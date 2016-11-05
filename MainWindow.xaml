@@ -1,0 +1,95 @@
+﻿<Window x:Class="Twinder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:p="clr-namespace:Twinder.Properties"
+		
+		xmlns:view="clr-namespace:Twinder.View"
+		
+		Closed="Window_Closed"
+		
+        mc:Ignorable="d"
+        Title="{x:Static p:Resources.app_title}"
+		MinHeight="400" MinWidth="600"
+        DataContext="{Binding Main, Source={StaticResource Locator}}" Width="78">
+
+	
+	<DockPanel LastChildFill="True">
+		<!-- Menu bar -->
+		<Menu DockPanel.Dock="Top">
+
+			<!-- Winder -->
+			<MenuItem Header="{x:Static p:Resources.menu_app}">
+				<MenuItem Header="{x:Static p:Resources.menu_app_exit}"
+						  Command="{Binding ExitCommand}"/>
+			</MenuItem>
+
+			<!-- Tools -->
+			<MenuItem Header="{x:Static p:Resources.menu_tools}">
+				<MenuItem Header="{x:Static p:Resources.menu_tools_login}"
+						  Command="{Binding LoginCommand}"/>
+			</MenuItem>
+			
+			<!-- Help -->
+			<MenuItem Header="{x:Static p:Resources.menu_help}">
+				<MenuItem Header="{x:Static p:Resources.menu_help_about}"
+						  Command="{Binding AboutCommand}"/>
+			</MenuItem>
+		</Menu>
+		
+		<!-- Status bar-->
+		<StatusBar DockPanel.Dock="Bottom">
+			<StatusBarItem>
+				<TextBlock Text="Status bar. WIP"/>
+			</StatusBarItem>
+		</StatusBar>
+
+		<Grid x:Name="LayoutRoot">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+
+
+			<!--Toolbar-->
+			<StackPanel Grid.Row="0" Orientation="Horizontal">
+
+				<Button Content="Update matches" Margin="2" Width="90"
+					Command="{Binding UpdateCommand}"/>
+
+				<Button Content="Get recs" Margin="2" Width="70"
+					Command="{Binding GetRecsCommand}"/>
+
+				<TextBox Text="{Binding Latitude, UpdateSourceTrigger=PropertyChanged}"
+						 Margin="2"
+						 Width="70"/>
+				<TextBox Text="{Binding Longtitude, UpdateSourceTrigger=PropertyChanged}"
+						 Margin="2"
+						 Width="70"/>
+				<Button Content="Ping" Margin="2" Width="50"
+						Command="{Binding PingCommand}"/>
+			</StackPanel>
+
+			<!--Match list-->
+			<ListView Grid.Row="1"
+					  ItemsSource="{Binding MatchList}" HorizontalAlignment="Stretch">
+				<ListView.Resources>
+					<Style TargetType="ListViewItem">
+						<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+						<EventSetter Event="MouseDoubleClick" Handler="ListView_OnMouseDoubleClick"/>
+						<EventSetter Event="PreviewMouseWheel" Handler="ListView_OnPreviewMouseWheel"/>
+					</Style>
+				</ListView.Resources>
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<view:MatchListItemView/>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</Grid>
+
+	</DockPanel>
+	
+</Window>

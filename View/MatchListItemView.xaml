@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="Twinder.View.MatchListItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Twinder.View"
+             mc:Ignorable="d" 
+			 
+			 d:DesignHeight="126" d:DesignWidth="400"
+			 Background="Azure">
+
+	<UserControl.Resources>
+		
+		<Style TargetType="TextBlock" x:Key="Name">
+			<Setter Property="FontSize" Value="18"/>
+			<Setter Property="FontWeight" Value="DemiBold"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+		
+		<Style TargetType="TextBlock" x:Key="BioText">
+			<Setter Property="FontSize" Value="11"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+
+		<Style TargetType="TextBlock" x:Key="SubTextHeader">
+			<Setter Property="FontSize" Value="10"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+		
+		<Style TargetType="TextBlock" x:Key="SubText">
+			<Setter Property="FontSize" Value="10"/>
+			<Setter Property="FontWeight" Value="Light"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+
+	</UserControl.Resources>
+
+	
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="126" />
+			<ColumnDefinition Width="5"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+
+		<!-- Profile picture -->
+		<Button Grid.Column="0" 
+				Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListView}}"
+				CommandParameter="{Binding}">
+			<Image Source="{Binding Person.Photos[0].ProcessedFiles[2].Url}"/>
+		</Button>
+
+		<!-- Match info -->
+		<Grid Grid.Column="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<!-- Name -->
+			<TextBlock Grid.Row="0" Style="{StaticResource Name}"
+					   Text="{Binding Person.Name, FallbackValue='Name'}"/>
+
+			<!-- Bio -->
+			<StackPanel Grid.Row="1" Orientation="Horizontal">
+				<TextBlock Text="Bio: "
+						   Style="{StaticResource SubTextHeader}"/>
+				<TextBlock Text="{Binding Person.BioTrimmed, FallbackValue='Bio'}"
+						   Style="{StaticResource SubText}"/>
+			</StackPanel>
+			<!-- Match date -->
+			<StackPanel Grid.Row="2" Orientation="Horizontal">
+				<TextBlock Text="Matched on: "
+						   Style="{StaticResource SubTextHeader}"/>
+				<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd', FallbackValue='yyyy-MM-dd'}"
+						   Style="{StaticResource SubText}"/>
+			</StackPanel>
+
+			<!-- Last seen date -->
+			<StackPanel Grid.Row="3" Orientation="Horizontal">
+				<TextBlock Text="Last seen: "
+						   Style="{StaticResource SubTextHeader}"/>
+				<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm'}"
+						   Style="{StaticResource SubText}"/>
+			</StackPanel>
+
+			<!-- Total messages -->
+			<StackPanel Grid.Row="4" Orientation="Horizontal">
+				<TextBlock Text="Total messages: "
+						   Style="{StaticResource SubTextHeader}"/>
+				<TextBlock Text="{Binding Messages.Count, FallbackValue='999'}"
+						   Style="{StaticResource SubText}"/>
+			</StackPanel>
+			
+			<!-- Last message -->
+			<StackPanel Grid.Row="5" Orientation="Horizontal">
+				<TextBlock Text="Last message: "
+						   Style="{StaticResource SubTextHeader}"/>
+				<TextBlock Text="{Binding LastMessage.Message, FallbackValue='-'}"
+						   Style="{StaticResource SubText}"/>
+			</StackPanel>
+
+		</Grid>
+		
+	</Grid>
+</UserControl>

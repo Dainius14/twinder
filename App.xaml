@@ -1,0 +1,23 @@
+﻿<Application x:Class="Twinder.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Twinder.ViewModel"
+             xmlns:converter="clr-namespace:Twinder.Converter"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ignore="http://www.galasoft.ch/ignore"
+             mc:Ignorable="d ignore"
+             
+			 Startup="Application_Startup"
+			 ShutdownMode="OnExplicitShutdown">
+
+	<Application.Resources>
+		<!-- Global View Model Locator -->
+        <vm:ViewModelLocator x:Key="Locator"
+                             d:IsDataSource="True" />
+		
+		<!-- Converters -->
+		<converter:ArrayIndexConverter x:Key="ArrayIndexConverter"/>
+	</Application.Resources>
+    
+</Application>
