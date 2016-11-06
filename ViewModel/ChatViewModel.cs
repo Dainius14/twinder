@@ -1,13 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using Twinder.Helpers;
-using Twinder.Model.Updates.Match;
 using Twinder.Models.Updates;
 
 namespace Twinder.ViewModel
@@ -23,9 +19,17 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _match, value);
-				SimplifyMessages();
 				SetChat();
+				WindowTitle = String.Format($"{Match.Person.Name} Chat | {Properties.Resources.app_title}");
+				RaisePropertyChanged("WindowTitle");
 			}
+		}
+
+		private string _windowTitle;
+		public string WindowTitle
+		{
+			get { return _windowTitle; }
+			set { Set(ref _windowTitle, value); }
 		}
 
 		private string _chat;
@@ -60,12 +64,17 @@ namespace Twinder.ViewModel
 				_lastActivity = Match.LastActivityDate;
 
 			var newUpdates = TinderHelper.GetUpdates(_lastActivity);
+			// TODO better error handling
+			if (newUpdates == null)
+				MessageBox.Show("Error getting updates");
+
 			if (newUpdates.Matches.Count > 0)
 			{
 				var matchUpdates = newUpdates.Matches.Where(item => item.Id == Match.Id).FirstOrDefault();
 
 				if (matchUpdates != null)
 					foreach (var msg in matchUpdates.Messages)
+						// Checks if the new message doesn't already exist
 						if (!Match.Messages.Contains(msg))
 						{
 							Match.Messages.Add(msg);
@@ -93,21 +102,7 @@ namespace Twinder.ViewModel
 			}
 		}
 		#endregion
-
-		/// <summary>
-		/// Generated a list of messages with only three neccessary properties
-		/// </summary>
-		private void SimplifyMessages()
-		{
-			var messages = Match.Messages.Select(item => new SimpleMessageModel()
-			{
-				Message = item.Message,
-				SentDate = item.SentDateLocal,
-				// Sets name to either the name of the match or me
-				From = Match.Person.Id == item.From ? Match.Person.Name : "Me"
-			});
-		}
-
+		
 		/// <summary>
 		/// Creates chat in format 
 		/// [yyyy-MM-dd]
@@ -129,6 +124,11 @@ namespace Twinder.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Adds message to chat in format of
+		/// [HH:mm:ss] <Sender> Message
+		/// </summary>
+		/// <param name="msg"></param>
 		private void AddMessageToChat(MessageModel msg)
 		{
 			var sentTime = msg.SentDateLocal.ToLongTimeString();

@@ -70,6 +70,60 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Common friends.
+        /// </summary>
+        public static string common_friends_count {
+            get {
+                return ResourceManager.GetString("common_friends_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Common likes.
+        /// </summary>
+        public static string common_likes_count {
+            get {
+                return ResourceManager.GetString("common_likes_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance.
+        /// </summary>
+        public static string distance {
+            get {
+                return ResourceManager.GetString("distance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string job {
+            get {
+                return ResourceManager.GetString("job", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last seen.
+        /// </summary>
+        public static string last_seen {
+            get {
+                return ResourceManager.GetString("last_seen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matched on.
+        /// </summary>
+        public static string matched_on {
+            get {
+                return ResourceManager.GetString("matched_on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to T_winder.
         /// </summary>
         public static string menu_app {
@@ -120,6 +174,24 @@ namespace Twinder.Properties {
         public static string menu_tools_login {
             get {
                 return ResourceManager.GetString("menu_tools_login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to School.
+        /// </summary>
+        public static string school {
+            get {
+                return ResourceManager.GetString("school", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total messages.
+        /// </summary>
+        public static string total_messages {
+            get {
+                return ResourceManager.GetString("total_messages", resourceCulture);
             }
         }
     }

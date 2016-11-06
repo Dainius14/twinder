@@ -4,23 +4,169 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twinder.View"
+		xmlns:p="clr-namespace:Twinder.Properties"
         mc:Ignorable="d"
-		Background="AntiqueWhite"
+		Background="WhiteSmoke"
         Title="RecommendationsView" Height="650" Width="700"
 		
 		DataContext="{Binding Recommendations, Source={StaticResource Locator}}">
 
-	<Grid  Margin="5">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="auto"/>
-		</Grid.RowDefinitions>
-		<!-- Images -->
-		<Rectangle Grid.Row="0" Fill="Red" Height="400" Width="400"/>
-		<ListView Grid.Row="0" DataContext="{Binding SelectedRec}"
-				  ItemsSource="{Binding Photos}" ScrollViewer.CanContentScroll="False">
+	<DockPanel Margin="5" LastChildFill="True">
+		
+		<Grid DockPanel.Dock="Bottom">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+
+			<!-- Match info -->
+
+			<Grid Grid.Row="0" Margin="0, 5, 0, 0" DataContext="{Binding SelectedRec}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				 <!--Name, age, bio-->
+				<Grid Grid.Column="0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+					</Grid.RowDefinitions>
+
+					<!--Name, age-->
+					<Grid Grid.Row="0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto"/>
+							<ColumnDefinition Width="10"/>
+							<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0"
+						   Text="{Binding Name, FallbackValue='Name'}"
+						   FontSize="18"
+						   VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Column="2"
+						   Text="{Binding Age, FallbackValue='99'}"
+						   FontSize="18"
+						   VerticalAlignment="Bottom"/>
+					</Grid>
+
+					<!--Bio-->
+					<ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Hidden" CanContentScroll="False" >
+						<TextBlock 
+						   Text="{Binding Bio, FallbackValue='Bio full'}"
+						   TextWrapping="Wrap"/>
+					</ScrollViewer>
+				</Grid>
+
+				<Grid Grid.Column="1" Margin="10, 0, 0, 0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+					</Grid.RowDefinitions>
+
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="10"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- Last seen date -->
+					<TextBlock Text="{x:Static p:Resources.last_seen}" Grid.Row="0" Grid.Column="0"/>
+					<TextBlock Text="{Binding PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
+						   Grid.Row="0" Grid.Column="2"/>
+
+					<!-- Matched on date-->
+					<TextBlock Text="{x:Static p:Resources.distance}" Grid.Row="1" Grid.Column="0"/>
+					<TextBlock Text="{Binding DistanceKilometers}"
+						   Grid.Row="1" Grid.Column="2"/>
+
+					<!-- Common like count-->
+					<TextBlock Text="{x:Static p:Resources.common_likes_count}" Grid.Row="2" Grid.Column="0"/>
+					<TextBlock Text="{Binding CommonLikeCount}"
+						   Grid.Row="2" Grid.Column="2"/>
+
+					<!-- Common friend count -->
+					<TextBlock Text="{x:Static p:Resources.common_friends_count}" Grid.Row="3" Grid.Column="0"/>
+					<TextBlock Text="{Binding CommonFriendCount}"
+						   Grid.Row="3" Grid.Column="2"/>
+					
+					<!-- School name -->
+					<TextBlock Text="{x:Static p:Resources.school}" Grid.Row="4" Grid.Column="0"/>
+					<TextBlock Text="{Binding Schools[0].Name}"
+						   Grid.Row="4" Grid.Column="2"/>
+					
+
+
+				</Grid>
+
+
+			</Grid>
+
+			<!-- Buttons -->
+			<StackPanel Grid.Row="1"
+					Orientation="Horizontal"
+					HorizontalAlignment="Center">
+				<StackPanel.Resources>
+					<Style TargetType="Button">
+						<Setter Property="Margin" Value="5"/>
+						<Setter Property="Width" Value="80"/>
+					</Style>
+				</StackPanel.Resources>
+
+				<Button Command="{Binding PassCommand}"
+					Content="Pass"/>
+
+				<Button Command="{Binding LikeCommand}"
+					Content="Like"/>
+
+				<Button Command="{Binding SuperLikeCommand}"
+					Content="Super Like"/>
+
+				<Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+
+				<Button Command="{Binding SelectPreviousCommand}"
+					Content="Previous"/>
+
+				<Button Command="{Binding SelectNextCommand}"
+					Content="Next"/>
+
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding SelectedIndex, FallbackValue='0', Converter={StaticResource ArrayIndexConverter}}"/>
+					<TextBlock Text="/"/>
+					<TextBlock Text="{Binding Recommendations.Count, FallbackValue='0'}"/>
+				</StackPanel>
+
+			</StackPanel>
+
+			<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+				<StackPanel.Resources>
+					<Style TargetType="Button">
+						<Setter Property="Margin" Value="5"/>
+						<Setter Property="Width" Value="80"/>
+					</Style>
+					<Style TargetType="CheckBox">
+						<Setter Property="Margin" Value="5"/>
+						<Setter Property="VerticalAlignment" Value="Center"/>
+					</Style>
+				</StackPanel.Resources>
+
+				<Button Command="{Binding LikeAllCommand}"
+					Content="Like All"/>
+
+				<CheckBox Content="Only without description"
+					  IsChecked="{Binding OnlyWithoutDescription}"/>
+			</StackPanel>
+
+		</Grid>
+		
+		<!-- Photos -->
+		<ListView x:Name="photoList" ItemsSource="{Binding SelectedRec.Photos}">
 			<ListView.Resources>
 				<Style TargetType="ListViewItem">
 					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>
@@ -29,148 +175,20 @@
 
 			<ListView.ItemsPanel>
 				<ItemsPanelTemplate>
-					<WrapPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+					<StackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+								ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
 				</ItemsPanelTemplate>
 			</ListView.ItemsPanel>
+
 			<ListView.ItemTemplate>
 				<DataTemplate>
-					<Image Source="{Binding Url}" Height="400"/>
+					<Image Source="{Binding Url}" 
+						   Height="{Binding ElementName=photoList, Path=ActualHeight,
+							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"/>
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
 
-		<!-- Match info -->
-		<Grid Grid.Row="1" DataContext="{Binding SelectedRec}">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
 
-			<!-- Name, age, bio -->
-			<Grid Grid.Column="0">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="auto"/>
-					<RowDefinition Height="auto"/>
-				</Grid.RowDefinitions>
-
-				<!-- Name, age -->
-				<Grid Grid.Row="0">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="auto"/>
-						<ColumnDefinition Width="10"/>
-						<ColumnDefinition Width="auto"/>
-					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0"
-						   Text="{Binding Name, FallbackValue='Name'}"
-						   FontSize="18"
-						   VerticalAlignment="Bottom"/>
-					<TextBlock Grid.Column="2"
-						   Text="{Binding Age, FallbackValue='99'}"
-						   FontSize="18"
-						   VerticalAlignment="Bottom"/>
-				</Grid>
-
-				<!-- Bio -->
-				<ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Hidden" CanContentScroll="False" >
-					<TextBlock 
-						   Text="{Binding Bio, FallbackValue='Bio full'}"
-						   TextWrapping="Wrap"/>
-				</ScrollViewer>
-			</Grid>
-
-			<!-- Other info -->
-			<Grid Grid.Column="1">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="auto"/>
-					<RowDefinition Height="auto"/>
-					<RowDefinition Height="auto"/>
-					<RowDefinition Height="auto"/>
-					<RowDefinition Height="auto"/>
-				</Grid.RowDefinitions>
-
-				<StackPanel Grid.Row="0" Orientation="Horizontal">
-					<TextBlock Text="Last seen: "/>
-					<TextBlock Text="{Binding PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"/>
-				</StackPanel>
-
-				<StackPanel Grid.Row="1" Orientation="Horizontal">
-					<TextBlock Text="Distance: "/>
-					<TextBlock Text="{Binding DistanceKilometers}"/>
-				</StackPanel>
-
-				<StackPanel Grid.Row="2" Orientation="Horizontal">
-					<TextBlock Text="Common likes: "/>
-					<TextBlock Text="{Binding CommonLikeCount}"/>
-				</StackPanel>
-
-				<StackPanel Grid.Row="3" Orientation="Horizontal">
-					<TextBlock Text="Common friends: "/>
-					<TextBlock Text="{Binding CommonFriendCount}"/>
-				</StackPanel>
-
-				<StackPanel Grid.Row="4" Orientation="Horizontal">
-					<TextBlock Text="School: "/>
-					<TextBlock Text="{Binding Schools[0].Name}"/>
-				</StackPanel>
-
-			</Grid>
-
-		</Grid>
-
-		<!-- Buttons -->
-		<StackPanel Grid.Row="2"
-					Orientation="Horizontal"
-					HorizontalAlignment="Center">
-			<StackPanel.Resources>
-				<Style TargetType="Button">
-					<Setter Property="Margin" Value="5"/>
-					<Setter Property="Width" Value="80"/>
-				</Style>
-			</StackPanel.Resources>
-
-			<Button Command="{Binding PassCommand}"
-					Content="Pass"/>
-
-			<Button Command="{Binding LikeCommand}"
-					Content="Like"/>
-
-			<Button Command="{Binding SuperLikeCommand}"
-					Content="Super Like"/>
-
-			<Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-
-
-			<Button Command="{Binding SelectPreviousCommand}"
-					Content="Previous"/>
-
-			<Button Command="{Binding SelectNextCommand}"
-					Content="Next"/>
-
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-				<TextBlock Text="{Binding SelectedIndex, FallbackValue='0', Converter={StaticResource ArrayIndexConverter}}"/>
-				<TextBlock Text="/"/>
-				<TextBlock Text="{Binding Recommendations.Count, FallbackValue='0'}"/>
-			</StackPanel>
-
-		</StackPanel>
-
-		<StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" >
-			<StackPanel.Resources>
-				<Style TargetType="Button">
-					<Setter Property="Margin" Value="5"/>
-					<Setter Property="Width" Value="80"/>
-				</Style>
-				<Style TargetType="CheckBox">
-					<Setter Property="Margin" Value="5"/>
-					<Setter Property="VerticalAlignment" Value="Center"/>
-				</Style>
-			</StackPanel.Resources>
-			
-			<Button Command="{Binding LikeAllCommand}"
-					Content="Like All"/>
-
-			<CheckBox Content="Only without description"
-					  IsChecked="{Binding OnlyWithoutDescription}"/>
-		</StackPanel>
-	</Grid>
+	</DockPanel>
 </Window>

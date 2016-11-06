@@ -130,6 +130,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\ScrollBarRemoverConverter.cs" />
     <Compile Include="Converter\ArrayIndexConverter.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helpers\FbHelper.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="Model\Updates\MatchModel.cs" />
     <Compile Include="Model\Updates\Match\MessageModel.cs" />
     <Compile Include="Model\Updates\Match\PersonModel.cs" />
-    <Compile Include="Model\Updates\Match\SimpleMessageModel.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MatchProfileViewModel.cs" />

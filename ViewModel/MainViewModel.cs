@@ -10,6 +10,7 @@ using Twinder.Models;
 using Twinder.Models.Updates;
 using Twinder.View;
 using System;
+using System.Reflection;
 
 namespace Twinder.ViewModel
 {
@@ -81,7 +82,6 @@ namespace Twinder.ViewModel
 			AboutCommand = new RelayCommand(About);
 
 			Authenticate();
-			GetMatches();
 		}
 
 		private void Authenticate()
@@ -89,6 +89,7 @@ namespace Twinder.ViewModel
 			if (TinderHelper.Authenticate())
 			{
 				MessageBox.Show(Application.Current.MainWindow, "Logged in successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+				GetMatches();
 			}
 			else
 			{
@@ -222,7 +223,9 @@ namespace Twinder.ViewModel
 		#region About command
 		private void About()
 		{
-			MessageBox.Show("What do you exactly want to see here?");
+			string appName = Properties.Resources.app_title;
+			string version = "Version " + Assembly.GetEntryAssembly().GetName().Version.ToString();
+			MessageBox.Show(version, appName);
 
 		}
 		#endregion

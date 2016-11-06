@@ -10,7 +10,7 @@
 		Width="500" Height="400"
 		
 		DataContext="{Binding Chat, Source={StaticResource Locator}}"
-		
+		Title="{Binding WindowTitle}"
 			 Background="AntiqueWhite">
 
 	<Window.Resources>
@@ -75,8 +75,9 @@
 		</Grid>
 
 		<!-- Chat -->
-		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
-			<TextBox Text="{Binding Chat}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap"/>
+		<ScrollViewer Name="chatScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible">
+			<TextBox Name="chatBox"
+				Text="{Binding Chat}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" TextChanged="chatBox_TextChanged"/>
 		</ScrollViewer>
 	
 		<!-- Send message -->

@@ -73,7 +73,7 @@
 			</StackPanel>
 
 			<!--Match list-->
-			<ListView Grid.Row="1"
+			<ListView Name="matchList" Grid.Row="1"
 					  ItemsSource="{Binding MatchList}" HorizontalAlignment="Stretch">
 				<ListView.Resources>
 					<Style TargetType="ListViewItem">
@@ -84,7 +84,9 @@
 				</ListView.Resources>
 				<ListView.ItemTemplate>
 					<DataTemplate>
-						<view:MatchListItemView/>
+						<view:MatchListItemView
+							Width="{Binding ElementName=matchList, Path=ActualWidth,
+							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=35}"/>
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>

@@ -4,42 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Twinder.View"
+				xmlns:p="clr-namespace:Twinder.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="700"
-		Height="610" Width="700" ResizeMode="NoResize"
-			 Background="AntiqueWhite"
-			 DataContext="{Binding MatchProfile, Source={StaticResource Locator}}">
-    
-	<Grid Margin="10"
-		  DataContext="{Binding Match}">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+				Height="610" Width="700"
+			 Background="WhiteSmoke"
+			 DataContext="{Binding MatchProfile, Source={StaticResource Locator}}"
+		Title="{Binding WindowTitle}">
 
-		<!-- Images -->
-		<ListView Grid.Row="0"
-				  ItemsSource="{Binding Person.Photos}" ScrollViewer.CanContentScroll="False">
-			<ListView.Resources>
-				<Style TargetType="ListViewItem">
-					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>
-				</Style>
-			</ListView.Resources>
-			
-			<ListView.ItemsPanel>
-				<ItemsPanelTemplate>
-					<WrapPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-				</ItemsPanelTemplate>
-			</ListView.ItemsPanel>
-			<ListView.ItemTemplate>
-				<DataTemplate>
-					<Image Source="{Binding Url}" Height="400"/>
-				</DataTemplate>
-			</ListView.ItemTemplate>
-		</ListView>
+	<DockPanel Margin="10" DataContext="{Binding Match}" LastChildFill="True">
 
 		<!-- Information -->
-		<Grid Grid.Row="1">
+		<Grid DockPanel.Dock="Bottom" Height="110" Margin="0, 5, 0, 0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="*"/>
@@ -49,36 +25,30 @@
 			<Grid Grid.Column="0">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="auto"/>
-					<RowDefinition Height="auto"/>
+					<RowDefinition Height="*"/>
 				</Grid.RowDefinitions>
 				
 				<!-- Name, age -->
-				<Grid Grid.Row="0">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="auto"/>
-						<ColumnDefinition Width="10"/>
-						<ColumnDefinition Width="auto"/>
-					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0"
+				<StackPanel Grid.Row="0" Orientation="Horizontal">
+					<TextBlock Margin="0, 0, 5, 0"
 						   Text="{Binding Person.Name, FallbackValue='Name'}"
 						   FontSize="18"
 						   VerticalAlignment="Bottom"/>
-					<TextBlock Grid.Column="2"
+					<TextBlock 
 						   Text="{Binding Person.Age, FallbackValue='99'}"
 						   FontSize="18"
 						   VerticalAlignment="Bottom"/>
-				</Grid>
+				</StackPanel>
 
 				<!-- Bio -->
-				<ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Hidden" CanContentScroll="False" >
+				<ScrollViewer Grid.Row="1">
 					<TextBlock 
-						   Text="{Binding Person.Bio, FallbackValue='Bio full'}"
-						   TextWrapping="Wrap"/>
+						   Text="{Binding Person.Bio, FallbackValue='Bio full'}"/>
 				</ScrollViewer>
 			</Grid>
 
 			<!-- Other info -->
-			<Grid Grid.Column="1">
+			<Grid Grid.Column="1" Margin="10, 5, 0, 0">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
@@ -87,33 +57,63 @@
 					<RowDefinition Height="auto"/>
 				</Grid.RowDefinitions>
 
-				<StackPanel Grid.Row="0" Orientation="Horizontal">
-					<TextBlock Text="Last seen: "/>
-					<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"/>
-				</StackPanel>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
 
-				<StackPanel Grid.Row="1" Orientation="Horizontal">
-					<TextBlock Text="Matched on: "/>
-					<TextBlock Text="{Binding CreatedDateLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"/>
-				</StackPanel>
+				<!-- Last seen date -->
+				<TextBlock Text="{x:Static p:Resources.last_seen}" Grid.Row="0" Grid.Column="0"/>
+				<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
+						   Grid.Row="0" Grid.Column="2"/>
 
-				<StackPanel Grid.Row="2" Orientation="Horizontal">
-					<TextBlock Text="Common likes: "/>
-					<TextBlock Text="{Binding CommonLikeCount}"/>
-				</StackPanel>
+				<!-- Matched on date-->
+				<TextBlock Text="{x:Static p:Resources.matched_on}" Grid.Row="1" Grid.Column="0"/>
+				<TextBlock Text="{Binding CreatedDateLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
+						   Grid.Row="1" Grid.Column="2"/>
 
-				<StackPanel Grid.Row="3" Orientation="Horizontal">
-					<TextBlock Text="Common friends: "/>
-					<TextBlock Text="{Binding CommonFriendCount}"/>
-				</StackPanel>
+				<!-- Common like count-->
+				<TextBlock Text="{x:Static p:Resources.common_likes_count}" Grid.Row="2" Grid.Column="0"/>
+				<TextBlock Text="{Binding CommonLikeCount}"
+						   Grid.Row="2" Grid.Column="2"/>
 
-				<StackPanel Grid.Row="4" Orientation="Horizontal">
-					<TextBlock Text="Total messages: "/>
-					<TextBlock Text="{Binding Messages.Count}"/>
-				</StackPanel>
+				<!-- Common friend count -->
+				<TextBlock Text="{x:Static p:Resources.common_friends_count}" Grid.Row="3" Grid.Column="0"/>
+				<TextBlock Text="{Binding CommonFriendCount}"
+						   Grid.Row="3" Grid.Column="2"/>
+
+				<!-- Total messages -->
+				<TextBlock Text="{x:Static p:Resources.total_messages}" Grid.Row="4" Grid.Column="0"/>
+				<TextBlock Text="{Binding Messages.Count}"
+						   Grid.Row="4" Grid.Column="2"/>
 
 			</Grid>
 			
 		</Grid>
-	</Grid>
+		
+		<!-- Images -->
+		<ListView x:Name="photoList" ItemsSource="{Binding Person.Photos}">
+			<ListView.Resources>
+				<Style TargetType="ListViewItem">
+					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>
+				</Style>
+			</ListView.Resources>
+
+			<ListView.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+								ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+				</ItemsPanelTemplate>
+			</ListView.ItemsPanel>
+
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Image Source="{Binding Url}" 
+						   Height="{Binding ElementName=photoList, Path=ActualHeight,
+							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"/>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</DockPanel>
 </Window>

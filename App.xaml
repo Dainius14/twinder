@@ -15,9 +15,10 @@
 		<!-- Global View Model Locator -->
         <vm:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
-		
+
 		<!-- Converters -->
 		<converter:ArrayIndexConverter x:Key="ArrayIndexConverter"/>
+		<converter:ScrollBarRemoverConverter x:Key="ScrollBarRemoverConverter"/>
 	</Application.Resources>
     
 </Application>

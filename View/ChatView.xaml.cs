@@ -14,8 +14,15 @@ namespace Twinder.View
 		public ChatView(MatchModel match)
 		{
 			InitializeComponent();
+			this.Focus();
 			var viewModel = DataContext as ChatViewModel;
 			viewModel.Match = match;
+			chatScrollViewer.ScrollToEnd();
+		}
+
+		private void chatBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+		{
+			chatScrollViewer.ScrollToEnd();
 		}
 	}
 }

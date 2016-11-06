@@ -121,9 +121,26 @@
     <value>Twinder</value>
     <comment>Application name duh</comment>
   </data>
+  <data name="common_friends_count" xml:space="preserve">
+    <value>Common friends</value>
+  </data>
+  <data name="common_likes_count" xml:space="preserve">
+    <value>Common likes</value>
+  </data>
+  <data name="distance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="job" xml:space="preserve">
+    <value>Job</value>
+  </data>
+  <data name="last_seen" xml:space="preserve">
+    <value>Last seen</value>
+  </data>
+  <data name="matched_on" xml:space="preserve">
+    <value>Matched on</value>
+  </data>
   <data name="menu_app" xml:space="preserve">
     <value>T_winder</value>
-    <comment>For use in menu bar</comment>
   </data>
   <data name="menu_app_exit" xml:space="preserve">
     <value>E_xit</value>
@@ -139,5 +156,11 @@
   </data>
   <data name="menu_tools_login" xml:space="preserve">
     <value>_Login</value>
+  </data>
+  <data name="school" xml:space="preserve">
+    <value>School</value>
+  </data>
+  <data name="total_messages" xml:space="preserve">
+    <value>Total messages</value>
   </data>
 </root>

@@ -1,9 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Twinder.Models.Updates;
 
 namespace Twinder.ViewModel
@@ -17,8 +13,17 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _match, value);
+				WindowTitle = String.Format($"{Match.Person.Name} Profile | {Properties.Resources.app_title}");
+				RaisePropertyChanged("WindowTitle");
 			}
 		}
 
+
+		private string _windowTitle;
+		public string WindowTitle
+		{
+			get { return _windowTitle; }
+			set { Set(ref _windowTitle, value); }
+		}
 	}
 }

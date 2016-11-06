@@ -41,21 +41,23 @@ namespace Twinder
 		
 		private void CreateRecommendationsWindow(RecsResultsModel results)
 		{
-			var window = new RecommendationsView(results);
-			window.Show();
+			var recsWindow = new RecommendationsView(results);
+			recsWindow.Owner = this;
+			recsWindow.Show();
 		}
 
 		private void CreateChatWindow(MatchModel match)
 		{
-			var chat = new ChatView(match);
-			chat.Owner = this;
-			chat.Show();
+			var chatWindow = new ChatView(match);
+			chatWindow.Owner = this;
+			chatWindow.Show();
 		}
 
 		private void CreateMatchProfileView(MatchModel match)
 		{
-			var window = new MatchProfileView(match);
-			window.Show();
+			var matchProfileWindow = new MatchProfileView(match);
+			matchProfileWindow.Owner = this;
+			matchProfileWindow.Show();
 		}
 
 		/// <summary>
@@ -87,7 +89,9 @@ namespace Twinder
 			ListViewItem item = sender as ListViewItem;
 			MatchModel match = item.Content as MatchModel;
 
-			viewModel.OpenChatCommand.Execute(match);
+			// Workaround for losing focus
+			Action newWindow = () => viewModel.OpenChatCommand.Execute(match);
+			Dispatcher.BeginInvoke(newWindow);
 		}
 
 		private void Window_Closed(object sender, EventArgs e)
