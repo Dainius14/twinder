@@ -7,6 +7,7 @@ using Twinder.Models.Authentication;
 using Twinder.Models.Updates;
 using Twinder.Model;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Twinder.Helpers
 {
@@ -28,7 +29,7 @@ namespace Twinder.Helpers
 		/// Authenticates with Tinder server with Facebook ID and Facebook Token
 		/// </summary>
 		/// <returns>True if authentication is successful</returns>
-		public static bool Authenticate()
+		public static async Task<bool> Authenticate()
 		{
 			_fbId = Settings.Default.fb_id;
 			_fbToken = Settings.Default.fb_token;
@@ -41,7 +42,7 @@ namespace Twinder.Helpers
 			request.AddParameter("facebook_id", _fbId);
 			request.AddParameter("facebook_token", _fbToken);
 
-			IRestResponse response = _client.Execute<dynamic>(request);
+			IRestResponse response = await _client.ExecuteTaskAsync<dynamic>(request);
 			
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
@@ -64,17 +65,17 @@ namespace Twinder.Helpers
 		/// </summary>
 		/// <param name="since">Date from which to get updates</param>
 		/// <returns>Returns the Update model</returns>
-		public static UpdatesModel GetUpdates(DateTime since)
+		public static async Task<UpdatesModel> GetUpdates(DateTime since)
 		{
 			RestRequest request = new RestRequest("updates", Method.POST);
-			
+
 			if (since != default(DateTime))
 				request.AddParameter("last_activity_date", since.ToString("o"));
-			
-			IRestResponse response = _client.Execute<dynamic>(request);
+
+			IRestResponse response = await _client.ExecuteTaskAsync<dynamic>(request);
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				return JsonConvert.DeserializeObject<UpdatesModel>(response.Content);
+				return await Task.Run(() => JsonConvert.DeserializeObject<UpdatesModel>(response.Content));
 			}
 			return null;
 		}
@@ -83,9 +84,9 @@ namespace Twinder.Helpers
 		/// Gets all updates
 		/// </summary>
 		/// <returns>Returns the update model</returns>
-		public static UpdatesModel GetUpdates()
+		public static async Task<UpdatesModel> GetUpdates()
 		{
-			return GetUpdates(default(DateTime));
+			return await GetUpdates(default(DateTime));
 		}
 
 		/// <summary>
@@ -94,7 +95,7 @@ namespace Twinder.Helpers
 		/// <param name="matchId">Match to whom to send message</param>
 		/// <param name="messageToSend">Message to send</param>
 		/// <returns>Returns MessageModel if message was sent succesfully.</returns>
-		public static MessageModel SendMessage(string matchId, string messageToSend)
+		public static async Task<MessageModel> SendMessage(string matchId, string messageToSend)
 		{
 			RestRequest request = new RestRequest("user/matches/" + matchId, Method.POST);
 			request.AddHeader("Content-type", "application/json");
@@ -103,7 +104,7 @@ namespace Twinder.Helpers
 			IRestResponse response = _client.Execute<dynamic>(request);
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				return JsonConvert.DeserializeObject<MessageModel>(response.Content);
+				return await Task.Run(() => JsonConvert.DeserializeObject<MessageModel>(response.Content));
 			}
 			return null;
 		}
@@ -114,7 +115,7 @@ namespace Twinder.Helpers
 		/// <param name="id">Recommendation ID</param>
 		/// <param name="superLike">True for making a super like</param>
 		/// <returns>Returns a MatchModel with match information</returns>
-		public static MatchModel LikeRecommendation(string id, bool superLike = false)
+		public static async Task<MatchModel> LikeRecommendation(string id, bool superLike = false)
 		{
 			var request = new RestRequest("like/" + id, Method.GET);
 			if (superLike)
@@ -124,15 +125,7 @@ namespace Twinder.Helpers
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				try
-				{
-					var results = JsonConvert.DeserializeObject<RecMatchedModel>(response.Content);
-					return results.Match;
-				}
-				catch
-				{
-
-				}
+					return await Task.Run(() => JsonConvert.DeserializeObject<RecMatchedModel>(response.Content).Match);
 			}
 			return null;
 		}
@@ -141,25 +134,24 @@ namespace Twinder.Helpers
 		/// Passes recommendation
 		/// </summary>
 		/// <param name="id">Recommendation ID</param>
-		public static void PassRecommendation(string id)
+		public static async void PassRecommendation(string id)
 		{
 			var request = new RestRequest("pass/" + id, Method.GET);
-			var response = _client.Execute<dynamic>(request);
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 		}
 
 		/// <summary>
 		/// Gets all available recommendations
 		/// </summary>
 		/// <returns>RecsResultsModel contains either recommendations or an error message</returns>
-		public static RecsResultsModel GetRecommendations()
+		public static async Task<RecsResultsModel> GetRecommendations()
 		{
 			var request = new RestRequest("user/recs", Method.GET);
 
 			var response = _client.Execute<dynamic>(request);
 			if (response.StatusCode == HttpStatusCode.OK)
 			{ 
-				var results = JsonConvert.DeserializeObject<RecsResultsModel>(response.Content);
-				return results;
+				return await Task.Run(() => JsonConvert.DeserializeObject<RecsResultsModel>(response.Content));
 			}
 			return null;
 		}
@@ -169,14 +161,14 @@ namespace Twinder.Helpers
 		/// </summary>
 		/// <param name="latitude">Latitude</param>
 		/// <param name="longtitude">Longtitude</param>
-		public static void PingLocation(string latitude, string longtitude)
+		public static async void PingLocation(string latitude, string longtitude)
 		{
 			var request = new RestRequest("user/ping", Method.POST);
 			request.AddHeader("Content-type", "application/json");
 			request.AddJsonBody(new { lat = latitude, lon = longtitude });
 
 			var response = _client.Execute<dynamic>(request);
-			var deserialized = JsonConvert.DeserializeObject<dynamic>(response.Content);
+			var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<dynamic>(response.Content));
 		}
 	}
 }

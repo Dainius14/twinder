@@ -9,12 +9,14 @@
 		
 		Closed="Window_Closed"
 		
+		ContentRendered="Window_ContentRendered"
+		
         mc:Ignorable="d"
         Title="{x:Static p:Resources.app_title}"
 		MinHeight="400" MinWidth="600"
         DataContext="{Binding Main, Source={StaticResource Locator}}" Width="78">
 
-	
+
 	<DockPanel LastChildFill="True">
 		<!-- Menu bar -->
 		<Menu DockPanel.Dock="Top">
@@ -30,18 +32,33 @@
 				<MenuItem Header="{x:Static p:Resources.menu_tools_login}"
 						  Command="{Binding LoginCommand}"/>
 			</MenuItem>
-			
+
 			<!-- Help -->
 			<MenuItem Header="{x:Static p:Resources.menu_help}">
 				<MenuItem Header="{x:Static p:Resources.menu_help_about}"
 						  Command="{Binding AboutCommand}"/>
 			</MenuItem>
 		</Menu>
-		
+
 		<!-- Status bar-->
-		<StatusBar DockPanel.Dock="Bottom">
-			<StatusBarItem>
-				<TextBlock Text="Status bar. WIP"/>
+		<StatusBar Name="statusbar" DockPanel.Dock="Bottom" Margin="5, 0">
+			<!-- Connected status -->
+			<StatusBarItem Name="statusbar_connectionStatus">
+				<StackPanel  Orientation="Horizontal">
+					<ProgressBar Name="authProgressBar" Height="10" Width="100" IsIndeterminate="True" Margin="0,0,5,0"/>
+					<TextBlock Name="authText" Text="{x:Static p:Resources.auth_connecting}"/>
+
+				</StackPanel>
+			</StatusBarItem>
+			<Separator Margin="5, 0" Width="1"/>
+			
+			<!-- Match count -->
+			<StatusBarItem Name="statusbar_matchCount" >
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Name="matchCount" Text="{Binding MatchList.Count, FallbackValue=0}"/>
+					<TextBlock Text=" "/>
+					<TextBlock Text="{x:Static p:Resources.statusbar_match_count}"/>
+				</StackPanel>
 			</StatusBarItem>
 		</StatusBar>
 
@@ -73,8 +90,7 @@
 			</StackPanel>
 
 			<!--Match list-->
-			<ListView Name="matchList" Grid.Row="1"
-					  ItemsSource="{Binding MatchList}" HorizontalAlignment="Stretch">
+			<ListView Name="matchList" Grid.Row="1" HorizontalAlignment="Stretch" ItemsSource="{Binding MatchList}">
 				<ListView.Resources>
 					<Style TargetType="ListViewItem">
 						<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -82,6 +98,7 @@
 						<EventSetter Event="PreviewMouseWheel" Handler="ListView_OnPreviewMouseWheel"/>
 					</Style>
 				</ListView.Resources>
+
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<view:MatchListItemView
@@ -93,5 +110,5 @@
 		</Grid>
 
 	</DockPanel>
-	
+
 </Window>

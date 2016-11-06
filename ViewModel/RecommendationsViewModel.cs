@@ -134,7 +134,7 @@ namespace Twinder.ViewModel
 		/// <summary>
 		/// Likes all of the recommendations
 		/// </summary>
-		private void LikeAll()
+		private async void LikeAll()
 		{
 			for (int i = 0; i < Recommendations.Count; i++)
 			{
@@ -142,7 +142,7 @@ namespace Twinder.ViewModel
 
 				if (OnlyWithoutDescription && string.IsNullOrEmpty(rec.Bio))
 				{
-					TinderHelper.LikeRecommendation(rec.Id);
+					await TinderHelper.LikeRecommendation(rec.Id);
 					RemoveRecomendations(rec);
 					i--;
 				}

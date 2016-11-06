@@ -70,6 +70,51 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication error.
+        /// </summary>
+        public static string auth_connect_error {
+            get {
+                return ResourceManager.GetString("auth_connect_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting....
+        /// </summary>
+        public static string auth_connecting {
+            get {
+                return ResourceManager.GetString("auth_connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error getting matches.
+        /// </summary>
+        public static string auth_get_matches_error {
+            get {
+                return ResourceManager.GetString("auth_get_matches_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting matches....
+        /// </summary>
+        public static string auth_getting_matches {
+            get {
+                return ResourceManager.GetString("auth_getting_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected.
+        /// </summary>
+        public static string auth_okay {
+            get {
+                return ResourceManager.GetString("auth_okay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Common friends.
         /// </summary>
         public static string common_friends_count {
@@ -183,6 +228,15 @@ namespace Twinder.Properties {
         public static string school {
             get {
                 return ResourceManager.GetString("school", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matches.
+        /// </summary>
+        public static string statusbar_match_count {
+            get {
+                return ResourceManager.GetString("statusbar_match_count", resourceCulture);
             }
         }
         

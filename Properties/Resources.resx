@@ -121,6 +121,21 @@
     <value>Twinder</value>
     <comment>Application name duh</comment>
   </data>
+  <data name="auth_connecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="auth_connect_error" xml:space="preserve">
+    <value>Authentication error</value>
+  </data>
+  <data name="auth_getting_matches" xml:space="preserve">
+    <value>Getting matches...</value>
+  </data>
+  <data name="auth_get_matches_error" xml:space="preserve">
+    <value>Error getting matches</value>
+  </data>
+  <data name="auth_okay" xml:space="preserve">
+    <value>Connected</value>
+  </data>
   <data name="common_friends_count" xml:space="preserve">
     <value>Common friends</value>
   </data>
@@ -162,5 +177,8 @@
   </data>
   <data name="total_messages" xml:space="preserve">
     <value>Total messages</value>
+  </data>
+  <data name="statusbar_match_count" xml:space="preserve">
+    <value>Matches</value>
   </data>
 </root>

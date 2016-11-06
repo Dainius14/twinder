@@ -98,5 +98,29 @@ namespace Twinder
 		{
 			Application.Current.Shutdown();
 		}
+
+		private async void Window_ContentRendered(object sender, EventArgs e)
+		{
+			var viewModel = DataContext as MainViewModel;
+			authText.Text = Properties.Resources.auth_connecting;
+			if (await viewModel.Authenticate())
+			{
+				authText.Text = Properties.Resources.auth_getting_matches;
+				if (await viewModel.GetMatches())
+				{
+					authText.Text = Properties.Resources.auth_okay;
+				}
+				else
+				{
+					authText.Text = Properties.Resources.auth_get_matches_error;
+				}
+			}
+			else
+			{
+				authText.Text = Properties.Resources.auth_connect_error;
+			}
+			authProgressBar.Visibility = Visibility.Collapsed;
+		}
+
 	}
 }

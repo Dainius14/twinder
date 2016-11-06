@@ -11,6 +11,7 @@ using Twinder.Models.Updates;
 using Twinder.View;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Twinder.ViewModel
 {
@@ -70,7 +71,7 @@ namespace Twinder.ViewModel
 			Longtitude = Properties.Settings.Default.longtitude;
 			Latitude = Properties.Settings.Default.latitude;
 
-			GetMatchesCommand = new RelayCommand(GetMatches, CanGetMatches);
+			GetMatchesCommand = new RelayCommand(GetMatchesComm, CanGetMatches);
 			UpdateCommand = new RelayCommand(Update);
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
 			GetRecsCommand = new RelayCommand(GetRecs);
@@ -80,26 +81,27 @@ namespace Twinder.ViewModel
 
 			LoginCommand = new RelayCommand(Login);
 			AboutCommand = new RelayCommand(About);
-
-			Authenticate();
+			
 		}
 
-		private void Authenticate()
+		public async Task<bool> Authenticate()
 		{
-			if (TinderHelper.Authenticate())
+			if (await TinderHelper.Authenticate())
 			{
-				MessageBox.Show(Application.Current.MainWindow, "Logged in successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-				GetMatches();
+				//MessageBox.Show(Application.Current.MainWindow, "Logged in successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+				//GetMatches();
+				return true;
 			}
 			else
 			{
-				MessageBox.Show(Application.Current.MainWindow, "Authentication error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				//MessageBox.Show(Application.Current.MainWindow, "Authentication error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
 			}
 		}
 
-		private void Update()
+		private async void Update()
 		{
-			var newUpdates = TinderHelper.GetUpdates(Properties.Settings.Default.last_update);
+			var newUpdates = await TinderHelper.GetUpdates(Properties.Settings.Default.last_update);
 			if (newUpdates.Matches.Count != 0)
 			{
 				foreach (var newMatch in newUpdates.Matches)
@@ -124,7 +126,17 @@ namespace Twinder.ViewModel
 			}
 		}
 
-
+		public async Task<bool> GetMatches()
+		{
+			if ((Updates = await TinderHelper.GetUpdates()) != null)
+			{
+				MatchList = Updates.Matches;
+				MatchListSetup();
+				Properties.Settings.Default["last_update"] = DateTime.UtcNow;
+				return true;
+			}
+			return false;
+		}
 
 		private void MatchListSetup()
 		{
@@ -150,9 +162,9 @@ namespace Twinder.ViewModel
 		#endregion
 
 		#region Get recommendations command
-		private void GetRecs()
+		private async void GetRecs()
 		{
-			var recsResults = TinderHelper.GetRecommendations();
+			var recsResults = await TinderHelper.GetRecommendations();
 			if (recsResults.Recommendations != null)
 			{
 				Messenger.Default.Send(recsResults, MessageType.ShowRecommendations);
@@ -165,14 +177,9 @@ namespace Twinder.ViewModel
 		#endregion
 
 		#region Get matches command
-		private void GetMatches()
+		private async void GetMatchesComm()
 		{
-			if ((Updates = TinderHelper.GetUpdates()) != null)
-			{
-				MatchList = Updates.Matches;
-				MatchListSetup();
-				Properties.Settings.Default["last_update"] = DateTime.UtcNow;
-			}
+			await GetMatches();
 		}
 
 
@@ -200,10 +207,10 @@ namespace Twinder.ViewModel
 		private void Login()
 		{
 			//Messenger.Default.Send(MessageType.ShowLoginDialog);
-			var loggedIn = new NotificationMessageAction<bool>(this, "ShowLoginDialog", r =>
+			var loggedIn = new NotificationMessageAction<bool>(this, "ShowLoginDialog", async r =>
 			{
 				if (r)
-					Authenticate();
+					await Authenticate();
 			});
 			Messenger.Default.Send(loggedIn);
 

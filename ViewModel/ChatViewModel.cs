@@ -58,12 +58,12 @@ namespace Twinder.ViewModel
 		}
 
 		// Sends a request to server for updates on chat model
-		private void Update()
+		private async void Update()
 		{
 			if (_lastActivity == default(DateTime))
 				_lastActivity = Match.LastActivityDate;
 
-			var newUpdates = TinderHelper.GetUpdates(_lastActivity);
+			var newUpdates = await TinderHelper.GetUpdates(_lastActivity);
 			// TODO better error handling
 			if (newUpdates == null)
 				MessageBox.Show("Error getting updates");
@@ -90,9 +90,9 @@ namespace Twinder.ViewModel
 			return !string.IsNullOrWhiteSpace(MessageToSend);
 		}
 
-		private void SendMessage()
+		private async void SendMessage()
 		{
-			MessageModel sentMessage = TinderHelper.SendMessage(Match.Id, MessageToSend);
+			MessageModel sentMessage = await TinderHelper.SendMessage(Match.Id, MessageToSend);
 			if (sentMessage != null)
 			{
 				MessageToSend = string.Empty;
