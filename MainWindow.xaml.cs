@@ -20,28 +20,12 @@ namespace Twinder
 			Closing += (s, e) => ViewModelLocator.Cleanup();
 			Messenger.Default.Register<MatchModel>(this, MessageType.NewChatWindow, CreateChatWindow);
 			Messenger.Default.Register<MatchModel>(this, MessageType.ShowMatchProfile, CreateMatchProfileView);
-			Messenger.Default.Register<RecsResultsModel>(this, MessageType.ShowRecommendations, CreateRecommendationsWindow);
-			Messenger.Default.Register<NotificationMessageAction<bool>>(this, r => 
-			{
-				var dialog = new FbLoginView();
-				var returned = dialog.ShowDialog();
-				r.Execute((bool) returned);
-
-			});
-		}
-
-		private void ShowLoginDialog(NotificationMessageAction<bool> obj)
-		{
-			var dialog = new FbLoginView();
-			var returned = dialog.ShowDialog();
-			obj.Execute((bool) returned);
-
-
+			Messenger.Default.Register<string>(this, MessageType.ShowRecommendations, CreateRecommendationsWindow);
 		}
 		
-		private void CreateRecommendationsWindow(RecsResultsModel results)
+		private void CreateRecommendationsWindow(string str)
 		{
-			var recsWindow = new RecommendationsView(results);
+			var recsWindow = new RecommendationsView();
 			recsWindow.Owner = this;
 			recsWindow.Show();
 		}
@@ -61,24 +45,6 @@ namespace Twinder
 		}
 
 		/// <summary>
-		/// Scrolls match list by one entry only
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ListView_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
-		{
-			if (e.Delta < 0)
-			{
-				ScrollBar.LineDownCommand.Execute(null, e.OriginalSource as IInputElement);
-			}
-			if (e.Delta > 0)
-			{
-				ScrollBar.LineUpCommand.Execute(null, e.OriginalSource as IInputElement);
-			}
-			e.Handled = true;
-		}
-
-		/// <summary>
 		/// Handles double click on match list, which opens a new chat
 		/// </summary>
 		/// <param name="sender"></param>
@@ -94,11 +60,21 @@ namespace Twinder
 			Dispatcher.BeginInvoke(newWindow);
 		}
 
+		/// <summary>
+		/// Explicit shutdown operation
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Window_Closed(object sender, EventArgs e)
 		{
 			Application.Current.Shutdown();
 		}
 
+		/// <summary>
+		/// Starts loading content, after the window is rendered
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private async void Window_ContentRendered(object sender, EventArgs e)
 		{
 			var viewModel = DataContext as MainViewModel;
@@ -109,6 +85,7 @@ namespace Twinder
 				if (await viewModel.GetMatches())
 				{
 					authText.Text = Properties.Resources.auth_okay;
+					matchList.SelectedIndex = 0;
 				}
 				else
 				{

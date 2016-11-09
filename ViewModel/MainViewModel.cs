@@ -58,9 +58,10 @@ namespace Twinder.ViewModel
 		public RelayCommand GetMatchesCommand { get; private set; }
 		public RelayCommand UpdateCommand { get; private set; }
 		public RelayCommand<MatchModel> OpenChatCommand { get; private set; }
+		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
+		public RelayCommand<MatchModel> UnmatchCommand { get; private set; }
 		public RelayCommand GetRecsCommand { get; private set; }
 		public RelayCommand PingCommand { get; private set; }
-		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
 		public RelayCommand ExitCommand { get; private set; }
 		public RelayCommand LoginCommand { get; private set; }
 		public RelayCommand AboutCommand { get; private set; }
@@ -74,15 +75,22 @@ namespace Twinder.ViewModel
 			GetMatchesCommand = new RelayCommand(GetMatchesComm, CanGetMatches);
 			UpdateCommand = new RelayCommand(Update);
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
+			OpenMatchProfileCommand = new RelayCommand<MatchModel>(param => OpenMatchProfile(param));
+			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
 			GetRecsCommand = new RelayCommand(GetRecs);
 			PingCommand = new RelayCommand(Ping, CanPing);
-			OpenMatchProfileCommand = new RelayCommand<MatchModel>(param => OpenMatchProfile(param));
 			ExitCommand = new RelayCommand(Exit);
 
 			LoginCommand = new RelayCommand(Login);
 			AboutCommand = new RelayCommand(About);
 			
 		}
+		#region Unmatch command
+		private void Unmatch(MatchModel match)
+		{
+			MessageBox.Show("To be implemented", "Soon");
+		}
+		#endregion
 
 		public async Task<bool> Authenticate()
 		{
@@ -160,19 +168,12 @@ namespace Twinder.ViewModel
 			return (!string.IsNullOrWhiteSpace(Latitude) && !string.IsNullOrWhiteSpace(Longtitude));
 		}
 		#endregion
+		
 
 		#region Get recommendations command
-		private async void GetRecs()
+		public void GetRecs()
 		{
-			var recsResults = await TinderHelper.GetRecommendations();
-			if (recsResults.Recommendations != null)
-			{
-				Messenger.Default.Send(recsResults, MessageType.ShowRecommendations);
-			}
-			else
-			{
-				MessageBox.Show(recsResults.Message);
-			}
+			Messenger.Default.Send("ayy", MessageType.ShowRecommendations);
 		}
 		#endregion
 

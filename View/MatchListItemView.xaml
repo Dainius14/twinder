@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Twinder.View"
+			 xmlns:helpers="clr-namespace:Twinder.Helpers"
+			 xmlns:p="clr-namespace:Twinder.Properties"
              mc:Ignorable="d" 
 			 
 			 d:DesignHeight="126" d:DesignWidth="400"
-			 Background="Azure">
+			 Background="MintCream">
 
 	<UserControl.Resources>
 		
@@ -18,8 +20,8 @@
 		</Style>
 		
 		<Style TargetType="TextBlock" x:Key="BioText">
-			<Setter Property="FontSize" Value="11"/>
-			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="FontSize" Value="10"/>
+			<Setter Property="FontWeight" Value="Regular"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
 
@@ -35,25 +37,65 @@
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
 
+
 	</UserControl.Resources>
 
+	<!--<UserControl.ContextMenu>
+		<ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource DataBindingDebugger}}">
+			<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
+					  Command="{Binding OpenChatCommand, Converter={StaticResource DataBindingDebugger}}"
+					  CommandParameter="{Binding}"
+					  InputGestureText="Enter" />
+			<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
+					  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+					  CommandParameter="{Binding}"
+					  InputGestureText="Ctrl+Enter" />
+			<MenuItem Header="{x:Static p:Resources.match_context_menu_unmatch}"
+					  Command="{Binding DataContext.UnmatchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+					  CommandParameter="{Binding}"
+					  InputGestureText="Delete" />
+
+
+		</ContextMenu>
+	</UserControl.ContextMenu>-->
+	
+	
 	
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="126" />
-			<ColumnDefinition Width="5"/>
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 
 		<!-- Profile picture -->
 		<Button Grid.Column="0" 
 				Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListView}}"
-				CommandParameter="{Binding}">
+				CommandParameter="{Binding}"
+				ToolTip="{x:Static p:Resources.tooltip_show_profile}">
+
 			<Image Source="{Binding Person.Photos[0].ProcessedFiles[2].Url}"/>
+			<Button.Resources>
+				<Style TargetType="Button">
+					<Style.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Effect">
+								<Setter.Value>
+									<DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="15"/>
+								</Setter.Value>
+							</Setter>
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Resources>
 		</Button>
 
 		<!-- Match info -->
-		<Grid Grid.Column="2">
+		<Grid Grid.Column="1" Margin="5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="5"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*"/>
@@ -62,48 +104,63 @@
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<!-- Name -->
-			<TextBlock Grid.Row="0" Style="{StaticResource Name}"
-					   Text="{Binding Person.Name, FallbackValue='Name'}"/>
+			
+			<!-- Name and age -->
+			<TextBlock Grid.Row="0" Grid.ColumnSpan="3"
+					   Style="{StaticResource Name}">
+				<TextBlock.Text>
+					<MultiBinding StringFormat="{}{0}, {1}">
+						<Binding Path="Person.Name"/>
+						<Binding Path="Person.Age"/>
+					</MultiBinding>
+				</TextBlock.Text>
+			</TextBlock>
 
 			<!-- Bio -->
-			<StackPanel Grid.Row="1" Orientation="Horizontal">
-				<TextBlock Text="Bio: "
-						   Style="{StaticResource SubTextHeader}"/>
-				<TextBlock Text="{Binding Person.BioTrimmed, FallbackValue='Bio'}"
-						   Style="{StaticResource SubText}"/>
-			</StackPanel>
+			<TextBlock Text="{Binding Person.Bio, Converter={StaticResource TextTrimConverter}}"
+					   Grid.Row="1" Grid.ColumnSpan="3"
+					   Style="{StaticResource BioText}"
+					   TextTrimming="CharacterEllipsis"
+					   ToolTip="{Binding Person.Bio}"/>
+			
 			<!-- Match date -->
-			<StackPanel Grid.Row="2" Orientation="Horizontal">
-				<TextBlock Text="Matched on: "
-						   Style="{StaticResource SubTextHeader}"/>
-				<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd', FallbackValue='yyyy-MM-dd'}"
-						   Style="{StaticResource SubText}"/>
-			</StackPanel>
+			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_matched_on}, StringFormat='{}{0}:'}"
+					   Grid.Row="2" Grid.Column="0"
+					   Style="{StaticResource SubTextHeader}"/>
+			<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd', FallbackValue='yyyy-MM-dd'}"
+					   Grid.Row="2" Grid.Column="2"
+					   Style="{StaticResource SubText}"/>
 
 			<!-- Last seen date -->
-			<StackPanel Grid.Row="3" Orientation="Horizontal">
-				<TextBlock Text="Last seen: "
-						   Style="{StaticResource SubTextHeader}"/>
-				<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm'}"
-						   Style="{StaticResource SubText}"/>
-			</StackPanel>
+			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
+					   Grid.Row="3" Grid.Column="0"
+					   Style="{StaticResource SubTextHeader}"/>
+			<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm'}"
+					   Grid.Row="3" Grid.Column="2"
+					   Style="{StaticResource SubText}"/>
 
 			<!-- Total messages -->
-			<StackPanel Grid.Row="4" Orientation="Horizontal">
-				<TextBlock Text="Total messages: "
-						   Style="{StaticResource SubTextHeader}"/>
-				<TextBlock Text="{Binding Messages.Count, FallbackValue='999'}"
-						   Style="{StaticResource SubText}"/>
-			</StackPanel>
+			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_message_count}, StringFormat='{}{0}:'}"
+					   Grid.Row="4" Grid.Column="0"
+					   Style="{StaticResource SubTextHeader}"/>
+			<TextBlock Text="{Binding Messages.Count, FallbackValue='999'}"
+					   Grid.Row="4" Grid.Column="2"
+					   Style="{StaticResource SubText}"/>
 			
 			<!-- Last message -->
-			<StackPanel Grid.Row="5" Orientation="Horizontal">
-				<TextBlock Text="Last message: "
-						   Style="{StaticResource SubTextHeader}"/>
-				<TextBlock Text="{Binding LastMessage.Message, FallbackValue='-'}"
-						   Style="{StaticResource SubText}"/>
-			</StackPanel>
+			<!--<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_message}, StringFormat='{}{0}:'}"
+					   Grid.Row="5" Grid.Column="0"
+					   Style="{StaticResource SubTextHeader}"/>-->
+			<TextBlock Grid.Row="5" Grid.ColumnSpan="3"
+					   Style="{StaticResource SubText}"
+					   TextTrimming="CharacterEllipsis">
+				<TextBlock.Text>
+					<MultiBinding StringFormat="{}[{0:MM-dd HH:mm:ss}] {1}">
+						<Binding Path="LastMessage.SentDateLocal"/>
+						<Binding Path="LastMessage.Message"/>
+					</MultiBinding>
+				</TextBlock.Text>
+			</TextBlock>
 
 		</Grid>
 		

@@ -5,79 +5,73 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Twinder.View"
+             xmlns:p="clr-namespace:Twinder.Properties"
              mc:Ignorable="d" 
 			 Background="WhiteSmoke"
 			 
 			 Height="115" Width="300" ResizeMode="NoResize"
 			 WindowStartupLocation="CenterScreen"
 			 
-			 DataContext="{Binding SetUser, Source={StaticResource Locator}}"
-			 Title="Facebook Login">
+			 DataContext="{Binding SetUser, Source={StaticResource Locator}}">
+	
+	<Window.Title>
+		<MultiBinding StringFormat="{}{0} - {1}">
+			<Binding Source="{x:Static p:Resources.window_title_fblogin}"/>
+			<Binding Source="{x:Static p:Resources.app_title}"/>
+		</MultiBinding>
+	</Window.Title>
 
-	<Grid>
+	<Grid Margin="6">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="5"/>
-			<ColumnDefinition Width="55"/>
+			<ColumnDefinition Width="auto"/>
 			<ColumnDefinition Width="5"/>
 			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="5"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="5"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="5"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="5"/>
 			<RowDefinition Height="auto"/>
-			<RowDefinition Height="5"/>
 		</Grid.RowDefinitions>
 
 		<!-- FB ID -->
-		<TextBlock Grid.Row="1" Grid.Column="1"
-				   Text="FB ID:"/>
+		<TextBlock Text="{Binding Source={x:Static p:Resources.fblogin_id}, StringFormat='{}{0}:'}"
+				   Grid.Row="0" Grid.Column="0" />
 
-		<TextBox Grid.Row="1" Grid.Column="3"
-				 Text="{Binding FbId, UpdateSourceTrigger=PropertyChanged}"/>
+		<TextBox Text="{Binding FbId, UpdateSourceTrigger=PropertyChanged}"
+				 Grid.Row="0" Grid.Column="2"/>
 
 		<!-- FB Token -->
-		<TextBlock Grid.Row="3" Grid.Column="1"
-				   Text="FB Token:"/>
-
-		<TextBox Grid.Row="3" Grid.Column="3"
-				 Text="{Binding FbToken, UpdateSourceTrigger=PropertyChanged}"/>
+		<TextBlock Text="{Binding Source={x:Static p:Resources.fblogin_token}, StringFormat='{}{0}:'}"
+				   Grid.Row="2" Grid.Column="0" />
+		<TextBox Text="{Binding FbToken, UpdateSourceTrigger=PropertyChanged}"
+				 Grid.Row="2" Grid.Column="2"/>
 
 		<StackPanel Grid.Row="5" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Right">
-			<!-- Button Get ID -->
-			<Button
-				Content="Get ID"
-				Margin="5, 0, 0, 0"
-				Command="{Binding GetFbIdCommand}"
-				Width="60" Height="20"/>
-			
-			<!-- Button Get Token -->
-			<Button
-				Content="Get Token"
-				Margin="5, 0, 0, 0"
-				Command="{Binding GetFbTokenCommand}"
-				Width="60" Height="20"/>
-			
-			<!-- Button OK -->
-			<Button
-				Content="OK"
-				Margin="5, 0, 0, 0"
-				Command="{Binding SetUserCommand}"
-				CommandParameter="{Binding ElementName=FbLoginWindow}"
-				IsDefault="True"
-				Width="60" Height="20"/>
+			<StackPanel.Resources>
+				<Style TargetType="Button">
+					<Setter Property="Width" Value="65"/>
+					<Setter Property="Margin" Value="5, 0, 0, 0"/>
+				</Style>
+			</StackPanel.Resources>
 
+			<!-- Button Get ID -->
+			<Button Content="{x:Static p:Resources.fblogin_btn_get_id}"
+					Command="{Binding GetFbIdCommand}"/>
+			<!-- Button Get Token -->
+			<Button Content="{x:Static p:Resources.fblogin_btn_get_token}"
+					Command="{Binding GetFbTokenCommand}"/>
+			<!-- Button OK -->
+			<Button Content="{x:Static p:Resources.fblogin_btn_ok}"
+					Command="{Binding SetUserCommand}"
+					CommandParameter="{Binding ElementName=FbLoginWindow}"
+					IsDefault="True"/>
 			<!-- Button Cancel -->
-			<Button
-				Content="Cancel"
-				Margin="5, 0, 0, 0"
-				Command="{Binding CancelCommand}"
-				CommandParameter="{Binding ElementName=FbLoginWindow}"
-				IsCancel="True"
-				Width="60" Height="20"/>
+			<Button Content="{x:Static p:Resources.fblogin_btn_cancel}"
+					Command="{Binding CancelCommand}"
+					CommandParameter="{Binding ElementName=FbLoginWindow}"
+					IsCancel="True"/>
 		</StackPanel>
 		
 	</Grid>

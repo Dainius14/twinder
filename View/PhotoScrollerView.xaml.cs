@@ -1,37 +1,36 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using Twinder.Models.Updates;
-using Twinder.ViewModel;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace Twinder.View
 {
-	public partial class MatchProfileView : Window
+	/// <summary>
+	/// Interaction logic for PhotoScrollerView.xaml
+	/// </summary>
+	public partial class PhotoScrollerView : UserControl
 	{
-		public MatchProfileView()
+		public PhotoScrollerView()
 		{
 			InitializeComponent();
 		}
 
-		public MatchProfileView(MatchModel match)
-		{
-			InitializeComponent();
-			MatchProfileViewModel viewModel = DataContext as MatchProfileViewModel;
-			viewModel.Match = match;
-		}
-
-		/// <summary>
-		/// Scrolls the listview
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
 		private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
 		{
 			if (e.Delta < 0)
 			{
 				// Scrolls a little bit more than one line
-				
 				ScrollBar.LineRightCommand.Execute(null, e.OriginalSource as IInputElement);
 				ScrollBar.LineRightCommand.Execute(null, e.OriginalSource as IInputElement);
 			}
@@ -42,6 +41,6 @@ namespace Twinder.View
 			}
 			e.Handled = true;
 		}
-		
+
 	}
 }

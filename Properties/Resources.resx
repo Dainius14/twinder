@@ -181,4 +181,70 @@
   <data name="statusbar_match_count" xml:space="preserve">
     <value>Matches</value>
   </data>
+  <data name="window_tile_recommendations" xml:space="preserve">
+    <value>Recommendations</value>
+  </data>
+  <data name="window_title_chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="window_title_my_profile" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="window_title_profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="auth_getting_recs" xml:space="preserve">
+    <value>Getting recommendations...</value>
+  </data>
+  <data name="auth_recs_exchausted" xml:space="preserve">
+    <value>No new recommendations</value>
+  </data>
+  <data name="match_context_menu_open_chat" xml:space="preserve">
+    <value>Open _Chat</value>
+  </data>
+  <data name="match_context_menu_open_profile" xml:space="preserve">
+    <value>Open _Profile</value>
+  </data>
+  <data name="match_context_menu_unmatch" xml:space="preserve">
+    <value>_Unmatch</value>
+  </data>
+  <data name="fblogin_btn_cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="fblogin_btn_get_id" xml:space="preserve">
+    <value>Get ID</value>
+  </data>
+  <data name="fblogin_btn_get_token" xml:space="preserve">
+    <value>Get Token</value>
+  </data>
+  <data name="fblogin_btn_ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="fblogin_id" xml:space="preserve">
+    <value>FB ID</value>
+  </data>
+  <data name="fblogin_token" xml:space="preserve">
+    <value>FB Token</value>
+  </data>
+  <data name="match_info_bio" xml:space="preserve">
+    <value>Bio</value>
+  </data>
+  <data name="match_info_last_message" xml:space="preserve">
+    <value>Last message</value>
+  </data>
+  <data name="match_info_last_seen" xml:space="preserve">
+    <value>Last seen</value>
+  </data>
+  <data name="match_info_matched_on" xml:space="preserve">
+    <value>Matched on</value>
+  </data>
+  <data name="match_info_message_count" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="tooltip_show_profile" xml:space="preserve">
+    <value>Show profile</value>
+  </data>
+  <data name="window_title_fblogin" xml:space="preserve">
+    <value>Facebook Login</value>
+  </data>
 </root>

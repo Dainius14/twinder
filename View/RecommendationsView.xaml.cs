@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Twinder.Model;
@@ -12,13 +13,7 @@ namespace Twinder.View
 		{
 			InitializeComponent();
 		}
-
-		public RecommendationsView(RecsResultsModel results)
-		{
-			InitializeComponent();
-			var viewModel = DataContext as RecommendationsViewModel;
-			viewModel.Recommendations = results.Recommendations;
-		}
+		
 
 		/// <summary>
 		/// Scrolls the listview
@@ -31,14 +26,25 @@ namespace Twinder.View
 			{
 				// Scrolls a little bit more than one line
 				ScrollBar.LineRightCommand.Execute(null, e.OriginalSource as IInputElement);
-				ScrollBar.LineRightCommand.Execute(null, e.OriginalSource as IInputElement);
 			}
 			if (e.Delta > 0)
 			{
 				ScrollBar.LineLeftCommand.Execute(null, e.OriginalSource as IInputElement);
-				ScrollBar.LineLeftCommand.Execute(null, e.OriginalSource as IInputElement);
 			}
 			e.Handled = true;
+		}
+
+		private async void Window_ContentRendered(object sender, System.EventArgs e)
+		{
+			var viewModel = DataContext as RecommendationsViewModel;
+			authText.Text = Properties.Resources.auth_getting_recs;
+			if (await viewModel.GetRecommendations())
+			{
+				auth_get_recs.Visibility = Visibility.Collapsed;
+				auth_sep.Visibility = Visibility.Collapsed;
+			}
+			else
+				authText.Text = Properties.Resources.auth_recs_exchausted;
 		}
 	}
 }

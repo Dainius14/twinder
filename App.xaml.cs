@@ -37,6 +37,7 @@ namespace Twinder
 				var mainWindow = new MainWindow();
 				//Current.MainWindow = MainWindow;
 				mainWindow.Show();
+				
 			}
 		}
 	}

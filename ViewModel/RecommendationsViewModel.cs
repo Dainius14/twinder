@@ -69,6 +69,17 @@ namespace Twinder.ViewModel
 			SuperLikeCommand = new RelayCommand<bool>(param => Like(true));
 			LikeAllCommand = new RelayCommand(LikeAll);
 		}
+
+		public async Task<bool> GetRecommendations()
+		{
+			var recommendations = await TinderHelper.GetRecommendations();
+			if (recommendations.Recommendations != null)
+			{
+				Recommendations = recommendations.Recommendations;
+				return true;
+			}
+			return false;
+		}
 		
 		#region Select Previous command
 		/// <summary>

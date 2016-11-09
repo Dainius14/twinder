@@ -20,7 +20,7 @@ namespace Twinder.ViewModel
 			{
 				Set(ref _match, value);
 				SetChat();
-				WindowTitle = String.Format($"{Match.Person.Name} Chat | {Properties.Resources.app_title}");
+				WindowTitle = String.Format($"{Match.Person.Name} Chat - {Properties.Resources.app_title}");
 				RaisePropertyChanged("WindowTitle");
 			}
 		}

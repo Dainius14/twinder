@@ -106,11 +106,29 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Getting recommendations....
+        /// </summary>
+        public static string auth_getting_recs {
+            get {
+                return ResourceManager.GetString("auth_getting_recs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connected.
         /// </summary>
         public static string auth_okay {
             get {
                 return ResourceManager.GetString("auth_okay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No new recommendations.
+        /// </summary>
+        public static string auth_recs_exchausted {
+            get {
+                return ResourceManager.GetString("auth_recs_exchausted", resourceCulture);
             }
         }
         
@@ -142,6 +160,60 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string fblogin_btn_cancel {
+            get {
+                return ResourceManager.GetString("fblogin_btn_cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get ID.
+        /// </summary>
+        public static string fblogin_btn_get_id {
+            get {
+                return ResourceManager.GetString("fblogin_btn_get_id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get Token.
+        /// </summary>
+        public static string fblogin_btn_get_token {
+            get {
+                return ResourceManager.GetString("fblogin_btn_get_token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string fblogin_btn_ok {
+            get {
+                return ResourceManager.GetString("fblogin_btn_ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FB ID.
+        /// </summary>
+        public static string fblogin_id {
+            get {
+                return ResourceManager.GetString("fblogin_id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FB Token.
+        /// </summary>
+        public static string fblogin_token {
+            get {
+                return ResourceManager.GetString("fblogin_token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Job.
         /// </summary>
         public static string job {
@@ -156,6 +228,78 @@ namespace Twinder.Properties {
         public static string last_seen {
             get {
                 return ResourceManager.GetString("last_seen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open _Chat.
+        /// </summary>
+        public static string match_context_menu_open_chat {
+            get {
+                return ResourceManager.GetString("match_context_menu_open_chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open _Profile.
+        /// </summary>
+        public static string match_context_menu_open_profile {
+            get {
+                return ResourceManager.GetString("match_context_menu_open_profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Unmatch.
+        /// </summary>
+        public static string match_context_menu_unmatch {
+            get {
+                return ResourceManager.GetString("match_context_menu_unmatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bio.
+        /// </summary>
+        public static string match_info_bio {
+            get {
+                return ResourceManager.GetString("match_info_bio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last message.
+        /// </summary>
+        public static string match_info_last_message {
+            get {
+                return ResourceManager.GetString("match_info_last_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last seen.
+        /// </summary>
+        public static string match_info_last_seen {
+            get {
+                return ResourceManager.GetString("match_info_last_seen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matched on.
+        /// </summary>
+        public static string match_info_matched_on {
+            get {
+                return ResourceManager.GetString("match_info_matched_on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Messages.
+        /// </summary>
+        public static string match_info_message_count {
+            get {
+                return ResourceManager.GetString("match_info_message_count", resourceCulture);
             }
         }
         
@@ -241,11 +385,65 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show profile.
+        /// </summary>
+        public static string tooltip_show_profile {
+            get {
+                return ResourceManager.GetString("tooltip_show_profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total messages.
         /// </summary>
         public static string total_messages {
             get {
                 return ResourceManager.GetString("total_messages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommendations.
+        /// </summary>
+        public static string window_tile_recommendations {
+            get {
+                return ResourceManager.GetString("window_tile_recommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chat.
+        /// </summary>
+        public static string window_title_chat {
+            get {
+                return ResourceManager.GetString("window_title_chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Facebook Login.
+        /// </summary>
+        public static string window_title_fblogin {
+            get {
+                return ResourceManager.GetString("window_title_fblogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Profile.
+        /// </summary>
+        public static string window_title_my_profile {
+            get {
+                return ResourceManager.GetString("window_title_my_profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        public static string window_title_profile {
+            get {
+                return ResourceManager.GetString("window_title_profile", resourceCulture);
             }
         }
     }

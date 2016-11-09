@@ -130,10 +130,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\DataBindingDebugger.cs" />
+    <Compile Include="Converter\TextTrimConverter.cs" />
     <Compile Include="Converter\ScrollBarRemoverConverter.cs" />
     <Compile Include="Converter\ArrayIndexConverter.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helpers\FbHelper.cs" />
+    <Compile Include="Helpers\PixelBasedScrolling.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="Model\AuthModel.cs" />
     <Compile Include="Model\Auth\GlobalsModel.cs" />
@@ -158,10 +161,10 @@
     <Compile Include="Model\Updates\Match\MessageModel.cs" />
     <Compile Include="Model\Updates\Match\PersonModel.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
+    <Compile Include="ViewModel\FbLoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MatchProfileViewModel.cs" />
     <Compile Include="ViewModel\RecommendationsViewModel.cs" />
-    <Compile Include="ViewModel\FbLoginViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
@@ -171,6 +174,9 @@
     </Compile>
     <Compile Include="View\MatchProfileView.xaml.cs">
       <DependentUpon>MatchProfileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PhotoScrollerView.xaml.cs">
+      <DependentUpon>PhotoScrollerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RecommendationsView.xaml.cs">
       <DependentUpon>RecommendationsView.xaml</DependentUpon>
@@ -203,6 +209,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MatchProfileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PhotoScrollerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

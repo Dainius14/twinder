@@ -4,15 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Twinder.View"
-             mc:Ignorable="d" 
+        xmlns:p="clr-namespace:Twinder.Properties"     
+		mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="500"
 		MinWidth="500" MinHeight="400"
 		Width="500" Height="400"
 		
 		DataContext="{Binding Chat, Source={StaticResource Locator}}"
-		Title="{Binding WindowTitle}"
 			 Background="AntiqueWhite">
-
+	<Window.Title>
+		<MultiBinding StringFormat="{}{0} {1} - {2}">
+			<Binding Path="Match.Person.Name" />
+			<Binding Source="{x:Static p:Resources.window_title_chat}"/>
+			<Binding Source="{x:Static p:Resources.app_title}"/>
+		</MultiBinding>
+	</Window.Title>
 	<Window.Resources>
 		<Style TargetType="TextBox" x:Key="ChatItem">
 			<Setter Property="FontFamily" Value="Consolas"/>

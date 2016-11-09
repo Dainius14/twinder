@@ -5,12 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Twinder.View"
 				xmlns:p="clr-namespace:Twinder.Properties"
+		xmlns:view="clr-namespace:Twinder.View"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="700"
 				Height="610" Width="700"
 			 Background="WhiteSmoke"
-			 DataContext="{Binding MatchProfile, Source={StaticResource Locator}}"
-		Title="{Binding WindowTitle}">
+			 DataContext="{Binding MatchProfile, Source={StaticResource Locator}}">
+	<Window.Title>
+		<MultiBinding StringFormat="{}{0} {1} - {2}">
+			<Binding Path="Match.Person.Name" />
+			<Binding Source="{x:Static p:Resources.window_title_profile}"/>
+			<Binding Source="{x:Static p:Resources.app_title}"/>
+		</MultiBinding>
+	</Window.Title>
 
 	<DockPanel Margin="10" DataContext="{Binding Match}" LastChildFill="True">
 
@@ -93,27 +100,6 @@
 		</Grid>
 		
 		<!-- Images -->
-		<ListView x:Name="photoList" ItemsSource="{Binding Person.Photos}">
-			<ListView.Resources>
-				<Style TargetType="ListViewItem">
-					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>
-				</Style>
-			</ListView.Resources>
-
-			<ListView.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-								ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
-				</ItemsPanelTemplate>
-			</ListView.ItemsPanel>
-
-			<ListView.ItemTemplate>
-				<DataTemplate>
-					<Image Source="{Binding Url}" 
-						   Height="{Binding ElementName=photoList, Path=ActualHeight,
-							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"/>
-				</DataTemplate>
-			</ListView.ItemTemplate>
-		</ListView>
+		<view:PhotoScrollerView/>
 	</DockPanel>
 </Window>

@@ -7,14 +7,22 @@
 		xmlns:p="clr-namespace:Twinder.Properties"
         mc:Ignorable="d"
 		Background="WhiteSmoke"
-        Title="RecommendationsView" Height="650" Width="700"
-		
+        Height="650" Width="700"
+		ContentRendered="Window_ContentRendered"
 		DataContext="{Binding Recommendations, Source={StaticResource Locator}}">
 
-	<DockPanel Margin="5" LastChildFill="True">
-		
-		<Grid DockPanel.Dock="Bottom">
+	<Window.Title>
+		<MultiBinding StringFormat="{}{0} - {1}">
+			<Binding Source="{x:Static p:Resources.window_tile_recommendations}"/>
+			<Binding Source="{x:Static p:Resources.app_title}"/>
+		</MultiBinding>
+	</Window.Title>
+	
+	<DockPanel LastChildFill="True">
+
+		<Grid DockPanel.Dock="Bottom" >
 			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
@@ -22,7 +30,7 @@
 
 			<!-- Match info -->
 
-			<Grid Grid.Row="0" Margin="0, 5, 0, 0" DataContext="{Binding SelectedRec}">
+			<Grid Grid.Row="0" Margin="5" DataContext="{Binding SelectedRec}">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="*"/>
@@ -136,12 +144,6 @@
 				<Button Command="{Binding SelectNextCommand}"
 					Content="Next"/>
 
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding SelectedIndex, FallbackValue='0', Converter={StaticResource ArrayIndexConverter}}"/>
-					<TextBlock Text="/"/>
-					<TextBlock Text="{Binding Recommendations.Count, FallbackValue='0'}"/>
-				</StackPanel>
-
 			</StackPanel>
 
 			<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" >
@@ -163,10 +165,37 @@
 					  IsChecked="{Binding OnlyWithoutDescription}"/>
 			</StackPanel>
 
+
+
+			<StatusBar Grid.Row="3" Padding="5, 0">
+				<!-- Match getting status -->
+				<StatusBarItem Name="auth_get_recs">
+					<StackPanel Orientation="Horizontal">
+						<ProgressBar Name="authProgressBar" Height="10" Width="100" IsIndeterminate="True" Margin="0,0,5,0"/>
+						<TextBlock Name="authText" Text="{x:Static p:Resources.auth_getting_recs}"/>
+					</StackPanel>
+				</StatusBarItem>
+
+				<Separator Name="auth_sep" Width="1" Margin="5, 0"/>
+
+				<StatusBarItem>
+					<!-- Current match number -->
+					<TextBlock>
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0}/{1} {2}">
+								<Binding Path="SelectedIndex" Converter="{StaticResource ArrayIndexConverter}"/>
+								<Binding Path="Recommendations.Count"/>
+								<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</StatusBarItem>
+			</StatusBar>
+
 		</Grid>
 		
 		<!-- Photos -->
-		<ListView x:Name="photoList" ItemsSource="{Binding SelectedRec.Photos}">
+		<ListView x:Name="photoList" ItemsSource="{Binding SelectedRec.Photos}" ScrollViewer.CanContentScroll="False">
 			<ListView.Resources>
 				<Style TargetType="ListViewItem">
 					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>
@@ -175,8 +204,7 @@
 
 			<ListView.ItemsPanel>
 				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-								ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+					<StackPanel Orientation="Horizontal" VirtualizingPanel.ScrollUnit="Pixel" />
 				</ItemsPanelTemplate>
 			</ListView.ItemsPanel>
 
@@ -188,7 +216,6 @@
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
-
 
 	</DockPanel>
 </Window>
