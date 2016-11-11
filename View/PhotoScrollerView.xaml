@@ -8,7 +8,10 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
 
-		<ListView Name="photoList" ItemsSource="{Binding Person.Photos}" VirtualizingPanel.ScrollUnit="Pixel" ScrollViewer.CanContentScroll="False">
+		<ListView Name="photoList" ItemsSource="{Binding}"
+				  VirtualizingPanel.ScrollUnit="Pixel"
+				  ScrollViewer.CanContentScroll="False"
+				  ScrollViewer.HorizontalScrollBarVisibility="Visible">
 			<ListView.Resources>
 				<Style TargetType="ListViewItem">
 					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>

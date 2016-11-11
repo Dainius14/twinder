@@ -4,11 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twinder.View"
-		xmlns:p="clr-namespace:Twinder.Properties"
         mc:Ignorable="d"
+
+		xmlns:p="clr-namespace:Twinder.Properties"
+		xmlns:view="clr-namespace:Twinder.View"
+
+		ContentRendered="Window_ContentRendered"
+
 		Background="WhiteSmoke"
         Height="650" Width="700"
-		ContentRendered="Window_ContentRendered"
 		DataContext="{Binding Recommendations, Source={StaticResource Locator}}">
 
 	<Window.Title>
@@ -195,27 +199,8 @@
 		</Grid>
 		
 		<!-- Photos -->
-		<ListView x:Name="photoList" ItemsSource="{Binding SelectedRec.Photos}" ScrollViewer.CanContentScroll="False">
-			<ListView.Resources>
-				<Style TargetType="ListViewItem">
-					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>
-				</Style>
-			</ListView.Resources>
 
-			<ListView.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" VirtualizingPanel.ScrollUnit="Pixel" />
-				</ItemsPanelTemplate>
-			</ListView.ItemsPanel>
-
-			<ListView.ItemTemplate>
-				<DataTemplate>
-					<Image Source="{Binding Url}" 
-						   Height="{Binding ElementName=photoList, Path=ActualHeight,
-							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"/>
-				</DataTemplate>
-			</ListView.ItemTemplate>
-		</ListView>
+		<view:PhotoScrollerView DataContext="{Binding SelectedRec.Photos}"/>
 
 	</DockPanel>
 </Window>

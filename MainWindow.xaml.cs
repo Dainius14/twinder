@@ -21,8 +21,16 @@ namespace Twinder
 			Messenger.Default.Register<MatchModel>(this, MessageType.NewChatWindow, CreateChatWindow);
 			Messenger.Default.Register<MatchModel>(this, MessageType.ShowMatchProfile, CreateMatchProfileView);
 			Messenger.Default.Register<string>(this, MessageType.ShowRecommendations, CreateRecommendationsWindow);
+			Messenger.Default.Register<string>(this, MessageType.ShowSetLocationWindow, CreateSetLocationWindow);
 		}
-		
+
+		private void CreateSetLocationWindow(string obj)
+		{
+			var locationWindow = new SetLocationView();
+			locationWindow.Owner = this;
+			locationWindow.ShowDialog();
+		}
+
 		private void CreateRecommendationsWindow(string str)
 		{
 			var recsWindow = new RecommendationsView();

@@ -43,6 +43,7 @@ namespace Twinder.ViewModel
 			SimpleIoc.Default.Register<ChatViewModel>();
 			SimpleIoc.Default.Register<MatchProfileViewModel>();
 			SimpleIoc.Default.Register<RecommendationsViewModel>();
+			SimpleIoc.Default.Register<SetLocationViewModel>();
 		}
 
 		/// <summary>
@@ -88,6 +89,14 @@ namespace Twinder.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<RecommendationsViewModel>();
+			}
+		}
+
+		public SetLocationViewModel SetLocation
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<SetLocationViewModel>();
 			}
 		}
 

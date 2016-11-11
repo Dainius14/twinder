@@ -21,7 +21,11 @@
 		<converter:ArrayIndexConverter x:Key="ArrayIndexConverter"/>
 		<converter:ScrollBarRemoverConverter x:Key="ScrollBarRemoverConverter"/>
 		<converter:TextTrimConverter x:Key="TextTrimConverter"/>
+		<converter:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
+		<converter:LastMessageConverter x:Key="LastMessageConverter"/>
+
 		
+
 	</Application.Resources>
     
 </Application>

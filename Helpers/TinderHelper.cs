@@ -163,6 +163,9 @@ namespace Twinder.Helpers
 		/// <param name="longtitude">Longtitude</param>
 		public static async void PingLocation(string latitude, string longtitude)
 		{
+			latitude = latitude.Replace(',', '.');
+			longtitude = longtitude.Replace(',', '.');
+
 			var request = new RestRequest("user/ping", Method.POST);
 			request.AddHeader("Content-type", "application/json");
 			request.AddJsonBody(new { lat = latitude, lon = longtitude });

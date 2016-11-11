@@ -3,23 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:p="clr-namespace:Twinder.Properties"
+        mc:Ignorable="d"
 		
+		xmlns:p="clr-namespace:Twinder.Properties"
 		xmlns:view="clr-namespace:Twinder.View"
 		
 		Closed="Window_Closed"
-		
 		ContentRendered="Window_ContentRendered"
 		
-        mc:Ignorable="d"
-        Title="{x:Static p:Resources.app_title}"
 		MinHeight="400" MinWidth="600"
-        DataContext="{Binding Main, Source={StaticResource Locator}}" Width="78">
+		Height="450" Width="650"
+        
+		Title="{x:Static p:Resources.app_title}"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
 
 	<Window.InputBindings>
-		<KeyBinding Key="Return" Command="{Binding OpenChatCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
-		<KeyBinding Key="Return" Modifiers="Ctrl" Command="{Binding OpenMatchProfileCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
-		<KeyBinding Key="Delete" Command="{Binding UnmatchCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
+		<KeyBinding Key="Return" 
+					Command="{Binding OpenChatCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
+		<KeyBinding Key="Return" Modifiers="Ctrl"
+					Command="{Binding OpenMatchProfileCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
+		<KeyBinding Key="Delete"
+					Command="{Binding UnmatchCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
 	</Window.InputBindings>
 	
 	<DockPanel LastChildFill="True">
@@ -68,7 +72,7 @@
 			</StatusBarItem>
 		</StatusBar>
 
-		<Grid x:Name="LayoutRoot">
+		<Grid Name="LayoutRoot">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*"/>
@@ -76,21 +80,21 @@
 
 			<!--Toolbar-->
 			<StackPanel Grid.Row="0" Orientation="Horizontal">
+				<StackPanel.Resources>
+					<Style TargetType="Button">
+						<Setter Property="Width" Value="110"/>
+						<Setter Property="Margin" Value="2"/>
+					</Style>
+				</StackPanel.Resources>
+				<Button Content="Update matches"
+						Command="{Binding UpdateCommand}"
+						IsEnabled="False"/>
 
-				<Button Content="Update matches" Margin="2" Width="90"
-					Command="{Binding UpdateCommand}"/>
+				<Button Content="{x:Static p:Resources.command_get_recommendations}"
+						Command="{Binding GetRecsCommand}"/>
 
-				<Button Content="Get recs" Margin="2" Width="70"
-					Command="{Binding GetRecsCommand}"/>
-
-				<TextBox Text="{Binding Latitude, UpdateSourceTrigger=PropertyChanged}"
-						 Margin="2"
-						 Width="70"/>
-				<TextBox Text="{Binding Longtitude, UpdateSourceTrigger=PropertyChanged}"
-						 Margin="2"
-						 Width="70"/>
-				<Button Content="Ping" Margin="2" Width="50"
-						Command="{Binding PingCommand}"/>
+				<Button Content="{x:Static p:Resources.command_set_location}"
+						Command="{Binding SetLocationCommand}"/>
 			</StackPanel>
 
 			<!--Match list-->
@@ -101,7 +105,7 @@
 						<EventSetter Event="MouseDoubleClick" Handler="ListView_OnMouseDoubleClick"/>
 					</Style>
 
-					<!-- TODO need to implement this into the control itself somehow god damn it-->
+					 <!--TODO need to implement this into the control itself somehow god damn it-->
 					<ContextMenu x:Key="Context menu">
 						<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
 								  Command="{Binding DataContext.OpenChatCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"

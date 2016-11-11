@@ -133,6 +133,42 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string btn_cancel {
+            get {
+                return ResourceManager.GetString("btn_cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string btn_ok {
+            get {
+                return ResourceManager.GetString("btn_ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get New Matches.
+        /// </summary>
+        public static string command_get_recommendations {
+            get {
+                return ResourceManager.GetString("command_get_recommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Location.
+        /// </summary>
+        public static string command_set_location {
+            get {
+                return ResourceManager.GetString("command_set_location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Common friends.
         /// </summary>
         public static string common_friends_count {
@@ -376,11 +412,47 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error locating.
+        /// </summary>
+        public static string set_location_auto_detect_error {
+            get {
+                return ResourceManager.GetString("set_location_auto_detect_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locating....
+        /// </summary>
+        public static string set_location_auto_detecting {
+            get {
+                return ResourceManager.GetString("set_location_auto_detecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find Location.
+        /// </summary>
+        public static string set_location_btn_auto_detect {
+            get {
+                return ResourceManager.GetString("set_location_btn_auto_detect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Matches.
         /// </summary>
         public static string statusbar_match_count {
             get {
                 return ResourceManager.GetString("statusbar_match_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         
@@ -444,6 +516,15 @@ namespace Twinder.Properties {
         public static string window_title_profile {
             get {
                 return ResourceManager.GetString("window_title_profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Location.
+        /// </summary>
+        public static string window_title_set_location {
+            get {
+                return ResourceManager.GetString("window_title_set_location", resourceCulture);
             }
         }
     }

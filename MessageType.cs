@@ -11,6 +11,7 @@ namespace Twinder
 		ShowLoginDialog,
 		NewChatWindow,
 		ShowMatchProfile,
-		ShowRecommendations
+		ShowRecommendations,
+		ShowSetLocationWindow
 	}
 }

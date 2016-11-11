@@ -247,4 +247,31 @@
   <data name="window_title_fblogin" xml:space="preserve">
     <value>Facebook Login</value>
   </data>
+  <data name="btn_cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="btn_ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="window_title_set_location" xml:space="preserve">
+    <value>Set Location</value>
+  </data>
+  <data name="set_location_btn_auto_detect" xml:space="preserve">
+    <value>Find Location</value>
+  </data>
+  <data name="set_location_auto_detecting" xml:space="preserve">
+    <value>Locating...</value>
+  </data>
+  <data name="set_location_auto_detect_error" xml:space="preserve">
+    <value>Error locating</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="command_get_recommendations" xml:space="preserve">
+    <value>Get New Matches</value>
+  </data>
+  <data name="command_set_location" xml:space="preserve">
+    <value>Set Location</value>
+  </data>
 </root>

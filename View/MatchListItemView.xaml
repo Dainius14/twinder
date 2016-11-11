@@ -9,7 +9,8 @@
              mc:Ignorable="d" 
 			 
 			 d:DesignHeight="126" d:DesignWidth="400"
-			 Background="MintCream">
+			 Background="MintCream"
+			 Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
 
 	<UserControl.Resources>
 		
@@ -41,9 +42,9 @@
 	</UserControl.Resources>
 
 	<!--<UserControl.ContextMenu>
-		<ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource DataBindingDebugger}}">
+		<ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
 			<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
-					  Command="{Binding OpenChatCommand, Converter={StaticResource DataBindingDebugger}}"
+					  Command="{Binding OpenChatCommand}"
 					  CommandParameter="{Binding}"
 					  InputGestureText="Enter" />
 			<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
@@ -74,6 +75,8 @@
 				ToolTip="{x:Static p:Resources.tooltip_show_profile}">
 
 			<Image Source="{Binding Person.Photos[0].ProcessedFiles[2].Url}"/>
+			
+			<!-- Shadow on mouse hover -->
 			<Button.Resources>
 				<Style TargetType="Button">
 					<Style.Triggers>
@@ -151,15 +154,11 @@
 			<!--<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_message}, StringFormat='{}{0}:'}"
 					   Grid.Row="5" Grid.Column="0"
 					   Style="{StaticResource SubTextHeader}"/>-->
-			<TextBlock Grid.Row="5" Grid.ColumnSpan="3"
-					   Style="{StaticResource SubText}"
+			<TextBlock Text="{Binding Converter={StaticResource LastMessageConverter}}"
+					   FontStyle="Italic"
+					   Grid.Row="5" Grid.ColumnSpan="3"
+					   Style="{StaticResource BioText}"
 					   TextTrimming="CharacterEllipsis">
-				<TextBlock.Text>
-					<MultiBinding StringFormat="{}[{0:MM-dd HH:mm:ss}] {1}">
-						<Binding Path="LastMessage.SentDateLocal"/>
-						<Binding Path="LastMessage.Message"/>
-					</MultiBinding>
-				</TextBlock.Text>
 			</TextBlock>
 
 		</Grid>

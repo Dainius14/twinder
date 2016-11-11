@@ -40,19 +40,6 @@ namespace Twinder.ViewModel
 			set { Set(ref _user, value); }
 		}
 
-		private string _latitude;
-		public string Latitude
-		{
-			get { return _latitude; }
-			set { Set(ref _latitude, value); }
-		}
-
-		private string _longtitude;
-		public string Longtitude
-		{
-			get { return _longtitude; }
-			set { Set(ref _longtitude, value); }
-		}
 
 		public RelayCommand AuthenticateCommand { get; private set; }
 		public RelayCommand GetMatchesCommand { get; private set; }
@@ -61,7 +48,7 @@ namespace Twinder.ViewModel
 		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
 		public RelayCommand<MatchModel> UnmatchCommand { get; private set; }
 		public RelayCommand GetRecsCommand { get; private set; }
-		public RelayCommand PingCommand { get; private set; }
+		public RelayCommand SetLocationCommand { get; private set; }
 		public RelayCommand ExitCommand { get; private set; }
 		public RelayCommand LoginCommand { get; private set; }
 		public RelayCommand AboutCommand { get; private set; }
@@ -69,16 +56,13 @@ namespace Twinder.ViewModel
 
 		public MainViewModel()
 		{
-			Longtitude = Properties.Settings.Default.longtitude;
-			Latitude = Properties.Settings.Default.latitude;
-
 			GetMatchesCommand = new RelayCommand(GetMatchesComm, CanGetMatches);
 			UpdateCommand = new RelayCommand(Update);
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
 			OpenMatchProfileCommand = new RelayCommand<MatchModel>(param => OpenMatchProfile(param));
 			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
 			GetRecsCommand = new RelayCommand(GetRecs);
-			PingCommand = new RelayCommand(Ping, CanPing);
+			SetLocationCommand = new RelayCommand(SetLocation);
 			ExitCommand = new RelayCommand(Exit);
 
 			LoginCommand = new RelayCommand(Login);
@@ -155,17 +139,9 @@ namespace Twinder.ViewModel
 		}
 
 		#region Ping command
-		private void Ping()
+		private void SetLocation()
 		{
-			Properties.Settings.Default["latitude"] = Latitude;
-			Properties.Settings.Default["longtitude"] = Longtitude;
-			Properties.Settings.Default.Save();
-			TinderHelper.PingLocation(Latitude.Replace(',', '.'), Longtitude.Replace(',', '.'));
-		}
-
-		private bool CanPing()
-		{
-			return (!string.IsNullOrWhiteSpace(Latitude) && !string.IsNullOrWhiteSpace(Longtitude));
+			Messenger.Default.Send("ayy", MessageType.ShowSetLocationWindow);
 		}
 		#endregion
 		

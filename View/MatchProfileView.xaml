@@ -36,21 +36,18 @@
 				</Grid.RowDefinitions>
 				
 				<!-- Name, age -->
-				<StackPanel Grid.Row="0" Orientation="Horizontal">
-					<TextBlock Margin="0, 0, 5, 0"
-						   Text="{Binding Person.Name, FallbackValue='Name'}"
-						   FontSize="18"
-						   VerticalAlignment="Bottom"/>
-					<TextBlock 
-						   Text="{Binding Person.Age, FallbackValue='99'}"
-						   FontSize="18"
-						   VerticalAlignment="Bottom"/>
-				</StackPanel>
+				<TextBlock Grid.Row="0" FontSize="18">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0}, {1}">
+							<Binding Path="Person.Name"/>
+							<Binding Path="Person.Age"/>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
 
 				<!-- Bio -->
 				<ScrollViewer Grid.Row="1">
-					<TextBlock 
-						   Text="{Binding Person.Bio, FallbackValue='Bio full'}"/>
+					<TextBlock Text="{Binding Person.Bio, FallbackValue='Bio full'}"/>
 				</ScrollViewer>
 			</Grid>
 
@@ -71,27 +68,32 @@
 				</Grid.ColumnDefinitions>
 
 				<!-- Last seen date -->
-				<TextBlock Text="{x:Static p:Resources.last_seen}" Grid.Row="0" Grid.Column="0"/>
+				<TextBlock Text="{Binding Source={x:Static p:Resources.last_seen}, StringFormat='{}{0}:'}"
+						   Grid.Row="0" Grid.Column="0"/>
 				<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
 						   Grid.Row="0" Grid.Column="2"/>
 
 				<!-- Matched on date-->
-				<TextBlock Text="{x:Static p:Resources.matched_on}" Grid.Row="1" Grid.Column="0"/>
+				<TextBlock Text="{Binding Source={x:Static p:Resources.matched_on}, StringFormat='{}{0}:'}"
+						   Grid.Row="1" Grid.Column="0"/>
 				<TextBlock Text="{Binding CreatedDateLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
 						   Grid.Row="1" Grid.Column="2"/>
 
 				<!-- Common like count-->
-				<TextBlock Text="{x:Static p:Resources.common_likes_count}" Grid.Row="2" Grid.Column="0"/>
+				<TextBlock Text="{Binding Source={x:Static p:Resources.common_likes_count}, StringFormat='{}{0}:'}"
+						   Grid.Row="2" Grid.Column="0"/>
 				<TextBlock Text="{Binding CommonLikeCount}"
 						   Grid.Row="2" Grid.Column="2"/>
 
 				<!-- Common friend count -->
-				<TextBlock Text="{x:Static p:Resources.common_friends_count}" Grid.Row="3" Grid.Column="0"/>
+				<TextBlock Text="{Binding Source={x:Static p:Resources.common_friends_count}, StringFormat='{}{0}:'}"
+						   Grid.Row="3" Grid.Column="0"/>
 				<TextBlock Text="{Binding CommonFriendCount}"
 						   Grid.Row="3" Grid.Column="2"/>
 
 				<!-- Total messages -->
-				<TextBlock Text="{x:Static p:Resources.total_messages}" Grid.Row="4" Grid.Column="0"/>
+				<TextBlock Text="{Binding Source={x:Static p:Resources.total_messages}, StringFormat='{}{0}:'}"
+						   Grid.Row="4" Grid.Column="0"/>
 				<TextBlock Text="{Binding Messages.Count}"
 						   Grid.Row="4" Grid.Column="2"/>
 
@@ -100,6 +102,6 @@
 		</Grid>
 		
 		<!-- Images -->
-		<view:PhotoScrollerView/>
+		<view:PhotoScrollerView DataContext="{Binding Person.Photos}"/>
 	</DockPanel>
 </Window>
