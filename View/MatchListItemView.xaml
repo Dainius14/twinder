@@ -9,6 +9,9 @@
              mc:Ignorable="d" 
 			 
 			 d:DesignHeight="126" d:DesignWidth="400"
+			 
+			 d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}"
+			 
 			 Background="MintCream"
 			 Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
 

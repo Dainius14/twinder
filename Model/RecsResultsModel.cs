@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Twinder.Model
 {
 	public class RecsResultsModel
 	{
+		// When something goes wrong
 		[JsonProperty("message")]
 		public string Message { get; set; }
 
@@ -17,6 +13,6 @@ namespace Twinder.Model
 		public int Status { get; set; }
 
 		[JsonProperty("results")]
-		public ObservableCollection<RecommendationModel> Recommendations { get; set; }
+		public List<RecModel> Recommendations { get; set; }
 	}
 }

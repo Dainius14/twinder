@@ -9,6 +9,9 @@ using System;
 using Twinder.View;
 using System.Collections.ObjectModel;
 using Twinder.Model;
+using Twinder.Models;
+using System.Windows.Interop;
+using Twinder.Helpers;
 
 namespace Twinder
 {
@@ -57,7 +60,7 @@ namespace Twinder
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void ListView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+		private void matchList_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 			MainViewModel viewModel = DataContext as MainViewModel;
 			ListViewItem item = sender as ListViewItem;
@@ -105,6 +108,8 @@ namespace Twinder
 				authText.Text = Properties.Resources.auth_connect_error;
 			}
 			authProgressBar.Visibility = Visibility.Collapsed;
+
+
 		}
 
 	}

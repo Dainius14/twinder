@@ -1,18 +1,18 @@
-﻿<Window		 x:Class="Twinder.View.FbLoginView"
-			 x:Name="FbLoginWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Twinder.View"
-             xmlns:p="clr-namespace:Twinder.Properties"
-             mc:Ignorable="d" 
-			 Background="WhiteSmoke"
+﻿<Window	x:Class="Twinder.View.FbLoginView"
+		x:Name="FbLoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:Twinder.View"
+        xmlns:p="clr-namespace:Twinder.Properties"
+        mc:Ignorable="d" 
+		Background="WhiteSmoke"
 			 
-			 Height="115" Width="300" ResizeMode="NoResize"
-			 WindowStartupLocation="CenterScreen"
-			 
-			 DataContext="{Binding SetUser, Source={StaticResource Locator}}">
+		Height="120" Width="320" ResizeMode="NoResize"
+		WindowStartupLocation="CenterScreen"
+		
+		DataContext="{Binding SetUser, Source={StaticResource Locator}}">
 	
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} - {1}">

@@ -15,8 +15,8 @@ namespace Twinder.ViewModel
 {
 	public class RecommendationsViewModel : ViewModelBase
 	{
-		private ObservableCollection<RecommendationModel> _recommendations;
-		public ObservableCollection<RecommendationModel> Recommendations
+		private ObservableCollection<RecModel> _recommendations;
+		public ObservableCollection<RecModel> Recommendations
 		{
 			get { return _recommendations; }
 			set
@@ -31,8 +31,8 @@ namespace Twinder.ViewModel
 				Set(ref _recommendations, value); }
 		}
 
-		private RecommendationModel _selectedRec;
-		public RecommendationModel SelectedRec
+		private RecModel _selectedRec;
+		public RecModel SelectedRec
 		{
 			get { return _selectedRec; }
 			set { Set(ref _selectedRec, value); }
@@ -72,10 +72,10 @@ namespace Twinder.ViewModel
 
 		public async Task<bool> GetRecommendations()
 		{
-			var recommendations = await TinderHelper.GetRecommendations();
-			if (recommendations.Recommendations != null)
+			var recs = await TinderHelper.GetRecommendations();
+			if (recs.Recommendations != null)
 			{
-				Recommendations = recommendations.Recommendations;
+				Recommendations = new ObservableCollection<RecModel>(recs.Recommendations);
 				return true;
 			}
 			return false;
@@ -87,12 +87,15 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void SelectPrevious()
 		{
-			if (SelectedIndex == 0)
-				SelectedIndex = Recommendations.Count - 1;
-			else
-				SelectedIndex--;
+			if (Recommendations.Count > 0)
+			{
+				if (SelectedIndex == 0)
+					SelectedIndex = Recommendations.Count - 1;
+				else
+					SelectedIndex--;
 
-			SelectedRec = Recommendations[_selectedIndex];
+				SelectedRec = Recommendations[SelectedIndex];
+			}
 		}
 		#endregion
 
@@ -102,12 +105,15 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void SelectNext()
 		{
-			if (SelectedIndex == Recommendations.Count - 1)
-				SelectedIndex = 0;
-			else
-				SelectedIndex++;
+			if (Recommendations.Count > 0)
+			{
+				if (SelectedIndex == Recommendations.Count - 1)
+					SelectedIndex = 0;
+				else
+					SelectedIndex++;
 
-			SelectedRec = Recommendations[SelectedIndex];
+				SelectedRec = Recommendations[SelectedIndex];
+			}
 		}
 		#endregion
 
@@ -117,8 +123,11 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void Pass()
 		{
-			TinderHelper.PassRecommendation(SelectedRec.Id);
-			RemoveSelectedRecommendation();
+			if (SelectedRec != null)
+			{
+				TinderHelper.PassRecommendation(SelectedRec.Id);
+				RemoveSelectedRecommendation();
+			}
 		}
 		#endregion
 
@@ -129,14 +138,17 @@ namespace Twinder.ViewModel
 		/// <param name="superLike">True if a superlike should be send, default is false</param>
 		private void Like(bool superLike = false)
 		{
-			var match = TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
-
-			if (match != null)
+			if (SelectedRec != null)
 			{
-				MessageBox.Show("It's a match!");
-			}
+				var match = TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
 
-			RemoveSelectedRecommendation();
+				if (match != null)
+				{
+					MessageBox.Show("It's a match!");
+				}
+
+				RemoveSelectedRecommendation();
+			}
 		}
 		#endregion
 		
@@ -165,7 +177,7 @@ namespace Twinder.ViewModel
 		/// Removes recommendation
 		/// </summary>
 		/// <param name="rec">Recommendation to remove</param>
-		private void RemoveRecomendations(RecommendationModel rec)
+		private void RemoveRecomendations(RecModel rec)
 		{
 			if (rec == SelectedRec)
 				RemoveSelectedRecommendation();
@@ -186,7 +198,7 @@ namespace Twinder.ViewModel
 					SelectedRec = Recommendations[SelectedIndex];
 			}
 			// If no more recommendations are left, removes selection
-			else if (Recommendations.Count == 0)
+			if (Recommendations.Count == 0)
 				SelectedRec = null;
 			else
 				SelectedRec = Recommendations[SelectedIndex];

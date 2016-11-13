@@ -151,6 +151,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string chat_btn_send_message {
+            get {
+                return ResourceManager.GetString("chat_btn_send_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Get New Matches.
         /// </summary>
         public static string command_get_recommendations {
@@ -250,24 +259,6 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Job.
-        /// </summary>
-        public static string job {
-            get {
-                return ResourceManager.GetString("job", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Last seen.
-        /// </summary>
-        public static string last_seen {
-            get {
-                return ResourceManager.GetString("last_seen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Open _Chat.
         /// </summary>
         public static string match_context_menu_open_chat {
@@ -340,6 +331,24 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string match_job {
+            get {
+                return ResourceManager.GetString("match_job", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to School.
+        /// </summary>
+        public static string match_school {
+            get {
+                return ResourceManager.GetString("match_school", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Matched on.
         /// </summary>
         public static string matched_on {
@@ -403,15 +412,6 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to School.
-        /// </summary>
-        public static string school {
-            get {
-                return ResourceManager.GetString("school", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error locating.
         /// </summary>
         public static string set_location_auto_detect_error {
@@ -444,15 +444,6 @@ namespace Twinder.Properties {
         public static string statusbar_match_count {
             get {
                 return ResourceManager.GetString("statusbar_match_count", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

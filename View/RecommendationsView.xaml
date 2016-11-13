@@ -65,7 +65,9 @@
 					</Grid>
 
 					<!--Bio-->
-					<ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Hidden" CanContentScroll="False" >
+					<ScrollViewer Grid.Row="1" Grid.Column="0"
+								  VerticalScrollBarVisibility="Visible"
+								  CanContentScroll="False" >
 						<TextBlock 
 						   Text="{Binding Bio, FallbackValue='Bio full'}"
 						   TextWrapping="Wrap"/>
@@ -88,13 +90,13 @@
 					</Grid.ColumnDefinitions>
 
 					<!-- Last seen date -->
-					<TextBlock Text="{x:Static p:Resources.last_seen}" Grid.Row="0" Grid.Column="0"/>
+					<TextBlock Text="{x:Static p:Resources.match_info_last_seen}" Grid.Row="0" Grid.Column="0"/>
 					<TextBlock Text="{Binding PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
 						   Grid.Row="0" Grid.Column="2"/>
 
 					<!-- Matched on date-->
 					<TextBlock Text="{x:Static p:Resources.distance}" Grid.Row="1" Grid.Column="0"/>
-					<TextBlock Text="{Binding DistanceKilometers}"
+					<TextBlock Text="{Binding DistanceKilometers, StringFormat='{}{0} km'}"
 						   Grid.Row="1" Grid.Column="2"/>
 
 					<!-- Common like count-->
@@ -108,7 +110,7 @@
 						   Grid.Row="3" Grid.Column="2"/>
 					
 					<!-- School name -->
-					<TextBlock Text="{x:Static p:Resources.school}" Grid.Row="4" Grid.Column="0"/>
+					<TextBlock Text="{x:Static p:Resources.match_school}" Grid.Row="4" Grid.Column="0"/>
 					<TextBlock Text="{Binding Schools[0].Name}"
 						   Grid.Row="4" Grid.Column="2"/>
 					
@@ -199,7 +201,6 @@
 		</Grid>
 		
 		<!-- Photos -->
-
 		<view:PhotoScrollerView DataContext="{Binding SelectedRec.Photos}"/>
 
 	</DockPanel>

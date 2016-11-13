@@ -145,11 +145,8 @@
   <data name="distance" xml:space="preserve">
     <value>Distance</value>
   </data>
-  <data name="job" xml:space="preserve">
+  <data name="match_job" xml:space="preserve">
     <value>Job</value>
-  </data>
-  <data name="last_seen" xml:space="preserve">
-    <value>Last seen</value>
   </data>
   <data name="matched_on" xml:space="preserve">
     <value>Matched on</value>
@@ -172,7 +169,7 @@
   <data name="menu_tools_login" xml:space="preserve">
     <value>_Login</value>
   </data>
-  <data name="school" xml:space="preserve">
+  <data name="match_school" xml:space="preserve">
     <value>School</value>
   </data>
   <data name="total_messages" xml:space="preserve">
@@ -265,13 +262,13 @@
   <data name="set_location_auto_detect_error" xml:space="preserve">
     <value>Error locating</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
   <data name="command_get_recommendations" xml:space="preserve">
     <value>Get New Matches</value>
   </data>
   <data name="command_set_location" xml:space="preserve">
     <value>Set Location</value>
+  </data>
+  <data name="chat_btn_send_message" xml:space="preserve">
+    <value>Send</value>
   </data>
 </root>

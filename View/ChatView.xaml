@@ -6,12 +6,15 @@
 		xmlns:local="clr-namespace:Twinder.View"
 		mc:Ignorable="d" 
         
-		xmlns:p="clr-namespace:Twinder.Properties"     
+		xmlns:p="clr-namespace:Twinder.Properties"    
+		
+		Activated="Window_Activated"
         
 		MinWidth="500" MinHeight="400"
 		Width="500" Height="400"
-		Background="AntiqueWhite"
-		DataContext="{Binding Chat, Source={StaticResource Locator}}">
+		Background="WhiteSmoke"
+		DataContext="{Binding Chat, Source={StaticResource Locator}}"
+		d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}">
 	
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} {1} - {2}">
@@ -27,86 +30,79 @@
 			<Setter Property="IsReadOnly" Value="True"/>
 		</Style>
 	</Window.Resources>
-	
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="auto"/>
-		</Grid.RowDefinitions>
 
-		<!-- Match info -->
-		<Grid Grid.Row="0">
+	<DockPanel LastChildFill="True">
+		<!-- Info bar -->
+		<Grid DockPanel.Dock="Top">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="auto"/>
 				<ColumnDefinition Width="5"/>
 				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="auto"/>
 			</Grid.ColumnDefinitions>
 
-
-			<Rectangle Grid.Column="0"
-				   Stretch="UniformToFill" 
-				   Fill="Red"/>
 			<Image Grid.Column="0"
 				   Source="{Binding Match.Person.Photos[0].ProcessedFiles[2].Url}"
 				   Height="50" Width="50"/>
 
+			
 			<Grid Grid.Column="2">
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="20"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+
 				<Grid.Resources>
 					<Style TargetType="TextBlock">
 						<Setter Property="VerticalAlignment" Value="Bottom"/>
 					</Style>
 				</Grid.Resources>
 				
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="auto"/>
-					<ColumnDefinition Width="20"/>
-					<ColumnDefinition Width="auto"/>
-					<ColumnDefinition Width="auto"/>
-				</Grid.ColumnDefinitions>
-
-				<TextBlock Grid.Column="0"
-						   Text="{Binding Match.Person.Name, FallbackValue='Name'}"
+				<TextBlock Text="{Binding Match.Person.Name, FallbackValue='Name'}"
+						   Grid.Column="0"
 						   FontSize="18" FontWeight="DemiBold"/>
 
-				<TextBlock Grid.Column="2"
-						   Text="Last seen: "/>
-				
-				<TextBlock Grid.Column="3"
-						   Text="{Binding Match.Person.PingTimeLocal, StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm'}"/>
+				<!-- Last seen -->
+				<TextBlock Grid.Column="2">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0}: {1:MM-dd HH:mm}">
+							<Binding Source="{x:Static p:Resources.match_info_last_seen}"/>
+							<Binding Path="Match.Person.PingTimeLocal"/>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
 			</Grid>
-
-			<Button Grid.Column="3"
-					Command="{Binding UpdateCommand}"
-					Content="Update"/>
 		</Grid>
 
-		<!-- Chat -->
-		<ScrollViewer Name="chatScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible">
-			<TextBox Name="chatBox"
-				Text="{Binding Chat}" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" TextChanged="chatBox_TextChanged"/>
-		</ScrollViewer>
-	
 		<!-- Send message -->
-		<Grid Grid.Row="2">
+		<Grid DockPanel.Dock="Bottom">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="auto"/>
 			</Grid.ColumnDefinitions>
 
-			<TextBox Grid.Column="0"
-					 Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
+			<TextBox Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
+					 Grid.Column="0"
 					 FontFamily="Consolas">
+				
 				<TextBox.InputBindings>
 					<KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
 				</TextBox.InputBindings>
 			</TextBox>
 
-			<Button Grid.Column="1"
+			<Button Content="{x:Static p:Resources.chat_btn_send_message}"
 					Command="{Binding SendMessageCommand}"
-					Content="Send"/>
+					Grid.Column="1"/>
 		</Grid>
 
-	</Grid>
+		<!-- Chat -->
+		<ScrollViewer Name="chatScrollViewer" VerticalScrollBarVisibility="Visible">
+			<TextBox Name="chatBox" Text="{Binding Chat}"
+					 FontFamily="Consolas"
+					 IsReadOnly="True"
+					 TextWrapping="Wrap"
+					 TextChanged="chatBox_TextChanged"/>
+		</ScrollViewer>
+	</DockPanel>
 </Window>

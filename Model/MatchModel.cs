@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using Twinder.Models.Updates;
 
-namespace Twinder.Models.Updates
+namespace Twinder.Models
 {
 	public sealed class MatchModel
 	{

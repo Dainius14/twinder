@@ -1,16 +1,19 @@
 ﻿<Window x:Class="Twinder.View.MatchProfileView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Twinder.View"
-				xmlns:p="clr-namespace:Twinder.Properties"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+		xmlns:local="clr-namespace:Twinder.View"
+        mc:Ignorable="d" 
+		
+		xmlns:p="clr-namespace:Twinder.Properties"
 		xmlns:view="clr-namespace:Twinder.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="700"
-				Height="610" Width="700"
-			 Background="WhiteSmoke"
-			 DataContext="{Binding MatchProfile, Source={StaticResource Locator}}">
+		
+        d:DesignHeight="650" d:DesignWidth="700"
+		Height="610" Width="700"
+		Background="WhiteSmoke"
+		DataContext="{Binding MatchProfile, Source={StaticResource Locator}}"
+		d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}">
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} {1} - {2}">
 			<Binding Path="Match.Person.Name" />
@@ -19,7 +22,10 @@
 		</MultiBinding>
 	</Window.Title>
 
-	<DockPanel Margin="10" DataContext="{Binding Match}" LastChildFill="True">
+	<DockPanel Margin="10" 
+			   DataContext="{Binding Match}"
+			   d:DataContext="{Binding}"
+			   LastChildFill="True">
 
 		<!-- Information -->
 		<Grid DockPanel.Dock="Bottom" Height="110" Margin="0, 5, 0, 0">
@@ -47,7 +53,7 @@
 
 				<!-- Bio -->
 				<ScrollViewer Grid.Row="1">
-					<TextBlock Text="{Binding Person.Bio, FallbackValue='Bio full'}"/>
+					<TextBlock Text="{Binding Person.Bio}"/>
 				</ScrollViewer>
 			</Grid>
 
@@ -68,7 +74,7 @@
 				</Grid.ColumnDefinitions>
 
 				<!-- Last seen date -->
-				<TextBlock Text="{Binding Source={x:Static p:Resources.last_seen}, StringFormat='{}{0}:'}"
+				<TextBlock Text="{Binding Source={x:Static p:Resources.match_school}, StringFormat='{}{0}:'}"
 						   Grid.Row="0" Grid.Column="0"/>
 				<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
 						   Grid.Row="0" Grid.Column="2"/>

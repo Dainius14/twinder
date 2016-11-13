@@ -142,31 +142,40 @@
     <Compile Include="Converter\ArrayIndexConverter.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helpers\FbHelper.cs" />
-    <Compile Include="Helpers\PixelBasedScrolling.cs" />
+    <Compile Include="Helpers\WindowFlasher.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="Model\AuthModel.cs" />
     <Compile Include="Model\Auth\GlobalsModel.cs" />
     <Compile Include="Model\Auth\UserModel.cs" />
     <Compile Include="Model\Auth\User\InterestModel.cs" />
+    <Compile Include="Model\Auth\User\JobModel.cs" />
     <Compile Include="Model\Auth\User\SchoolModel.cs" />
     <Compile Include="Model\Auth\VersionsModel.cs" />
+    <Compile Include="Helpers\TinderHelper.cs" />
+    <Compile Include="Model\CompanyModel.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
-    <Compile Include="Helpers\TinderHelper.cs" />
     <Compile Include="Model\InstagramModel.cs" />
     <Compile Include="Model\Photos\InstagramPhoto.cs" />
     <Compile Include="Model\Photos\PhotoModel.cs" />
     <Compile Include="Model\Photos\ProcessedFileModel.cs" />
     <Compile Include="Model\RecMatchedModel.cs" />
-    <Compile Include="Model\RecommendationModel.cs" />
+    <Compile Include="Model\RecModel.cs" />
     <Compile Include="Model\RecsResultsModel.cs" />
+    <Compile Include="Model\Spotify\SpotifyAlbumModel.cs" />
+    <Compile Include="Model\Spotify\SpotifyArtistModel.cs" />
+    <Compile Include="Model\Spotify\SpotifyImageModel.cs" />
+    <Compile Include="Model\Spotify\SpotifyTopArtistModel.cs" />
+    <Compile Include="Model\Spotify\SpotifyTrackModel.cs" />
+    <Compile Include="Model\TeaserModel.cs" />
     <Compile Include="Model\UpdatesModel.cs" />
     <Compile Include="Model\Updates\LikedMessage.cs" />
-    <Compile Include="Model\Updates\MatchModel.cs" />
+    <Compile Include="Model\MatchModel.cs" />
     <Compile Include="Model\Updates\Match\MessageModel.cs" />
     <Compile Include="Model\Updates\Match\PersonModel.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
+    <Compile Include="SampleData\SampleMainVM.cs" />
     <Compile Include="ViewModel\FbLoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SetLocationViewModel.cs" />
@@ -280,6 +289,13 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <DesignData Include="SampleData\DoloresPics\dolores1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

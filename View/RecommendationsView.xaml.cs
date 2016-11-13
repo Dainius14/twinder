@@ -38,13 +38,11 @@ namespace Twinder.View
 		{
 			var viewModel = DataContext as RecommendationsViewModel;
 			authText.Text = Properties.Resources.auth_getting_recs;
-			if (await viewModel.GetRecommendations())
-			{
-				auth_get_recs.Visibility = Visibility.Collapsed;
-				auth_sep.Visibility = Visibility.Collapsed;
-			}
-			else
+			if (!await viewModel.GetRecommendations())
 				authText.Text = Properties.Resources.auth_recs_exchausted;
+
+			auth_get_recs.Visibility = Visibility.Collapsed;
+			auth_sep.Visibility = Visibility.Collapsed;
 		}
 	}
 }

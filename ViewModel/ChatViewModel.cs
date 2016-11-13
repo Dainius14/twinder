@@ -1,16 +1,23 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using Twinder.Helpers;
+using Twinder.Models;
 using Twinder.Models.Updates;
 
 namespace Twinder.ViewModel
 {
+	// TODO this all needs much better way of implementation
 	public class ChatViewModel : ViewModelBase
 	{
 		private DateTime _lastActivity;
+
+		public event NewChatMessageHandler NewChatMessageReceived;
+		public delegate void NewChatMessageHandler(object sender, EventArgs e);
 
 		private MatchModel _match;
 		public MatchModel Match
@@ -20,18 +27,9 @@ namespace Twinder.ViewModel
 			{
 				Set(ref _match, value);
 				SetChat();
-				WindowTitle = String.Format($"{Match.Person.Name} Chat - {Properties.Resources.app_title}");
-				RaisePropertyChanged("WindowTitle");
 			}
 		}
-
-		private string _windowTitle;
-		public string WindowTitle
-		{
-			get { return _windowTitle; }
-			set { Set(ref _windowTitle, value); }
-		}
-
+		
 		private string _chat;
 		public string Chat
 		{
@@ -47,43 +45,64 @@ namespace Twinder.ViewModel
 		}
 
 		public RelayCommand SendMessageCommand { get; private set; }
-		public RelayCommand UpdateCommand { get; private set; }
 
 		public ChatViewModel()
 		{
 			SendMessageCommand = new RelayCommand(SendMessage, CanSendMessage);
-			UpdateCommand = new RelayCommand(Update);
 
+			_lastActivity = DateTime.Now;
 
+			if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+			{
+				//DispatcherTimer timer = new DispatcherTimer();
+				//timer.Tick += new EventHandler(UpdateTick);
+				//timer.Interval = new TimeSpan(0, 0, 5);
+				//timer.Start();
+			}
 		}
 
-		// Sends a request to server for updates on chat model
+	
+
+		/// <summary>
+		/// Sends a request to server for updates on chat
+		/// </summary>
 		private async void Update()
 		{
-			if (_lastActivity == default(DateTime))
-				_lastActivity = Match.LastActivityDate;
-
-			var newUpdates = await TinderHelper.GetUpdates(_lastActivity);
-			// TODO better error handling
-			if (newUpdates == null)
-				MessageBox.Show("Error getting updates");
-
-			if (newUpdates.Matches.Count > 0)
+			// fuck you designer mode
+			if (!IsInDesignMode)
 			{
-				var matchUpdates = newUpdates.Matches.Where(item => item.Id == Match.Id).FirstOrDefault();
+				var newUpdates = await TinderHelper.GetUpdates(_lastActivity);
 
-				if (matchUpdates != null)
-					foreach (var msg in matchUpdates.Messages)
-						// Checks if the new message doesn't already exist
-						if (!Match.Messages.Contains(msg))
-						{
-							Match.Messages.Add(msg);
-							AddMessageToChat(msg);
-						}
+				// TODO better error handling
+				if (newUpdates == null)
+					MessageBox.Show("Error getting updates");
+
+				if (newUpdates.Matches.Count > 0)
+				{
+					_lastActivity = newUpdates.LastActivityDateLocal;
+					NewChatMessageReceived.Invoke(this, null);
+					var matchUpdates = newUpdates.Matches.Where(item => item.Id == Match.Id).FirstOrDefault();
+
+					if (matchUpdates != null)
+						foreach (var msg in matchUpdates.Messages)
+							// Checks if the new message doesn't already exist
+							if (!Match.Messages.Contains(msg))
+							{
+								Match.Messages.Add(msg);
+								AddMessageToChat(msg);
+							}
+					}
 			}
 
 		}
 
+
+		private void UpdateTick(object sender, EventArgs e)
+		{
+			if (!IsInDesignMode)
+				Update();
+		}
+		
 		#region Send message command
 		private bool CanSendMessage()
 		{
@@ -104,9 +123,9 @@ namespace Twinder.ViewModel
 		#endregion
 		
 		/// <summary>
-		/// Creates chat in format 
-		/// [yyyy-MM-dd]
-		/// [HH:mm:ss] <Sender> message
+		/// Creates chat in format:<para/> 
+		/// [yyyy-MM-dd]<para/>
+		/// [HH:mm:ss] &lt;Sender&gt; message
 		/// </summary>
 		private void SetChat()
 		{
@@ -125,8 +144,8 @@ namespace Twinder.ViewModel
 		}
 
 		/// <summary>
-		/// Adds message to chat in format of
-		/// [HH:mm:ss] <Sender> Message
+		/// Adds message to chat in format
+		/// [HH:mm:ss] &lt;Message&gt; Message
 		/// </summary>
 		/// <param name="msg"></param>
 		private void AddMessageToChat(MessageModel msg)

@@ -117,15 +117,20 @@ namespace Twinder.Helpers
 		/// <returns>Returns a MatchModel with match information</returns>
 		public static async Task<MatchModel> LikeRecommendation(string id, bool superLike = false)
 		{
-			var request = new RestRequest("like/" + id, Method.GET);
+			var request = new RestRequest("like/" + id);
 			if (superLike)
+			{
+				request.Method = Method.POST;
 				request.Resource += "/super";
+			}
+			else
+				request.Method = Method.GET;
 
 			var response = _client.Execute<dynamic>(request);
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-					return await Task.Run(() => JsonConvert.DeserializeObject<RecMatchedModel>(response.Content).Match);
+				return await Task.Run(() => JsonConvert.DeserializeObject<RecMatchedModel>(response.Content).Match);
 			}
 			return null;
 		}
@@ -150,7 +155,8 @@ namespace Twinder.Helpers
 
 			var response = _client.Execute<dynamic>(request);
 			if (response.StatusCode == HttpStatusCode.OK)
-			{ 
+			{
+				dynamic content = JsonConvert.DeserializeObject<dynamic>(response.Content);
 				return await Task.Run(() => JsonConvert.DeserializeObject<RecsResultsModel>(response.Content));
 			}
 			return null;

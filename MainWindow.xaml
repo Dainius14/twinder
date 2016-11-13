@@ -11,26 +11,30 @@
 		Closed="Window_Closed"
 		ContentRendered="Window_ContentRendered"
 		
-		MinHeight="400" MinWidth="600"
-		Height="450" Width="650"
+		MinHeight="400" MinWidth="500"
+		Height="500" Width="550"
         
 		Title="{x:Static p:Resources.app_title}"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+		d:DataContext="{Binding SampleMain, Source={StaticResource Locator}}">
 
 	<Window.InputBindings>
 		<KeyBinding Key="Return" 
-					Command="{Binding OpenChatCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
+					Command="{Binding OpenChatCommand}"
+					CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
 		<KeyBinding Key="Return" Modifiers="Ctrl"
-					Command="{Binding OpenMatchProfileCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
+					Command="{Binding OpenMatchProfileCommand}"
+					CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
 		<KeyBinding Key="Delete"
-					Command="{Binding UnmatchCommand}" CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
+					Command="{Binding UnmatchCommand}"
+					CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
 	</Window.InputBindings>
 	
 	<DockPanel LastChildFill="True">
 		<!-- Menu bar -->
 		<Menu DockPanel.Dock="Top">
 
-			<!-- Winder -->
+			<!-- Twinder -->
 			<MenuItem Header="{x:Static p:Resources.menu_app}">
 				<MenuItem Header="{x:Static p:Resources.menu_app_exit}"
 						  Command="{Binding ExitCommand}"/>
@@ -64,11 +68,14 @@
 			
 			<!-- Match count -->
 			<StatusBarItem Name="statusbar_matchCount" >
-				<StackPanel Orientation="Horizontal">
-					<TextBlock Name="matchCount" Text="{Binding MatchList.Count, FallbackValue=0}"/>
-					<TextBlock Text=" "/>
-					<TextBlock Text="{x:Static p:Resources.statusbar_match_count}"/>
-				</StackPanel>
+				<TextBlock Name="matchCount">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0} {1}">
+							<Binding Path="MatchList.Count"/>
+							<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
 			</StatusBarItem>
 		</StatusBar>
 
@@ -87,8 +94,7 @@
 					</Style>
 				</StackPanel.Resources>
 				<Button Content="Update matches"
-						Command="{Binding UpdateCommand}"
-						IsEnabled="False"/>
+						Command="{Binding UpdateCommand}"/>
 
 				<Button Content="{x:Static p:Resources.command_get_recommendations}"
 						Command="{Binding GetRecsCommand}"/>
@@ -102,7 +108,6 @@
 				<ListView.Resources>
 					<Style TargetType="ListViewItem">
 						<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-						<EventSetter Event="MouseDoubleClick" Handler="ListView_OnMouseDoubleClick"/>
 					</Style>
 
 					 <!--TODO need to implement this into the control itself somehow god damn it-->
@@ -132,8 +137,9 @@
 				</ListView.ItemTemplate>
 
 				<ListView.ItemContainerStyle>
-					<Style TargetType="{x:Type ListViewItem}">
+					<Style TargetType="ListViewItem">
 						<Setter Property="ContextMenu" Value="{StaticResource Context menu}"/>
+						<EventSetter Event="MouseDoubleClick" Handler="matchList_OnMouseDoubleClick"/>
 					</Style>
 				</ListView.ItemContainerStyle>
 			</ListView>

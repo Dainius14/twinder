@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
+using Twinder.Models;
 using Twinder.Models.Updates;
 
 namespace Twinder.ViewModel

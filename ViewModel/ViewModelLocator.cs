@@ -12,7 +12,9 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using Twinder.Design;
 using Twinder.Model;
+using Twinder.ViewModel.Design;
 
 namespace Twinder.ViewModel
 {
@@ -31,11 +33,7 @@ namespace Twinder.ViewModel
 
 			if (ViewModelBase.IsInDesignModeStatic)
 			{
-				SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
-			}
-			else
-			{
-				SimpleIoc.Default.Register<IDataService, DataService>();
+				SimpleIoc.Default.Register<IDataService, DesignDataService>();
 			}
 
 			SimpleIoc.Default.Register<MainViewModel>();
@@ -44,6 +42,9 @@ namespace Twinder.ViewModel
 			SimpleIoc.Default.Register<MatchProfileViewModel>();
 			SimpleIoc.Default.Register<RecommendationsViewModel>();
 			SimpleIoc.Default.Register<SetLocationViewModel>();
+
+			// Design time
+			SimpleIoc.Default.Register<SampleMainVM>();
 		}
 
 		/// <summary>
@@ -97,6 +98,17 @@ namespace Twinder.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<SetLocationViewModel>();
+			}
+		}
+
+
+
+		// Design time
+		public SampleMainVM SampleMain
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<SampleMainVM>();
 			}
 		}
 
