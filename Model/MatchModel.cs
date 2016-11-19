@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Twinder.Models.Updates;
 
 namespace Twinder.Models
@@ -35,13 +36,8 @@ namespace Twinder.Models
 		[JsonProperty("messages")]
 		public ObservableCollection<MessageModel> Messages { get; set; }
 
-		public MessageModel LastMessage
-		{
-			get { return Messages.Count > 0 ? Messages[Messages.Count - 1] : null; }
-		}
-
 		[JsonProperty("muted")]
-		public bool muted { get; set; }
+		public bool Muted { get; set; }
 
 		[JsonProperty("participants")]
 		public ObservableCollection<string> Participants { get; set; }

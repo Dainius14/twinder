@@ -154,10 +154,8 @@
 					   Style="{StaticResource SubText}"/>
 			
 			<!-- Last message -->
-			<!--<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_message}, StringFormat='{}{0}:'}"
-					   Grid.Row="5" Grid.Column="0"
-					   Style="{StaticResource SubTextHeader}"/>-->
-			<TextBlock Text="{Binding Converter={StaticResource LastMessageConverter}}"
+
+			<TextBlock Text="{Binding Converter={StaticResource LastMessageConverter}, UpdateSourceTrigger=PropertyChanged}"
 					   FontStyle="Italic"
 					   Grid.Row="5" Grid.ColumnSpan="3"
 					   Style="{StaticResource BioText}"

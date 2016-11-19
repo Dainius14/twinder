@@ -23,6 +23,7 @@ namespace Twinder.View
 			var viewModel = DataContext as ChatViewModel;
 			viewModel.Match = match;
 			chatScrollViewer.ScrollToEnd();
+
 			viewModel.NewChatMessageReceived += FlashWindow;
 			
 
@@ -52,7 +53,11 @@ namespace Twinder.View
 				WindowFlasher.Start(this);
 		}
 		
-
+		/// <summary>
+		/// Stops flashing window when it is activated
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Window_Activated(object sender, EventArgs e)
 		{
 			WindowFlasher.Stop(this);

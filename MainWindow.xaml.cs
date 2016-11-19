@@ -12,6 +12,8 @@ using Twinder.Model;
 using Twinder.Models;
 using System.Windows.Interop;
 using Twinder.Helpers;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace Twinder
 {
@@ -21,37 +23,67 @@ namespace Twinder
 		{
 			InitializeComponent();
 			Closing += (s, e) => ViewModelLocator.Cleanup();
-			Messenger.Default.Register<MatchModel>(this, MessageType.NewChatWindow, CreateChatWindow);
-			Messenger.Default.Register<MatchModel>(this, MessageType.ShowMatchProfile, CreateMatchProfileView);
-			Messenger.Default.Register<string>(this, MessageType.ShowRecommendations, CreateRecommendationsWindow);
-			Messenger.Default.Register<string>(this, MessageType.ShowSetLocationWindow, CreateSetLocationWindow);
+			Messenger.Default.Register<MatchModel>(this, MessengerToken.NewChatWindow, CreateChatWindow);
+			Messenger.Default.Register<MatchModel>(this, MessengerToken.ShowMatchProfile, CreateMatchProfileView);
+			Messenger.Default.Register<ObservableCollection<RecModel>>(this, MessengerToken.OpenRecommendations, OpenRecsWindow);
+			Messenger.Default.Register<string>(this, MessengerToken.ShowSetLocationWindow, CreateSetLocationWindow);
+			Messenger.Default.Register<string>(this, MessengerToken.ShowLoginDialog, CreateLoginWindow);
+			Messenger.Default.Register<string>(this, MessengerToken.RefreshMatchList, RefreshMatchList);
+
+			var myViewModel = DataContext as MainViewModel;
+			myViewModel.MyView = this;
+			myViewModel.ConnectionStatusChanged += UpdateStatusBar;
+			
+
+			Messenger.Default.Register<string>(this, MessengerToken.SortMatchList, SortMatchList);
 		}
+
+		private void SortMatchList(string obj)
+		{
+			string propertyName = nameof(MatchModel.LastActivityDate);
+
+			using (matchList.Items.DeferRefresh())
+			{
+				ListSortDirection direction = ListSortDirection.Descending;
+				matchList.Items.SortDescriptions.Add(new SortDescription(propertyName, direction));
+			}
+		}
+
+		private void RefreshMatchList(string obj)
+		{
+			var matchListProperty = CollectionViewSource.GetDefaultView(matchList.ItemsSource);
+			matchListProperty.Refresh();
+		}
+
+		private void CreateLoginWindow(string obj)
+		{
+			var loginWindow = new FbLoginView();
+			loginWindow.Owner = this;
+			loginWindow.ShowDialog();
+		}
+		
 
 		private void CreateSetLocationWindow(string obj)
 		{
 			var locationWindow = new SetLocationView();
-			locationWindow.Owner = this;
 			locationWindow.ShowDialog();
 		}
 
-		private void CreateRecommendationsWindow(string str)
+		private void OpenRecsWindow(ObservableCollection<RecModel> recList)
 		{
-			var recsWindow = new RecommendationsView();
-			recsWindow.Owner = this;
+			var recsWindow = new RecommendationsView(recList);
 			recsWindow.Show();
 		}
 
 		private void CreateChatWindow(MatchModel match)
 		{
 			var chatWindow = new ChatView(match);
-			chatWindow.Owner = this;
 			chatWindow.Show();
 		}
 
 		private void CreateMatchProfileView(MatchModel match)
 		{
 			var matchProfileWindow = new MatchProfileView(match);
-			matchProfileWindow.Owner = this;
 			matchProfileWindow.Show();
 		}
 
@@ -62,9 +94,9 @@ namespace Twinder
 		/// <param name="e"></param>
 		private void matchList_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			MainViewModel viewModel = DataContext as MainViewModel;
-			ListViewItem item = sender as ListViewItem;
-			MatchModel match = item.Content as MatchModel;
+			var viewModel = DataContext as MainViewModel;
+			var item = sender as ListViewItem;
+			var match = item.Content as MatchModel;
 
 			// Workaround for losing focus
 			Action newWindow = () => viewModel.OpenChatCommand.Execute(match);
@@ -80,37 +112,78 @@ namespace Twinder
 		{
 			Application.Current.Shutdown();
 		}
-
+		
 		/// <summary>
-		/// Starts loading content, after the window is rendered
+		/// Updates status bar based on current connection status
+		/// TODO could be managed better I guess, should look into this
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private async void Window_ContentRendered(object sender, EventArgs e)
+		private void UpdateStatusBar(object sender, ConnectionStatusEventArgs e)
 		{
-			var viewModel = DataContext as MainViewModel;
-			authText.Text = Properties.Resources.auth_connecting;
-			if (await viewModel.Authenticate())
+			// Is authenticating
+			if (e.AuthStatus == AuthStatus.Connecting)
 			{
-				authText.Text = Properties.Resources.auth_getting_matches;
-				if (await viewModel.GetMatches())
-				{
-					authText.Text = Properties.Resources.auth_okay;
-					matchList.SelectedIndex = 0;
-				}
-				else
-				{
-					authText.Text = Properties.Resources.auth_get_matches_error;
-				}
+				connection_ProgressBar.Visibility = Visibility.Visible;
+				connection_TextBlock.Text = Properties.Resources.tinder_auth_connecting;
 			}
+			// Authentication error
+			else if (e.AuthStatus == AuthStatus.Error)
+			{
+				connection_ProgressBar.Visibility = Visibility.Collapsed;
+				connection_TextBlock.Text = Properties.Resources.tinder_auth_error;
+			}
+			// Authentication ok
 			else
 			{
-				authText.Text = Properties.Resources.auth_connect_error;
+				// Getting both recommendations and matches
+				if (e.MatchesStatus == MatchesStatus.Getting && e.RecsStatus == RecsStatus.Getting)
+					connection_TextBlock.Text = Properties.Resources.tinder_getting_recs_matches;
+				
+				// Getting matches
+				else if (e.MatchesStatus == MatchesStatus.Getting)
+					connection_TextBlock.Text = Properties.Resources.tinder_update_getting_matches;
+
+				// Getting recommendations
+				else if (e.RecsStatus == RecsStatus.Getting)
+					connection_TextBlock.Text = Properties.Resources.tinder_recs_getting_recs;
+
+
+				// Matches
+				if (e.MatchesStatus == MatchesStatus.Okay)
+					matchCount_StatusBarItem.Visibility = Visibility.Visible;
+				else if (e.MatchesStatus == MatchesStatus.Error)
+				{
+					matchCount_StatusBarItem.Visibility = Visibility.Visible;
+					matchCountError_TextBlock.Visibility = Visibility.Visible;
+					matchCountOk_TextBlock.Visibility = Visibility.Collapsed;
+				}
+
+				// Recommendations
+				if (e.RecsStatus == RecsStatus.Okay)
+					recCount_StatusBarItem.Visibility = Visibility.Visible;
+				else if (e.RecsStatus == RecsStatus.Exhausted)
+				{
+					recCount_StatusBarItem.Visibility = Visibility.Visible;
+					recCountExhausted_TextBlock.Visibility = Visibility.Visible;
+					recCountOk_TextBlock.Visibility = Visibility.Collapsed;
+				}
+				else if (e.RecsStatus == RecsStatus.Error)
+				{
+					recCount_StatusBarItem.Visibility = Visibility.Visible;
+					recCountError_TextBlock.Visibility = Visibility.Visible;
+					recCountOk_TextBlock.Visibility = Visibility.Collapsed;
+				}
+
+				// Everything connected
+				if (e.MatchesStatus != MatchesStatus.Getting && e.MatchesStatus != MatchesStatus.Waiting
+					&& e.RecsStatus != RecsStatus.Getting && e.RecsStatus != RecsStatus.Waiting)
+				{
+					connection_ProgressBar.Visibility = Visibility.Collapsed;
+					connection_TextBlock.Text = Properties.Resources.tinder_auth_okay;
+				}
 			}
-			authProgressBar.Visibility = Visibility.Collapsed;
-
-
 		}
-
+		
 	}
 }

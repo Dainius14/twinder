@@ -12,6 +12,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using System;
 using Twinder.Design;
 using Twinder.Model;
 using Twinder.ViewModel.Design;
@@ -73,7 +74,7 @@ namespace Twinder.ViewModel
 		{
 			get
 			{
-				return ServiceLocator.Current.GetInstance<ChatViewModel>();
+				return ServiceLocator.Current.GetInstance<ChatViewModel>(Guid.NewGuid().ToString());
 			}
 		}
 
@@ -81,7 +82,7 @@ namespace Twinder.ViewModel
 		{
 			get
 			{
-				return ServiceLocator.Current.GetInstance<MatchProfileViewModel>();
+				return ServiceLocator.Current.GetInstance<MatchProfileViewModel>(Guid.NewGuid().ToString());
 			}
 		}
 

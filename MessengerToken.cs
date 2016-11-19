@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Twinder
 {
-	public enum MessageType
+	public enum MessengerToken
 	{
 		ShowLoginDialog,
 		NewChatWindow,
 		ShowMatchProfile,
-		ShowRecommendations,
-		ShowSetLocationWindow
+		OpenRecommendations,
+		ShowSetLocationWindow,
+		ForceUpdate,
+		RefreshMatchList,
+		SortMatchList
 	}
 }

@@ -121,19 +121,19 @@
     <value>Twinder</value>
     <comment>Application name duh</comment>
   </data>
-  <data name="auth_connecting" xml:space="preserve">
+  <data name="tinder_auth_connecting" xml:space="preserve">
     <value>Connecting...</value>
   </data>
-  <data name="auth_connect_error" xml:space="preserve">
+  <data name="tinder_auth_error" xml:space="preserve">
     <value>Authentication error</value>
   </data>
-  <data name="auth_getting_matches" xml:space="preserve">
+  <data name="tinder_update_getting_matches" xml:space="preserve">
     <value>Getting matches...</value>
   </data>
-  <data name="auth_get_matches_error" xml:space="preserve">
+  <data name="tinder_update_matches_error" xml:space="preserve">
     <value>Error getting matches</value>
   </data>
-  <data name="auth_okay" xml:space="preserve">
+  <data name="tinder_auth_okay" xml:space="preserve">
     <value>Connected</value>
   </data>
   <data name="common_friends_count" xml:space="preserve">
@@ -145,7 +145,7 @@
   <data name="distance" xml:space="preserve">
     <value>Distance</value>
   </data>
-  <data name="match_job" xml:space="preserve">
+  <data name="match_info_job" xml:space="preserve">
     <value>Job</value>
   </data>
   <data name="matched_on" xml:space="preserve">
@@ -169,7 +169,7 @@
   <data name="menu_tools_login" xml:space="preserve">
     <value>_Login</value>
   </data>
-  <data name="match_school" xml:space="preserve">
+  <data name="match_info_school" xml:space="preserve">
     <value>School</value>
   </data>
   <data name="total_messages" xml:space="preserve">
@@ -190,10 +190,10 @@
   <data name="window_title_profile" xml:space="preserve">
     <value>Profile</value>
   </data>
-  <data name="auth_getting_recs" xml:space="preserve">
+  <data name="tinder_recs_getting_recs" xml:space="preserve">
     <value>Getting recommendations...</value>
   </data>
-  <data name="auth_recs_exchausted" xml:space="preserve">
+  <data name="tinder_recs_exchausted" xml:space="preserve">
     <value>No new recommendations</value>
   </data>
   <data name="match_context_menu_open_chat" xml:space="preserve">
@@ -262,13 +262,22 @@
   <data name="set_location_auto_detect_error" xml:space="preserve">
     <value>Error locating</value>
   </data>
-  <data name="command_get_recommendations" xml:space="preserve">
-    <value>Get New Matches</value>
+  <data name="command_open_recommendations" xml:space="preserve">
+    <value>Open Recommendations</value>
   </data>
   <data name="command_set_location" xml:space="preserve">
     <value>Set Location</value>
   </data>
   <data name="chat_btn_send_message" xml:space="preserve">
     <value>Send</value>
+  </data>
+  <data name="statusbar_rec_count" xml:space="preserve">
+    <value>New recommendations</value>
+  </data>
+  <data name="tinder_getting_recs_matches" xml:space="preserve">
+    <value>Getting matches and recommendations...</value>
+  </data>
+  <data name="tinder_recs_error" xml:space="preserve">
+    <value>Recommendations error</value>
   </data>
 </root>

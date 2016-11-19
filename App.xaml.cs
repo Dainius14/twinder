@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Threading;
 using Twinder.View;
+using Twinder.ViewModel;
 
 namespace Twinder
 {
@@ -35,7 +36,8 @@ namespace Twinder
 			if ((bool) returned)
 			{
 				var mainWindow = new MainWindow();
-				//Current.MainWindow = MainWindow;
+				var mainViewModel = mainWindow.DataContext as MainViewModel;
+				mainWindow.ContentRendered += mainViewModel.StartConnection;
 				mainWindow.Show();
 				
 			}

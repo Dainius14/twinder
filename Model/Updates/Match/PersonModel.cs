@@ -2,6 +2,7 @@
 using Twinder.Models.UserRelated.PhotosRelated;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Twinder.Models.Updates
 {
@@ -22,7 +23,7 @@ namespace Twinder.Models.Updates
 
 		[JsonProperty("birth_date")]
 		public DateTime BirthDate { get; set; }
-		public int Age { get { return (int)(DateTime.Now - BirthDate).TotalDays / 365; } }
+		public int Age { get { return (int)(DateTime.Now - BirthDate).TotalDays / 365 - 1; } }
 
 		[JsonProperty("gender")]
 		public int Gender { get; set; }
@@ -35,7 +36,7 @@ namespace Twinder.Models.Updates
 		public DateTime PingTimeLocal { get { return PingTime.ToLocalTime(); } }
 
 		[JsonProperty("photos")]
-		public List<PhotoModel> Photos { get; set; }
+		public ObservableCollection<PhotoModel> Photos { get; set; }
 
 		[JsonProperty("badges")]
 		public dynamic Badges{ get; set; }

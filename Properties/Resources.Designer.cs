@@ -70,69 +70,6 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication error.
-        /// </summary>
-        public static string auth_connect_error {
-            get {
-                return ResourceManager.GetString("auth_connect_error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Connecting....
-        /// </summary>
-        public static string auth_connecting {
-            get {
-                return ResourceManager.GetString("auth_connecting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error getting matches.
-        /// </summary>
-        public static string auth_get_matches_error {
-            get {
-                return ResourceManager.GetString("auth_get_matches_error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Getting matches....
-        /// </summary>
-        public static string auth_getting_matches {
-            get {
-                return ResourceManager.GetString("auth_getting_matches", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Getting recommendations....
-        /// </summary>
-        public static string auth_getting_recs {
-            get {
-                return ResourceManager.GetString("auth_getting_recs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Connected.
-        /// </summary>
-        public static string auth_okay {
-            get {
-                return ResourceManager.GetString("auth_okay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No new recommendations.
-        /// </summary>
-        public static string auth_recs_exchausted {
-            get {
-                return ResourceManager.GetString("auth_recs_exchausted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string btn_cancel {
@@ -160,11 +97,11 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get New Matches.
+        ///   Looks up a localized string similar to Open Recommendations.
         /// </summary>
-        public static string command_get_recommendations {
+        public static string command_open_recommendations {
             get {
-                return ResourceManager.GetString("command_get_recommendations", resourceCulture);
+                return ResourceManager.GetString("command_open_recommendations", resourceCulture);
             }
         }
         
@@ -295,6 +232,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string match_info_job {
+            get {
+                return ResourceManager.GetString("match_info_job", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last message.
         /// </summary>
         public static string match_info_last_message {
@@ -331,20 +277,11 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Job.
-        /// </summary>
-        public static string match_job {
-            get {
-                return ResourceManager.GetString("match_job", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to School.
         /// </summary>
-        public static string match_school {
+        public static string match_info_school {
             get {
-                return ResourceManager.GetString("match_school", resourceCulture);
+                return ResourceManager.GetString("match_info_school", resourceCulture);
             }
         }
         
@@ -444,6 +381,96 @@ namespace Twinder.Properties {
         public static string statusbar_match_count {
             get {
                 return ResourceManager.GetString("statusbar_match_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New recommendations.
+        /// </summary>
+        public static string statusbar_rec_count {
+            get {
+                return ResourceManager.GetString("statusbar_rec_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting....
+        /// </summary>
+        public static string tinder_auth_connecting {
+            get {
+                return ResourceManager.GetString("tinder_auth_connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication error.
+        /// </summary>
+        public static string tinder_auth_error {
+            get {
+                return ResourceManager.GetString("tinder_auth_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected.
+        /// </summary>
+        public static string tinder_auth_okay {
+            get {
+                return ResourceManager.GetString("tinder_auth_okay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting matches and recommendations....
+        /// </summary>
+        public static string tinder_getting_recs_matches {
+            get {
+                return ResourceManager.GetString("tinder_getting_recs_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommendations error.
+        /// </summary>
+        public static string tinder_recs_error {
+            get {
+                return ResourceManager.GetString("tinder_recs_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No new recommendations.
+        /// </summary>
+        public static string tinder_recs_exchausted {
+            get {
+                return ResourceManager.GetString("tinder_recs_exchausted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting recommendations....
+        /// </summary>
+        public static string tinder_recs_getting_recs {
+            get {
+                return ResourceManager.GetString("tinder_recs_getting_recs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting matches....
+        /// </summary>
+        public static string tinder_update_getting_matches {
+            get {
+                return ResourceManager.GetString("tinder_update_getting_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error getting matches.
+        /// </summary>
+        public static string tinder_update_matches_error {
+            get {
+                return ResourceManager.GetString("tinder_update_matches_error", resourceCulture);
             }
         }
         

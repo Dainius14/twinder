@@ -9,8 +9,6 @@
 		xmlns:p="clr-namespace:Twinder.Properties"
 		xmlns:view="clr-namespace:Twinder.View"
 
-		ContentRendered="Window_ContentRendered"
-
 		Background="WhiteSmoke"
         Height="650" Width="700"
 		DataContext="{Binding Recommendations, Source={StaticResource Locator}}">
@@ -110,7 +108,7 @@
 						   Grid.Row="3" Grid.Column="2"/>
 					
 					<!-- School name -->
-					<TextBlock Text="{x:Static p:Resources.match_school}" Grid.Row="4" Grid.Column="0"/>
+					<TextBlock Text="{x:Static p:Resources.match_info_school}" Grid.Row="4" Grid.Column="0"/>
 					<TextBlock Text="{Binding Schools[0].Name}"
 						   Grid.Row="4" Grid.Column="2"/>
 					
@@ -175,22 +173,22 @@
 
 			<StatusBar Grid.Row="3" Padding="5, 0">
 				<!-- Match getting status -->
-				<StatusBarItem Name="auth_get_recs">
+				<StatusBarItem Name="gettingRecs_StatusBarItem" Visibility="Collapsed">
 					<StackPanel Orientation="Horizontal">
-						<ProgressBar Name="authProgressBar" Height="10" Width="100" IsIndeterminate="True" Margin="0,0,5,0"/>
-						<TextBlock Name="authText" Text="{x:Static p:Resources.auth_getting_recs}"/>
+						<ProgressBar Name="gettingRecs_ProgressBar"
+									 Style="{StaticResource StatusBarProgressBar}"/>
+						<TextBlock Name="gettingRecs_TextBlock"
+								   Text="{x:Static p:Resources.tinder_recs_getting_recs}"/>
 					</StackPanel>
 				</StatusBarItem>
 
-				<Separator Name="auth_sep" Width="1" Margin="5, 0"/>
-
-				<StatusBarItem>
-					<!-- Current match number -->
+				<!-- Current match number -->
+				<StatusBarItem Name="recCount_StatusBarItem">
 					<TextBlock>
 						<TextBlock.Text>
-							<MultiBinding StringFormat="{}{0}/{1} {2}">
+							<MultiBinding StringFormat="{}{0} of {1} {2}">
 								<Binding Path="SelectedIndex" Converter="{StaticResource ArrayIndexConverter}"/>
-								<Binding Path="Recommendations.Count"/>
+								<Binding Path="RecList.Count"/>
 								<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
 							</MultiBinding>
 						</TextBlock.Text>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -42,7 +43,7 @@ namespace Twinder.ViewModel.Design
 					Bio = "Hi, I'm Dolores :p",
 					Gender = 1,
 					BirthDate = new DateTime(1987, 9, 7),
-					Photos = new List<PhotoModel>()
+					Photos = new ObservableCollection<PhotoModel>()
 					{
 						new PhotoModel()
 						{

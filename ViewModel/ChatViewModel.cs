@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -27,9 +29,30 @@ namespace Twinder.ViewModel
 			{
 				Set(ref _match, value);
 				SetChat();
+				Match.Messages.CollectionChanged += Messages_CollectionChanged;
 			}
 		}
-		
+
+		private void Messages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.NewItems != null)
+				foreach (MessageModel item in e.NewItems)
+				{
+					AddMessageToChat(item);
+
+					// Invokes event if the new message is not from me
+					if (!IsMessageFromMe(item))
+						NewChatMessageReceived.Invoke(this, null);
+
+
+					Match.LastActivityDate = item.SentDate;
+
+					Messenger.Default.Send("", MessengerToken.SortMatchList);
+
+
+				}
+		}
+
 		private string _chat;
 		public string Chat
 		{
@@ -51,56 +74,7 @@ namespace Twinder.ViewModel
 			SendMessageCommand = new RelayCommand(SendMessage, CanSendMessage);
 
 			_lastActivity = DateTime.Now;
-
-			if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
-			{
-				//DispatcherTimer timer = new DispatcherTimer();
-				//timer.Tick += new EventHandler(UpdateTick);
-				//timer.Interval = new TimeSpan(0, 0, 5);
-				//timer.Start();
-			}
-		}
-
-	
-
-		/// <summary>
-		/// Sends a request to server for updates on chat
-		/// </summary>
-		private async void Update()
-		{
-			// fuck you designer mode
-			if (!IsInDesignMode)
-			{
-				var newUpdates = await TinderHelper.GetUpdates(_lastActivity);
-
-				// TODO better error handling
-				if (newUpdates == null)
-					MessageBox.Show("Error getting updates");
-
-				if (newUpdates.Matches.Count > 0)
-				{
-					_lastActivity = newUpdates.LastActivityDateLocal;
-					NewChatMessageReceived.Invoke(this, null);
-					var matchUpdates = newUpdates.Matches.Where(item => item.Id == Match.Id).FirstOrDefault();
-
-					if (matchUpdates != null)
-						foreach (var msg in matchUpdates.Messages)
-							// Checks if the new message doesn't already exist
-							if (!Match.Messages.Contains(msg))
-							{
-								Match.Messages.Add(msg);
-								AddMessageToChat(msg);
-							}
-					}
-			}
-
-		}
-
-
-		private void UpdateTick(object sender, EventArgs e)
-		{
-			if (!IsInDesignMode)
-				Update();
+			
 		}
 		
 		#region Send message command
@@ -116,7 +90,6 @@ namespace Twinder.ViewModel
 			{
 				MessageToSend = string.Empty;
 				Match.Messages.Add(sentMessage);
-				AddMessageToChat(sentMessage);
 				_lastActivity = sentMessage.SentDate;
 			}
 		}
@@ -151,10 +124,20 @@ namespace Twinder.ViewModel
 		private void AddMessageToChat(MessageModel msg)
 		{
 			var sentTime = msg.SentDateLocal.ToLongTimeString();
-			var from = Match.Person.Id == msg.From ? Match.Person.Name : "Me";
+
+			var from = Match.Person.Name;
+			// If message is from myself, change the sender to "Me"
+			if (IsMessageFromMe(msg))
+				from = "Me";
+
 			var message = msg.Message;
 			
 			Chat += string.Format($"[{sentTime}] <{from}> {message}\n");
+		}
+
+		private bool IsMessageFromMe(MessageModel msg)
+		{
+			return Match.Person.Id != msg.From;
 		}
 	}
 }

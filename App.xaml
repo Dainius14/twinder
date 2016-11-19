@@ -24,6 +24,17 @@
 		<converter:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
 		<converter:LastMessageConverter x:Key="LastMessageConverter"/>
 
+		<Style TargetType="Separator" x:Key="StatusBarSeperator">
+			<Setter Property="Width" Value="1"/>
+			<Setter Property="Margin" Value="10, 0, 10, 0"/>
+		</Style>
+		
+		<Style TargetType="ProgressBar" x:Key="StatusBarProgressBar">
+			<Setter Property="Width" Value="80"/>
+			<Setter Property="Height" Value="12"/>
+			<Setter Property="IsIndeterminate" Value="True"/>
+			<Setter Property="Margin" Value="0, 0, 5, 0"/>
+		</Style>
 		
 
 	</Application.Resources>

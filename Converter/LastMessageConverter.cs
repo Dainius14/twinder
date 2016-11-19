@@ -22,19 +22,22 @@ namespace Twinder.Converter
 					if (targetType == typeof(string))
 					{
 						MatchModel match = value as MatchModel;
-						if (match.Messages.Count != 0)
-						{
-							var lastMessage = match.Messages[match.Messages.Count - 1];
-							string result = string.Format($"[{lastMessage.SentDateLocal:MM-dd HH:mm}] ");
+						var lastMessage = match.Messages.LastOrDefault();
 
+						if (lastMessage != null)
+						{
+							string result = string.Format($"[{lastMessage.SentDateLocal:MM-dd HH:mm}] ");
+							
 							if (match.Person.Id == match.Messages[match.Messages.Count - 1].From)
 								result += match.Person.Name;
 							else
 								result += "Me";
 
 							result += string.Format($": {lastMessage.Message}");
+
 							return result;
 						}
+
 						return "No messages sent";
 					}
 					throw new ArgumentException("Wrong target type.");

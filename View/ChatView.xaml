@@ -83,6 +83,7 @@
 			</Grid.ColumnDefinitions>
 
 			<TextBox Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
+					 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
 					 Grid.Column="0"
 					 FontFamily="Consolas">
 				

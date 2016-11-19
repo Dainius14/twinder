@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -13,7 +15,15 @@ namespace Twinder.View
 		{
 			InitializeComponent();
 		}
-		
+
+		public RecommendationsView(ObservableCollection<RecModel> recList)
+		{
+			InitializeComponent();
+			var viewModel = DataContext as RecommendationsViewModel;
+			viewModel.LoadingStateChange += SwitchLoadingIndicators;
+			viewModel.SetRecommendations(recList);
+		}
+
 
 		/// <summary>
 		/// Scrolls the listview
@@ -34,15 +44,23 @@ namespace Twinder.View
 			e.Handled = true;
 		}
 
-		private async void Window_ContentRendered(object sender, System.EventArgs e)
+		private void SwitchLoadingIndicators(object sender, RecsLoadingStateEventArgs e)
 		{
-			var viewModel = DataContext as RecommendationsViewModel;
-			authText.Text = Properties.Resources.auth_getting_recs;
-			if (!await viewModel.GetRecommendations())
-				authText.Text = Properties.Resources.auth_recs_exchausted;
-
-			auth_get_recs.Visibility = Visibility.Collapsed;
-			auth_sep.Visibility = Visibility.Collapsed;
+			if (e.RecsStatus == RecsStatus.Getting)
+			{
+				gettingRecs_StatusBarItem.Visibility = Visibility.Visible;
+				gettingRecs_TextBlock.Text = Properties.Resources.tinder_recs_getting_recs;
+			}
+			else if (e.RecsStatus == RecsStatus.Exhausted)
+			{
+				gettingRecs_StatusBarItem.Visibility = Visibility.Visible;
+				gettingRecs_TextBlock.Text = Properties.Resources.tinder_recs_exchausted;
+			}
+			else if (e.RecsStatus == RecsStatus.Okay)
+			{
+				gettingRecs_StatusBarItem.Visibility = Visibility.Collapsed;
+				recCount_StatusBarItem.Visibility = Visibility.Visible;
+			}
 		}
 	}
 }

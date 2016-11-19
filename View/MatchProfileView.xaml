@@ -74,7 +74,7 @@
 				</Grid.ColumnDefinitions>
 
 				<!-- Last seen date -->
-				<TextBlock Text="{Binding Source={x:Static p:Resources.match_school}, StringFormat='{}{0}:'}"
+				<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
 						   Grid.Row="0" Grid.Column="0"/>
 				<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
 						   Grid.Row="0" Grid.Column="2"/>

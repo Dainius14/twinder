@@ -1,34 +1,31 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Twinder.Helpers;
 using Twinder.Model;
+using Twinder.Models;
 using Twinder.Models.Updates;
 
 namespace Twinder.ViewModel
 {
 	public class RecommendationsViewModel : ViewModelBase
 	{
-		private ObservableCollection<RecModel> _recommendations;
-		public ObservableCollection<RecModel> Recommendations
-		{
-			get { return _recommendations; }
-			set
-			{
-				// If recommendations are set for the first time
-				if (_recommendations == null)
-				{
-					_selectedIndex = 0;
-					SelectedRec = value[0];
-				}
+		public event LoadingStateChangeHandler LoadingStateChange;
+		public delegate void LoadingStateChangeHandler(object sender, RecsLoadingStateEventArgs e);
 
-				Set(ref _recommendations, value); }
+		private ObservableCollection<RecModel> _recList;
+		public ObservableCollection<RecModel> RecList
+		{
+			get { return _recList; }
+			set { Set(ref _recList, value); }
 		}
 
 		private RecModel _selectedRec;
@@ -70,14 +67,44 @@ namespace Twinder.ViewModel
 			LikeAllCommand = new RelayCommand(LikeAll);
 		}
 
+		/// <summary>
+		/// Sets RecList property to input, adds event listener and invokes LoadingStateChange event
+		/// </summary>
+		/// <param name="recList"></param>
+		public void SetRecommendations(ObservableCollection<RecModel> recList)
+		{
+			RecsLoadingStateEventArgs args = new RecsLoadingStateEventArgs();
+			if (recList != null)
+			{
+				RecList = recList;
+				RecList.CollectionChanged += GetMoreRecs;
+				SelectedRec = RecList[0];
+				SelectedIndex = 0;
+
+				args.RecsStatus = RecsStatus.Okay;
+			}
+			else
+				args.RecsStatus = RecsStatus.Exhausted;
+
+			LoadingStateChange.Invoke(this, args);
+		}
+
 		public async Task<bool> GetRecommendations()
 		{
+			RecsLoadingStateEventArgs args = new RecsLoadingStateEventArgs();
+			args.RecsStatus = RecsStatus.Getting;
+
+			LoadingStateChange.Invoke(this, args);
 			var recs = await TinderHelper.GetRecommendations();
 			if (recs.Recommendations != null)
 			{
-				Recommendations = new ObservableCollection<RecModel>(recs.Recommendations);
+				var recList = new ObservableCollection<RecModel>(recs.Recommendations);
+				SetRecommendations(recList);
+				
 				return true;
 			}
+			args.RecsStatus = RecsStatus.Exhausted;
+			LoadingStateChange.Invoke(this, args);
 			return false;
 		}
 		
@@ -87,14 +114,14 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void SelectPrevious()
 		{
-			if (Recommendations.Count > 0)
+			if (RecList.Count > 0)
 			{
 				if (SelectedIndex == 0)
-					SelectedIndex = Recommendations.Count - 1;
+					SelectedIndex = RecList.Count - 1;
 				else
 					SelectedIndex--;
 
-				SelectedRec = Recommendations[SelectedIndex];
+				SelectedRec = RecList[SelectedIndex];
 			}
 		}
 		#endregion
@@ -105,14 +132,14 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void SelectNext()
 		{
-			if (Recommendations.Count > 0)
+			if (RecList.Count > 0)
 			{
-				if (SelectedIndex == Recommendations.Count - 1)
+				if (SelectedIndex == RecList.Count - 1)
 					SelectedIndex = 0;
 				else
 					SelectedIndex++;
 
-				SelectedRec = Recommendations[SelectedIndex];
+				SelectedRec = RecList[SelectedIndex];
 			}
 		}
 		#endregion
@@ -136,14 +163,16 @@ namespace Twinder.ViewModel
 		/// Likes the selected recommendation
 		/// </summary>
 		/// <param name="superLike">True if a superlike should be send, default is false</param>
-		private void Like(bool superLike = false)
+		private async void Like(bool superLike = false)
 		{
 			if (SelectedRec != null)
 			{
-				var match = TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
+				var match = await TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
 
+				// If the method returns a non-null value, it means it's a match
 				if (match != null)
 				{
+					Messenger.Default.Send("", MessengerToken.ForceUpdate);
 					MessageBox.Show("It's a match!");
 				}
 
@@ -151,7 +180,7 @@ namespace Twinder.ViewModel
 			}
 		}
 		#endregion
-		
+
 
 		#region Like All command
 		/// <summary>
@@ -159,9 +188,9 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private async void LikeAll()
 		{
-			for (int i = 0; i < Recommendations.Count; i++)
+			for (int i = 0; i < RecList.Count; i++)
 			{
-				var rec = Recommendations[i];
+				var rec = RecList[i];
 
 				if (OnlyWithoutDescription && string.IsNullOrEmpty(rec.Bio))
 				{
@@ -181,7 +210,7 @@ namespace Twinder.ViewModel
 		{
 			if (rec == SelectedRec)
 				RemoveSelectedRecommendation();
-			Recommendations.Remove(rec);
+			RecList.Remove(rec);
 		}
 
 		/// <summary>
@@ -189,19 +218,37 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void RemoveSelectedRecommendation()
 		{
-			Recommendations.Remove(SelectedRec);
+			RecList.Remove(SelectedRec);
 			// If it was the last item, selects a new last item
-			if (SelectedIndex >= Recommendations.Count)
+			if (SelectedIndex >= RecList.Count)
 			{
-				SelectedIndex = Recommendations.Count - 1;
+				SelectedIndex = RecList.Count - 1;
 				if (SelectedIndex >= 0)
-					SelectedRec = Recommendations[SelectedIndex];
+					SelectedRec = RecList[SelectedIndex];
 			}
 			// If no more recommendations are left, removes selection
-			if (Recommendations.Count == 0)
+			if (RecList.Count == 0)
 				SelectedRec = null;
 			else
-				SelectedRec = Recommendations[SelectedIndex];
+				SelectedRec = RecList[SelectedIndex];
 		}
+
+		/// <summary>
+		/// When there no more recommendations - tries to get more
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private async void GetMoreRecs(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (RecList.Count == 0)
+			{
+				await GetRecommendations();
+			}
+		}
+	}
+
+	public class RecsLoadingStateEventArgs : EventArgs
+	{
+		public RecsStatus RecsStatus { get; set; }
 	}
 }

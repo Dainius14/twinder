@@ -142,8 +142,9 @@
     <Compile Include="Converter\ArrayIndexConverter.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helpers\FbHelper.cs" />
+    <Compile Include="Helpers\UpdatingCollection.cs" />
     <Compile Include="Helpers\WindowFlasher.cs" />
-    <Compile Include="MessageType.cs" />
+    <Compile Include="MessengerToken.cs" />
     <Compile Include="Model\AuthModel.cs" />
     <Compile Include="Model\Auth\GlobalsModel.cs" />
     <Compile Include="Model\Auth\UserModel.cs" />

@@ -54,9 +54,6 @@ namespace Twinder.Helpers
 
 				return true;
 			}
-
-			//throw new Exception("Authenticaton error");
-
 			return false;
 		}
 
@@ -101,7 +98,7 @@ namespace Twinder.Helpers
 			request.AddHeader("Content-type", "application/json");
 			request.AddParameter("message", messageToSend);
 
-			IRestResponse response = _client.Execute<dynamic>(request);
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
 				return await Task.Run(() => JsonConvert.DeserializeObject<MessageModel>(response.Content));
@@ -126,7 +123,7 @@ namespace Twinder.Helpers
 			else
 				request.Method = Method.GET;
 
-			var response = _client.Execute<dynamic>(request);
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
@@ -153,10 +150,9 @@ namespace Twinder.Helpers
 		{
 			var request = new RestRequest("user/recs", Method.GET);
 
-			var response = _client.Execute<dynamic>(request);
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				dynamic content = JsonConvert.DeserializeObject<dynamic>(response.Content);
 				return await Task.Run(() => JsonConvert.DeserializeObject<RecsResultsModel>(response.Content));
 			}
 			return null;
@@ -176,7 +172,7 @@ namespace Twinder.Helpers
 			request.AddHeader("Content-type", "application/json");
 			request.AddJsonBody(new { lat = latitude, lon = longtitude });
 
-			var response = _client.Execute<dynamic>(request);
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 			var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<dynamic>(response.Content));
 		}
 	}

@@ -9,7 +9,6 @@
 		xmlns:view="clr-namespace:Twinder.View"
 		
 		Closed="Window_Closed"
-		ContentRendered="Window_ContentRendered"
 		
 		MinHeight="400" MinWidth="500"
 		Height="500" Width="550"
@@ -29,7 +28,7 @@
 					Command="{Binding UnmatchCommand}"
 					CommandParameter="{Binding ElementName=matchList, Path=SelectedItem}"/>
 	</Window.InputBindings>
-	
+
 	<DockPanel LastChildFill="True">
 		<!-- Menu bar -->
 		<Menu DockPanel.Dock="Top">
@@ -54,28 +53,75 @@
 		</Menu>
 
 		<!-- Status bar-->
-		<StatusBar Name="statusbar" DockPanel.Dock="Bottom" Padding="5, 0">
-			<!-- Connected status -->
-			<StatusBarItem Name="statusbar_connectionStatus">
-				<StackPanel  Orientation="Horizontal">
-					<ProgressBar Name="authProgressBar" Height="10" Width="100" IsIndeterminate="True" Margin="0,0,5,0"/>
-					<TextBlock Name="authText" Text="{x:Static p:Resources.auth_connecting}"/>
+		<StatusBar DockPanel.Dock="Bottom" Padding="5, 0">
+
+			<StatusBar.Resources>
+				<Style TargetType="ProgressBar" BasedOn="{StaticResource StatusBarProgressBar}"/>
+			</StatusBar.Resources>
+			
+			<!-- Autherization status -->
+			<StatusBarItem>
+				<StackPanel Orientation="Horizontal">
+					
+					<ProgressBar Name="connection_ProgressBar"/>
+					
+					<TextBlock Name="connection_TextBlock"
+							   Text="{x:Static p:Resources.tinder_auth_connecting}"/>
 
 				</StackPanel>
 			</StatusBarItem>
-			
-			<Separator Margin="5, 0" Width="1"/>
-			
+
+			<Separator Visibility="{Binding Visibility, ElementName=matchCount_StatusBarItem}"
+					   Style="{StaticResource StatusBarSeperator}"/>
+
 			<!-- Match count -->
-			<StatusBarItem Name="statusbar_matchCount" >
-				<TextBlock Name="matchCount">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="{}{0} {1}">
-							<Binding Path="MatchList.Count"/>
-							<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
+			<StatusBarItem Name="matchCount_StatusBarItem"
+						   Visibility="Collapsed">
+				<StackPanel Orientation="Horizontal">
+					
+					<TextBlock Name="matchCountOk_TextBlock">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0} {1}">
+								<Binding Path="MatchList.Count"/>
+								<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+
+					<TextBlock Name="matchCountError_TextBlock"
+							   Text="{x:Static p:Resources.tinder_update_matches_error}"
+							   Visibility="Collapsed"/>
+
+
+				</StackPanel>
+			</StatusBarItem>
+
+			<Separator Visibility="{Binding Visibility, ElementName=recCount_StatusBarItem}"
+					   Style="{StaticResource StatusBarSeperator}"/>
+
+			<!-- Recommendations count -->
+			<StatusBarItem Name="recCount_StatusBarItem"
+						   Visibility="Collapsed">
+				<StackPanel Orientation="Horizontal">
+
+					<TextBlock Name="recCountOk_TextBlock">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0} {1}">
+								<Binding Path="RecList.Count"/>
+								<Binding Source="{x:Static p:Resources.statusbar_rec_count}"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+
+					<TextBlock Name="recCountExhausted_TextBlock"
+							   Text="{x:Static p:Resources.tinder_recs_exchausted}"
+							   Visibility="Collapsed"/>
+					
+					<TextBlock Name="recCountError_TextBlock"
+							   Text="{x:Static p:Resources.tinder_recs_error}"
+							   Visibility="Collapsed"/>
+
+				</StackPanel>
 			</StatusBarItem>
 		</StatusBar>
 
@@ -93,11 +139,9 @@
 						<Setter Property="Margin" Value="2"/>
 					</Style>
 				</StackPanel.Resources>
-				<Button Content="Update matches"
-						Command="{Binding UpdateCommand}"/>
 
-				<Button Content="{x:Static p:Resources.command_get_recommendations}"
-						Command="{Binding GetRecsCommand}"/>
+				<Button Content="{x:Static p:Resources.command_open_recommendations}"
+						Command="{Binding OpenRecsCommand}"/>
 
 				<Button Content="{x:Static p:Resources.command_set_location}"
 						Command="{Binding SetLocationCommand}"/>
