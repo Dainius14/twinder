@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using Twinder.Models;
-using Twinder.Models.Updates;
 
 namespace Twinder.Converter
 {
@@ -15,36 +10,28 @@ namespace Twinder.Converter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value != null)
+			if (value != null && value.GetType() == typeof(MatchModel) && targetType == typeof(string))
 			{
-				if (value is MatchModel)
+				MatchModel match = value as MatchModel;
+				var lastMessage = match.Messages.LastOrDefault();
+
+				if (lastMessage != null)
 				{
-					if (targetType == typeof(string))
-					{
-						MatchModel match = value as MatchModel;
-						var lastMessage = match.Messages.LastOrDefault();
-
-						if (lastMessage != null)
-						{
-							string result = string.Format($"[{lastMessage.SentDateLocal:MM-dd HH:mm}] ");
+					string result = string.Format($"[{lastMessage.SentDate.ToLocalTime():MM-dd HH:mm}] ");
 							
-							if (match.Person.Id == match.Messages[match.Messages.Count - 1].From)
-								result += match.Person.Name;
-							else
-								result += "Me";
+					if (match.Person.Id == match.Messages[match.Messages.Count - 1].From)
+						result += match.Person.Name;
+					else
+						result += "Me";
 
-							result += string.Format($": {lastMessage.Message}");
+					result += string.Format($": {lastMessage.Message}");
 
-							return result;
-						}
-
-						return "No messages sent";
-					}
-					throw new ArgumentException("Wrong target type.");
+					return result;
 				}
-				throw new ArgumentException("Wrong input type.");
+
+				return "No messages sent";
 			}
-			throw new ArgumentNullException();
+			throw new ArgumentException();
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

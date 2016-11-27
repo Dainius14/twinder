@@ -43,6 +43,8 @@ namespace Twinder.ViewModel
 			SimpleIoc.Default.Register<MatchProfileViewModel>();
 			SimpleIoc.Default.Register<RecommendationsViewModel>();
 			SimpleIoc.Default.Register<SetLocationViewModel>();
+			SimpleIoc.Default.Register<ErrorDialogViewModel>();
+			SimpleIoc.Default.Register<UserProfileViewModel>();
 
 			// Design time
 			SimpleIoc.Default.Register<SampleMainVM>();
@@ -99,6 +101,25 @@ namespace Twinder.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<SetLocationViewModel>();
+			}
+		}
+
+
+		public ErrorDialogViewModel ErrorDialog
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<ErrorDialogViewModel>();
+			}
+		}
+
+
+
+		public UserProfileViewModel UserProfile
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<UserProfileViewModel>();
 			}
 		}
 

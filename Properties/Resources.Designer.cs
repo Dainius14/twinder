@@ -79,11 +79,29 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Error.
+        /// </summary>
+        public static string btn_copy_error {
+            get {
+                return ResourceManager.GetString("btn_copy_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string btn_ok {
             get {
                 return ResourceManager.GetString("btn_ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string btn_save {
+            get {
+                return ResourceManager.GetString("btn_save", resourceCulture);
             }
         }
         
@@ -97,7 +115,7 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Recommendations.
+        ///   Looks up a localized string similar to Recommendations.
         /// </summary>
         public static string command_open_recommendations {
             get {
@@ -111,6 +129,15 @@ namespace Twinder.Properties {
         public static string command_set_location {
             get {
                 return ResourceManager.GetString("command_set_location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Profile.
+        /// </summary>
+        public static string command_user_profile {
+            get {
+                return ResourceManager.GetString("command_user_profile", resourceCulture);
             }
         }
         
@@ -138,6 +165,15 @@ namespace Twinder.Properties {
         public static string distance {
             get {
                 return ResourceManager.GetString("distance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unhandled exception occured.
+        /// </summary>
+        public static string error_exception_occured {
+            get {
+                return ResourceManager.GetString("error_exception_occured", resourceCulture);
             }
         }
         
@@ -192,6 +228,33 @@ namespace Twinder.Properties {
         public static string fblogin_token {
             get {
                 return ResourceManager.GetString("fblogin_token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Both.
+        /// </summary>
+        public static string gender_both {
+            get {
+                return ResourceManager.GetString("gender_both", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Men.
+        /// </summary>
+        public static string gender_men {
+            get {
+                return ResourceManager.GetString("gender_men", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Women.
+        /// </summary>
+        public static string gender_women {
+            get {
+                return ResourceManager.GetString("gender_women", resourceCulture);
             }
         }
         
@@ -349,6 +412,51 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Like.
+        /// </summary>
+        public static string recs_button_like {
+            get {
+                return ResourceManager.GetString("recs_button_like", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Super Like.
+        /// </summary>
+        public static string recs_button_like_super {
+            get {
+                return ResourceManager.GetString("recs_button_like_super", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        public static string recs_button_next {
+            get {
+                return ResourceManager.GetString("recs_button_next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pass.
+        /// </summary>
+        public static string recs_button_pass {
+            get {
+                return ResourceManager.GetString("recs_button_pass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous.
+        /// </summary>
+        public static string recs_button_prev {
+            get {
+                return ResourceManager.GetString("recs_button_prev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error locating.
         /// </summary>
         public static string set_location_auto_detect_error {
@@ -493,11 +601,65 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recommendations.
+        ///   Looks up a localized string similar to Maximum age.
         /// </summary>
-        public static string window_tile_recommendations {
+        public static string user_age_filter_max {
             get {
-                return ResourceManager.GetString("window_tile_recommendations", resourceCulture);
+                return ResourceManager.GetString("user_age_filter_max", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum age.
+        /// </summary>
+        public static string user_age_filter_min {
+            get {
+                return ResourceManager.GetString("user_age_filter_min", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interested in.
+        /// </summary>
+        public static string user_interested_in {
+            get {
+                return ResourceManager.GetString("user_interested_in", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max distance, km.
+        /// </summary>
+        public static string user_max_distance {
+            get {
+                return ResourceManager.GetString("user_max_distance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last active.
+        /// </summary>
+        public static string user_tinder_active {
+            get {
+                return ResourceManager.GetString("user_tinder_active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tinder created on.
+        /// </summary>
+        public static string user_tinder_created {
+            get {
+                return ResourceManager.GetString("user_tinder_created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tinder pinged on.
+        /// </summary>
+        public static string user_tinder_pinged {
+            get {
+                return ResourceManager.GetString("user_tinder_pinged", resourceCulture);
             }
         }
         
@@ -507,6 +669,15 @@ namespace Twinder.Properties {
         public static string window_title_chat {
             get {
                 return ResourceManager.GetString("window_title_chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string window_title_error {
+            get {
+                return ResourceManager.GetString("window_title_error", resourceCulture);
             }
         }
         
@@ -534,6 +705,15 @@ namespace Twinder.Properties {
         public static string window_title_profile {
             get {
                 return ResourceManager.GetString("window_title_profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommendations.
+        /// </summary>
+        public static string window_title_recommendations {
+            get {
+                return ResourceManager.GetString("window_title_recommendations", resourceCulture);
             }
         }
         

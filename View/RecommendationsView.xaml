@@ -15,16 +15,16 @@
 
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} - {1}">
-			<Binding Source="{x:Static p:Resources.window_tile_recommendations}"/>
+			<Binding Source="{x:Static p:Resources.window_title_recommendations}"/>
 			<Binding Source="{x:Static p:Resources.app_title}"/>
 		</MultiBinding>
 	</Window.Title>
 	
 	<DockPanel LastChildFill="True">
 
-		<Grid DockPanel.Dock="Bottom" >
+		<Grid DockPanel.Dock="Bottom" Height="210">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
@@ -42,7 +42,7 @@
 				<Grid Grid.Column="0">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="auto"/>
-						<RowDefinition Height="auto"/>
+						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
 
 					<!--Name, age-->
@@ -52,10 +52,12 @@
 							<ColumnDefinition Width="10"/>
 							<ColumnDefinition Width="auto"/>
 						</Grid.ColumnDefinitions>
+						
 						<TextBlock Grid.Column="0"
 						   Text="{Binding Name, FallbackValue='Name'}"
 						   FontSize="18"
 						   VerticalAlignment="Bottom"/>
+						
 						<TextBlock Grid.Column="2"
 						   Text="{Binding Age, FallbackValue='99'}"
 						   FontSize="18"
@@ -64,8 +66,7 @@
 
 					<!--Bio-->
 					<ScrollViewer Grid.Row="1" Grid.Column="0"
-								  VerticalScrollBarVisibility="Visible"
-								  CanContentScroll="False" >
+								  VerticalScrollBarVisibility="Visible">
 						<TextBlock 
 						   Text="{Binding Bio, FallbackValue='Bio full'}"
 						   TextWrapping="Wrap"/>
@@ -89,7 +90,8 @@
 
 					<!-- Last seen date -->
 					<TextBlock Text="{x:Static p:Resources.match_info_last_seen}" Grid.Row="0" Grid.Column="0"/>
-					<TextBlock Text="{Binding PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
+					<TextBlock Text="{Binding PingTime, StringFormat='yyyy-MM-dd dddd, HH:mm',
+									Converter={StaticResource DateTimeToLocalConverter}}"
 						   Grid.Row="0" Grid.Column="2"/>
 
 					<!-- Matched on date-->
@@ -130,23 +132,53 @@
 					</Style>
 				</StackPanel.Resources>
 
-				<Button Command="{Binding PassCommand}"
-					Content="Pass"/>
+				<Button Command="{Binding PassCommand}">
+					<Button.Content>
+						<StackPanel>
+							<Image Source="{StaticResource icon_pass}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.recs_button_pass}"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
 
-				<Button Command="{Binding LikeCommand}"
-					Content="Like"/>
+				<Button Command="{Binding LikeCommand}">
+					<Button.Content>
+						<StackPanel>
+							<Image Source="{StaticResource icon_like}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.recs_button_like}"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
 
-				<Button Command="{Binding SuperLikeCommand}"
-					Content="Super Like"/>
+				<Button Command="{Binding SuperLikeCommand}">
+					<Button.Content>
+						<StackPanel>
+							<Image Source="{StaticResource icon_like_super}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.recs_button_like_super}"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
 
 				<Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
 
-				<Button Command="{Binding SelectPreviousCommand}"
-					Content="Previous"/>
+				<Button Command="{Binding SelectPreviousCommand}">
+					<Button.Content>
+						<StackPanel>
+							<Image Source="{StaticResource icon_prev}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.recs_button_prev}"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
 
-				<Button Command="{Binding SelectNextCommand}"
-					Content="Next"/>
+				<Button Command="{Binding SelectNextCommand}">
+					<Button.Content>
+						<StackPanel>
+							<Image Source="{StaticResource icon_next}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.recs_button_next}"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
 
 			</StackPanel>
 
@@ -186,10 +218,9 @@
 				<StatusBarItem Name="recCount_StatusBarItem">
 					<TextBlock>
 						<TextBlock.Text>
-							<MultiBinding StringFormat="{}{0} of {1} {2}">
+							<MultiBinding StringFormat="{}{0} of {1}">
 								<Binding Path="SelectedIndex" Converter="{StaticResource ArrayIndexConverter}"/>
 								<Binding Path="RecList.Count"/>
-								<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
 							</MultiBinding>
 						</TextBlock.Text>
 					</TextBlock>

@@ -22,7 +22,6 @@ namespace Twinder.Models
 
 		[JsonProperty("created_date")]
 		public DateTime CreatedDate { get; set; }
-		public DateTime CreatedDateLocal { get { return CreatedDate.ToLocalTime(); } }
 
 		[JsonProperty("dead")]
 		public bool Dead { get; set; }

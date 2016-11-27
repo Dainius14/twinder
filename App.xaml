@@ -9,8 +9,10 @@
              mc:Ignorable="d ignore"
              
 			 Startup="Application_Startup"
-			 ShutdownMode="OnExplicitShutdown">
+			 ShutdownMode="OnExplicitShutdown"
+			 DispatcherUnhandledException="Application_DispatcherUnhandledException">
 
+	
 	<Application.Resources>
 		<!-- Global View Model Locator -->
         <vm:ViewModelLocator x:Key="Locator"
@@ -23,6 +25,9 @@
 		<converter:TextTrimConverter x:Key="TextTrimConverter"/>
 		<converter:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
 		<converter:LastMessageConverter x:Key="LastMessageConverter"/>
+		<converter:InterestedInConverter x:Key="InterestedInConverter"/>
+		<converter:MiToKmConverter x:Key="MiToKmConverter"/>
+		<converter:DateTimeToLocalConverter x:Key="DateTimeToLocalConverter"/>
 
 		<Style TargetType="Separator" x:Key="StatusBarSeperator">
 			<Setter Property="Width" Value="1"/>
@@ -36,6 +41,16 @@
 			<Setter Property="Margin" Value="0, 0, 5, 0"/>
 		</Style>
 		
+		
+		<!-- Icons -->
+		<BitmapImage x:Key="icon_pass" UriSource="Icons/Cancel-50.png"/>
+		<BitmapImage x:Key="icon_like" UriSource="Icons/Hearts-50.png"/>
+		<BitmapImage x:Key="icon_like_super" UriSource="Icons/Novel-50.png"/>
+		<BitmapImage x:Key="icon_next" UriSource="Icons/Right-50.png"/>
+		<BitmapImage x:Key="icon_prev" UriSource="Icons/Left-50.png"/>
+		<BitmapImage x:Key="icon_location" UriSource="Icons/Location-50.png"/>
+		<BitmapImage x:Key="icon_user" UriSource="Icons/User-50.png"/>
+		<BitmapImage x:Key="icon_recs" UriSource="Icons/Novel-50.png"/>
 
 	</Application.Resources>
     

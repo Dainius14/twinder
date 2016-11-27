@@ -50,7 +50,7 @@ namespace Twinder.Model
 
 		[JsonProperty("birth_date")]
 		public DateTime BirthDate { get; set; }
-		public int Age { get { return (int) (DateTime.Now - BirthDate).TotalDays / 365; } }
+		public int Age { get { return (int) (DateTime.Now - BirthDate).TotalDays / 365 - 1; } }
 
 		[JsonProperty("gender")]
 		public int Gender { get; set; }
@@ -60,7 +60,6 @@ namespace Twinder.Model
 
 		[JsonProperty("ping_time")]
 		public DateTime PingTime { get; set; }
-		public DateTime PingTimeLocal { get { return PingTime.ToLocalTime(); } }
 
 		[JsonProperty("photos")]
 		public ObservableCollection<PhotoModel> Photos { get; set; }

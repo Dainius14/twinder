@@ -25,6 +25,7 @@ namespace Twinder
 			Closing += (s, e) => ViewModelLocator.Cleanup();
 			Messenger.Default.Register<MatchModel>(this, MessengerToken.NewChatWindow, CreateChatWindow);
 			Messenger.Default.Register<MatchModel>(this, MessengerToken.ShowMatchProfile, CreateMatchProfileView);
+			Messenger.Default.Register<UserModel>(this, MessengerToken.OpenMyProfile, CreateMyProfileWindow);
 			Messenger.Default.Register<ObservableCollection<RecModel>>(this, MessengerToken.OpenRecommendations, OpenRecsWindow);
 			Messenger.Default.Register<string>(this, MessengerToken.ShowSetLocationWindow, CreateSetLocationWindow);
 			Messenger.Default.Register<string>(this, MessengerToken.ShowLoginDialog, CreateLoginWindow);
@@ -53,6 +54,12 @@ namespace Twinder
 		{
 			var matchListProperty = CollectionViewSource.GetDefaultView(matchList.ItemsSource);
 			matchListProperty.Refresh();
+		}
+
+		private void CreateMyProfileWindow(UserModel user)
+		{
+			var myProfileWindow = new UserProfileView(user);
+			myProfileWindow.Show();
 		}
 
 		private void CreateLoginWindow(string obj)

@@ -102,7 +102,6 @@ namespace Twinder.ViewModel
 		private void Cancel(Window window)
 		{
 			window.DialogResult = false;
-			Application.Current.Shutdown();
 		}
 		#endregion
 

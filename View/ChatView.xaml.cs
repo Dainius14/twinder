@@ -25,7 +25,7 @@ namespace Twinder.View
 			chatScrollViewer.ScrollToEnd();
 
 			viewModel.NewChatMessageReceived += FlashWindow;
-			
+			Loaded += (sender, e) => message_TextBox.Focus();
 
 		}
 

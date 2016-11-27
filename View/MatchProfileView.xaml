@@ -16,7 +16,7 @@
 		d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}">
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} {1} - {2}">
-			<Binding Path="Match.Person.Name" />
+			<Binding Path="Match.Person.Name"/>
 			<Binding Source="{x:Static p:Resources.window_title_profile}"/>
 			<Binding Source="{x:Static p:Resources.app_title}"/>
 		</MultiBinding>
@@ -76,13 +76,13 @@
 				<!-- Last seen date -->
 				<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
 						   Grid.Row="0" Grid.Column="0"/>
-				<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
+				<TextBlock Text="{Binding Person.PingTime, StringFormat='yyyy-MM-dd dddd, HH:mm', Converter={StaticResource DateTimeToLocalConverter}}"
 						   Grid.Row="0" Grid.Column="2"/>
 
 				<!-- Matched on date-->
 				<TextBlock Text="{Binding Source={x:Static p:Resources.matched_on}, StringFormat='{}{0}:'}"
 						   Grid.Row="1" Grid.Column="0"/>
-				<TextBlock Text="{Binding CreatedDateLocal, StringFormat='yyyy-MM-dd dddd, HH:mm'}"
+				<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd dddd, HH:mm', Converter={StaticResource DateTimeToLocalConverter}}"
 						   Grid.Row="1" Grid.Column="2"/>
 
 				<!-- Common like count-->

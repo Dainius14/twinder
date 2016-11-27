@@ -33,7 +33,6 @@ namespace Twinder.Models.Updates
 
 		[JsonProperty("ping_time")]
 		public DateTime PingTime { get; set; }
-		public DateTime PingTimeLocal { get { return PingTime.ToLocalTime(); } }
 
 		[JsonProperty("photos")]
 		public ObservableCollection<PhotoModel> Photos { get; set; }

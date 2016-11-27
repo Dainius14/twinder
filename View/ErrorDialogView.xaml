@@ -1,0 +1,61 @@
+﻿<Window x:Class="Twinder.View.ErrorDialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Twinder.View"
+        mc:Ignorable="d"
+		
+		xmlns:p="clr-namespace:Twinder.Properties"
+		
+        DataContext="{Binding ErrorDialog, Source={StaticResource Locator}}"
+		Height="300" Width="400" ResizeMode="NoResize"
+		Background="WhiteSmoke"
+        Title="{x:Static p:Resources.window_title_error}">
+    <Grid >
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock Padding="5" Grid.Row="0"
+				   TextWrapping="Wrap">
+			<TextBlock.Text>
+				<MultiBinding StringFormat="{}{0}: {1}">
+					<Binding Source="{x:Static p:Resources.error_exception_occured}"/>
+					<Binding Path="ErrorMessage"/>
+				</MultiBinding>
+			</TextBlock.Text>
+		</TextBlock>
+
+		<TextBox Text="{Binding ErrorStackTrace}"
+				 Grid.Row="1"
+				 Padding="5"
+				 IsReadOnly="True"/>
+		
+
+		<Grid Grid.Row="2"
+			  Background="LightGray">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
+
+			<Button Content="{x:Static p:Resources.btn_copy_error}"
+					Command="{Binding CopyErrorCommand}"
+					Grid.Column="1"
+					Width="60" Height="20"
+					Margin="20, 5"/>
+			
+			<Button Content="{x:Static p:Resources.btn_ok}"
+					Command="{Binding OkCommand}"
+					Grid.Column="2"
+					IsDefault="True"
+					Width="60" Height="20"
+					Margin="20, 5"/>
+
+		</Grid>
+	</Grid>
+</Window>

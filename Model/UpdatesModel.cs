@@ -32,9 +32,5 @@ namespace Twinder.Models
 
 		[JsonProperty("last_activity_date")]
 		public DateTime LastActivityDate { get; set; }
-		public DateTime LastActivityDateLocal
-		{
-			get { return LastActivityDate.ToLocalTime(); }
-		}
 	}
 }

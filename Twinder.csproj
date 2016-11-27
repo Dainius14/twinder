@@ -113,6 +113,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Device" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -136,17 +138,20 @@
     </ApplicationDefinition>
     <Compile Include="Converter\BoolToVisibleConverter.cs" />
     <Compile Include="Converter\DataBindingDebugger.cs" />
+    <Compile Include="Converter\DateTimeToLocalConverter.cs" />
+    <Compile Include="Converter\InterestedInConverter.cs" />
+    <Compile Include="Converter\MiToKmConverter.cs" />
     <Compile Include="Converter\LastMessageConverter.cs" />
     <Compile Include="Converter\TextTrimConverter.cs" />
     <Compile Include="Converter\ScrollBarRemoverConverter.cs" />
     <Compile Include="Converter\ArrayIndexConverter.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helpers\FbHelper.cs" />
-    <Compile Include="Helpers\UpdatingCollection.cs" />
     <Compile Include="Helpers\WindowFlasher.cs" />
     <Compile Include="MessengerToken.cs" />
     <Compile Include="Model\AuthModel.cs" />
     <Compile Include="Model\Auth\GlobalsModel.cs" />
+    <Compile Include="Model\Auth\PositionModel.cs" />
     <Compile Include="Model\Auth\UserModel.cs" />
     <Compile Include="Model\Auth\User\InterestModel.cs" />
     <Compile Include="Model\Auth\User\JobModel.cs" />
@@ -177,14 +182,22 @@
     <Compile Include="Model\Updates\Match\PersonModel.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
     <Compile Include="SampleData\SampleMainVM.cs" />
+    <Compile Include="ViewModel\ErrorDialogViewModel.cs" />
     <Compile Include="ViewModel\FbLoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\UserProfileViewModel.cs" />
     <Compile Include="ViewModel\SetLocationViewModel.cs" />
     <Compile Include="ViewModel\MatchProfileViewModel.cs" />
     <Compile Include="ViewModel\RecommendationsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ErrorDialogView.xaml.cs">
+      <DependentUpon>ErrorDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserProfileView.xaml.cs">
+      <DependentUpon>UserProfileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SetLocationView.xaml.cs">
       <DependentUpon>SetLocationView.xaml</DependentUpon>
@@ -223,6 +236,14 @@
     <Page Include="View\ChatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ErrorDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserProfileView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\SetLocationView.xaml">
       <SubType>Designer</SubType>
@@ -292,9 +313,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <Resource Include="Icons\Cancel-50.png" />
+    <Resource Include="Icons\User-50.png" />
+    <Resource Include="Icons\Hearts-50.png" />
+    <Resource Include="Icons\Left-50.png" />
+    <Resource Include="Icons\Novel-50.png" />
+    <Resource Include="Icons\Right-50.png" />
+    <Resource Include="Icons\Location-50.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <DesignData Include="SampleData\DoloresPics\dolores1.jpg" />
   </ItemGroup>

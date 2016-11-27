@@ -28,17 +28,9 @@ namespace Twinder.Models.Updates
 
 		[JsonProperty("sent_date")]
 		public DateTime SentDate { get; set; }
-		public DateTime SentDateLocal
-		{
-			get { return SentDate.ToLocalTime(); }
-		}
 
 		[JsonProperty("created_date")]
 		public DateTime CreatedDate { get; set; }
-		public DateTime CreatedDateLocal
-		{
-			get { return CreatedDate.ToLocalTime(); }
-		}
 
 		[JsonProperty("timestamp")]
 		public string TimeStamp { get; set; }

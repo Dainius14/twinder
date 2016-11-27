@@ -68,7 +68,7 @@
 					<TextBlock.Text>
 						<MultiBinding StringFormat="{}{0}: {1:MM-dd HH:mm}">
 							<Binding Source="{x:Static p:Resources.match_info_last_seen}"/>
-							<Binding Path="Match.Person.PingTimeLocal"/>
+							<Binding Path="Match.Person.PingTime" Converter="{StaticResource DateTimeToLocalConverter}"/>
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>
@@ -83,7 +83,7 @@
 			</Grid.ColumnDefinitions>
 
 			<TextBox Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
-					 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+					 Name="message_TextBox"
 					 Grid.Column="0"
 					 FontFamily="Consolas">
 				

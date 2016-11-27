@@ -106,10 +106,10 @@ namespace Twinder.ViewModel
 			for (int i = 0; i < Match.Messages.Count; i++)
 			{
 				var msg = Match.Messages[i];
-				var sentDate = msg.SentDateLocal.ToLongDateString();
+				var sentDate = msg.SentDate.ToLocalTime().ToLongDateString();
 
 				// Prints new date in new line if it's the first message or the date has changed
-				if (i == 0 || (i > 0 && Match.Messages[i - 1].SentDateLocal.Date != msg.SentDateLocal.Date))
+				if (i == 0 || (i > 0 && Match.Messages[i - 1].SentDate.ToLocalTime().Date != msg.SentDate.ToLocalTime().Date))
 					Chat += string.Format($"[{sentDate}]\n");
 
 				AddMessageToChat(msg);
@@ -123,7 +123,7 @@ namespace Twinder.ViewModel
 		/// <param name="msg"></param>
 		private void AddMessageToChat(MessageModel msg)
 		{
-			var sentTime = msg.SentDateLocal.ToLongTimeString();
+			var sentTime = msg.SentDate.ToLocalTime().ToLongTimeString();
 
 			var from = Match.Person.Name;
 			// If message is from myself, change the sender to "Me"

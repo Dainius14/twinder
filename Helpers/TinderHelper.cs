@@ -8,6 +8,7 @@ using Twinder.Models.Updates;
 using Twinder.Model;
 using System.Net;
 using System.Threading.Tasks;
+using Twinder.ViewModel;
 
 namespace Twinder.Helpers
 {
@@ -46,12 +47,15 @@ namespace Twinder.Helpers
 			
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				Auth = JsonConvert.DeserializeObject<AuthModel>(response.Content);
-				User = Auth.User;
-
+				Auth = await Task.Run(() => JsonConvert.DeserializeObject<AuthModel>(response.Content));
 				_tinderToken = Auth.Token;
 				_client.AddDefaultHeader("X-Auth-Token", _tinderToken);
-
+				
+				// Sends second request to get all user data
+				request = new RestRequest("profile", Method.POST);
+				response = await _client.ExecuteTaskAsync<dynamic>(request);
+				User = await Task.Run(() => JsonConvert.DeserializeObject<UserModel>(response.Content));
+				
 				return true;
 			}
 			return false;
@@ -174,6 +178,29 @@ namespace Twinder.Helpers
 
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 			var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<dynamic>(response.Content));
+		}
+
+		public static async Task<DateTime> UpdateUser(string bio, int minAge, int maxAge, int distance, Gender interestedIn)
+		{
+
+			var request = new RestRequest("profile", Method.POST);
+			request.AddHeader("Content-type", "application/json");
+			request.AddJsonBody(new
+			{
+				bio = bio,
+				age_filter_min = minAge,
+				age_filter_max = maxAge,
+				distance = distance,
+				gender_filter = (int) interestedIn
+			});
+
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
+			if (response.StatusCode == HttpStatusCode.OK)
+			{
+				var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<UserModel>(response.Content));
+				return deserialized.ActiveTime;
+			}
+			return default(DateTime);
 		}
 	}
 }

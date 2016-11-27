@@ -59,14 +59,17 @@
 			<!-- Button Get ID -->
 			<Button Content="{x:Static p:Resources.fblogin_btn_get_id}"
 					Command="{Binding GetFbIdCommand}"/>
+			
 			<!-- Button Get Token -->
 			<Button Content="{x:Static p:Resources.fblogin_btn_get_token}"
 					Command="{Binding GetFbTokenCommand}"/>
+			
 			<!-- Button OK -->
 			<Button Content="{x:Static p:Resources.fblogin_btn_ok}"
 					Command="{Binding SetUserCommand}"
 					CommandParameter="{Binding ElementName=FbLoginWindow}"
 					IsDefault="True"/>
+			
 			<!-- Button Cancel -->
 			<Button Content="{x:Static p:Resources.fblogin_btn_cancel}"
 					Command="{Binding CancelCommand}"

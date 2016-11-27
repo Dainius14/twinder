@@ -178,7 +178,7 @@
   <data name="statusbar_match_count" xml:space="preserve">
     <value>Matches</value>
   </data>
-  <data name="window_tile_recommendations" xml:space="preserve">
+  <data name="window_title_recommendations" xml:space="preserve">
     <value>Recommendations</value>
   </data>
   <data name="window_title_chat" xml:space="preserve">
@@ -263,7 +263,7 @@
     <value>Error locating</value>
   </data>
   <data name="command_open_recommendations" xml:space="preserve">
-    <value>Open Recommendations</value>
+    <value>Recommendations</value>
   </data>
   <data name="command_set_location" xml:space="preserve">
     <value>Set Location</value>
@@ -279,5 +279,65 @@
   </data>
   <data name="tinder_recs_error" xml:space="preserve">
     <value>Recommendations error</value>
+  </data>
+  <data name="error_exception_occured" xml:space="preserve">
+    <value>Unhandled exception occured</value>
+  </data>
+  <data name="window_title_error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="btn_copy_error" xml:space="preserve">
+    <value>Copy Error</value>
+  </data>
+  <data name="command_user_profile" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="btn_save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="user_age_filter_max" xml:space="preserve">
+    <value>Maximum age</value>
+  </data>
+  <data name="user_age_filter_min" xml:space="preserve">
+    <value>Minimum age</value>
+  </data>
+  <data name="user_tinder_created" xml:space="preserve">
+    <value>Tinder created on</value>
+  </data>
+  <data name="user_tinder_pinged" xml:space="preserve">
+    <value>Tinder pinged on</value>
+  </data>
+  <data name="gender_both" xml:space="preserve">
+    <value>Both</value>
+  </data>
+  <data name="gender_men" xml:space="preserve">
+    <value>Men</value>
+  </data>
+  <data name="gender_women" xml:space="preserve">
+    <value>Women</value>
+  </data>
+  <data name="user_interested_in" xml:space="preserve">
+    <value>Interested in</value>
+  </data>
+  <data name="user_max_distance" xml:space="preserve">
+    <value>Max distance, km</value>
+  </data>
+  <data name="user_tinder_active" xml:space="preserve">
+    <value>Last active</value>
+  </data>
+  <data name="recs_button_like" xml:space="preserve">
+    <value>Like</value>
+  </data>
+  <data name="recs_button_like_super" xml:space="preserve">
+    <value>Super Like</value>
+  </data>
+  <data name="recs_button_next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="recs_button_pass" xml:space="preserve">
+    <value>Pass</value>
+  </data>
+  <data name="recs_button_prev" xml:space="preserve">
+    <value>Previous</value>
   </data>
 </root>

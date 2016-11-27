@@ -15,6 +15,7 @@ namespace Twinder
 		ShowSetLocationWindow,
 		ForceUpdate,
 		RefreshMatchList,
-		SortMatchList
+		SortMatchList,
+		OpenMyProfile
 	}
 }

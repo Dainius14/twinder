@@ -133,7 +133,8 @@
 			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_matched_on}, StringFormat='{}{0}:'}"
 					   Grid.Row="2" Grid.Column="0"
 					   Style="{StaticResource SubTextHeader}"/>
-			<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd', FallbackValue='yyyy-MM-dd'}"
+			<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd', FallbackValue='yyyy-MM-dd',
+							Converter={StaticResource DateTimeToLocalConverter}}"
 					   Grid.Row="2" Grid.Column="2"
 					   Style="{StaticResource SubText}"/>
 
@@ -141,7 +142,8 @@
 			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
 					   Grid.Row="3" Grid.Column="0"
 					   Style="{StaticResource SubTextHeader}"/>
-			<TextBlock Text="{Binding Person.PingTimeLocal, StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm'}"
+			<TextBlock Text="{Binding Person.PingTime, StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm',
+							Converter={StaticResource DateTimeToLocalConverter}}"
 					   Grid.Row="3" Grid.Column="2"
 					   Style="{StaticResource SubText}"/>
 

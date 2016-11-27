@@ -18,6 +18,5 @@ namespace Twinder.Models.Authentication
 
 		[JsonProperty("trending_active_text")]
 		public string TrendingActiveText { get; set; }
-
 	}
 }

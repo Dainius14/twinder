@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -14,23 +9,15 @@ namespace Twinder.Converter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value != null)
+			if (value != null && value.GetType() == typeof(bool) && targetType == typeof(Visibility))
 			{
-				if (value is bool)
-				{
-					if (targetType == typeof(Visibility))
-					{
-						if ((bool) value)
-							return Visibility.Visible;
-						else
-							return
-								Visibility.Collapsed;
-					}
-					throw new ArgumentException("Wrong target type.");
-				}
-				throw new ArgumentException("Wrong input type.");
+				if ((bool) value)
+					return Visibility.Visible;
+				else
+					return
+						Visibility.Collapsed;
 			}
-			throw new ArgumentNullException();
+			throw new ArgumentException();
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

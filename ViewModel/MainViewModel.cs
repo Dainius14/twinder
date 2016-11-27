@@ -55,10 +55,14 @@ namespace Twinder.ViewModel
 		// Holds reference to my view to subsribe to events
 		public MainWindow MyView { get; set; }
 
+		public AuthStatus AuthStatus { get; set; }
+
 		public RelayCommand<MatchModel> OpenChatCommand { get; private set; }
 		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
 		public RelayCommand<MatchModel> UnmatchCommand { get; private set; }
+
 		public RelayCommand OpenRecsCommand { get; private set; }
+		public RelayCommand OpenUserProfileCommand { get; private set; }
 		public RelayCommand SetLocationCommand { get; private set; }
 		public RelayCommand ExitCommand { get; private set; }
 		public RelayCommand LoginCommand { get; private set; }
@@ -72,8 +76,11 @@ namespace Twinder.ViewModel
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
 			OpenMatchProfileCommand = new RelayCommand<MatchModel>(param => OpenMatchProfile(param));
 			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
-			OpenRecsCommand = new RelayCommand(OpenRecs);
-			SetLocationCommand = new RelayCommand(SetLocation);
+
+			OpenRecsCommand = new RelayCommand(OpenRecs, IsConnected);
+			OpenUserProfileCommand = new RelayCommand(OpenUserProfile, IsConnected);
+			SetLocationCommand = new RelayCommand(SetLocation, IsConnected);
+
 			ExitCommand = new RelayCommand(Exit);
 
 			LoginCommand = new RelayCommand(Login);
@@ -83,7 +90,12 @@ namespace Twinder.ViewModel
 
 			Messenger.Default.Register<string>(this, MessengerToken.ForceUpdate, AddNewMatch);
 		}
-		
+
+		private bool IsConnected()
+		{
+			return AuthStatus == AuthStatus.Okay;
+		}
+
 		private void AddNewMatch(string message)
 		{
 			UpdateMatches(this, null);
@@ -149,7 +161,16 @@ namespace Twinder.ViewModel
 		public async Task<AuthStatus> Authenticate()
 		{
 			if (await TinderHelper.Authenticate())
+			{
+				User = TinderHelper.User;
+				// Sets current location of user
+				Properties.Settings.Default["latitude"] = User.Pos.Latitude.Replace('.', ',');
+				Properties.Settings.Default["longtitude"] = User.Pos.Longtitude.Replace('.', ',');
+				Properties.Settings.Default.Save();
+				AuthStatus = AuthStatus.Okay;
 				return AuthStatus.Okay;
+			}
+			AuthStatus = AuthStatus.Error;
 			return AuthStatus.Error;
 		}
 
@@ -250,54 +271,38 @@ namespace Twinder.ViewModel
 
 		}
 
-		#region Ping command
+		private void OpenUserProfile()
+		{
+			Messenger.Default.Send(User, MessengerToken.OpenMyProfile);
+		}
+		
 		private void SetLocation()
 		{
 			Messenger.Default.Send("ayy", MessengerToken.ShowSetLocationWindow);
 		}
-		#endregion
 		
 
-		#region Open Recommendations command
 		public void OpenRecs()
 		{
 			Messenger.Default.Send(RecList, MessengerToken.OpenRecommendations);
 		}
-		#endregion
 
-		#region Open chat command
 		private void OpenChat(MatchModel match)
 		{
 			Messenger.Default.Send(match, MessengerToken.NewChatWindow);
 		}
-		#endregion
 
-		#region Open match profile
 		private void OpenMatchProfile(MatchModel match)
 		{
 			Messenger.Default.Send(match, MessengerToken.ShowMatchProfile);
 		}
-		#endregion
 
-		#region Login command
 		private void Login()
 		{
 			Messenger.Default.Send("", MessengerToken.ShowLoginDialog);
 
 		}
-		#endregion
 
-		#region Exit command
-		/// <summary>
-		/// Exits application
-		/// </summary>
-		private void Exit()
-		{
-			Application.Current.Shutdown();
-		}
-		#endregion
-
-		#region About command
 		private void About()
 		{
 			string appName = Properties.Resources.app_title;
@@ -305,7 +310,14 @@ namespace Twinder.ViewModel
 			MessageBox.Show(version, appName);
 
 		}
-		#endregion
+
+		/// <summary>
+		/// Exits application
+		/// </summary>
+		private void Exit()
+		{
+			Application.Current.Shutdown();
+		}
 	}
 
 	public class ConnectionStatusEventArgs : EventArgs
