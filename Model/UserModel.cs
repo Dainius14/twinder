@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Twinder.Models.UserRelated;
-using Twinder.Models.UserRelated.PhotosRelated;
+using Twinder.Model.UserRelated;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Twinder.Model.Auth;
+using Twinder.Model.Photos;
 
-namespace Twinder.Models
+namespace Twinder.Model
 {
 	public enum Gender
 	{

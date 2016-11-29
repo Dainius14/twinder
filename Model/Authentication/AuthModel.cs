@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Twinder.Models.Authentication;
 
-namespace Twinder.Models.Authentication
+namespace Twinder.Model.Authentication
 {
 	public sealed class AuthModel
 	{

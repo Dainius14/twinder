@@ -61,10 +61,17 @@ namespace Twinder.ViewModel
 
 		private void SetLocation()
 		{
-			Properties.Settings.Default["latitude"] = MyLatitude;
-			Properties.Settings.Default["longtitude"] = MyLongtitude;
-			Properties.Settings.Default.Save();
-			TinderHelper.PingLocation(MyLatitude, MyLongtitude);
+			try
+			{
+				TinderHelper.PingLocation(MyLatitude, MyLongtitude);
+				Properties.Settings.Default["latitude"] = MyLatitude;
+				Properties.Settings.Default["longtitude"] = MyLongtitude;
+				Properties.Settings.Default.Save();
+			}
+			catch (TinderRequestException e)
+			{
+				MessageBox.Show(e.Message);
+			}
 		}
 
 		private void AutoDetect()

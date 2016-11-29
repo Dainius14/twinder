@@ -47,7 +47,7 @@ namespace Twinder
 			{
 				var mainWindow = new MainWindow();
 				var mainViewModel = mainWindow.DataContext as MainViewModel;
-				mainWindow.ContentRendered += mainViewModel.StartConnection;
+				mainWindow.ContentRendered += mainViewModel.Connect;
 				mainWindow.Show();
 			}
 			else

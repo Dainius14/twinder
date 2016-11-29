@@ -1,14 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Twinder.Models.Updates;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
-namespace Twinder.Models
+namespace Twinder.Model
 {
 	public sealed class UpdatesModel
 	{

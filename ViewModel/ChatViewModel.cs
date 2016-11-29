@@ -3,13 +3,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
 using Twinder.Helpers;
-using Twinder.Models;
-using Twinder.Models.Updates;
+using Twinder.Model;
 
 namespace Twinder.ViewModel
 {
@@ -85,14 +81,18 @@ namespace Twinder.ViewModel
 
 		private async void SendMessage()
 		{
-			MessageModel sentMessage = await TinderHelper.SendMessage(Match.Id, MessageToSend);
-			if (sentMessage != null)
+			try
 			{
+				MessageModel sentMessage = await TinderHelper.SendMessage(Match.Id, MessageToSend);
 				MessageToSend = string.Empty;
 				Match.Messages.Add(sentMessage);
 				_lastActivity = sentMessage.SentDate;
 			}
-		}
+			catch (TinderRequestException e)
+			{
+				MessageBox.Show(e.Message);
+			}
+		 }
 		#endregion
 		
 		/// <summary>

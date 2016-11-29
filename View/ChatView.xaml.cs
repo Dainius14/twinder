@@ -1,11 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
 using Twinder.Helpers;
-using Twinder.Models;
-using Twinder.Models.Updates;
+using Twinder.Model;
 using Twinder.ViewModel;
 
 namespace Twinder.View

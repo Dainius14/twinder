@@ -1,14 +1,10 @@
 ﻿using System;
 using RestSharp;
 using Newtonsoft.Json;
-using Twinder.Properties;
-using Twinder.Models;
-using Twinder.Models.Authentication;
-using Twinder.Models.Updates;
 using Twinder.Model;
+using Twinder.Model.Authentication;
 using System.Net;
 using System.Threading.Tasks;
-using Twinder.ViewModel;
 
 namespace Twinder.Helpers
 {
@@ -18,53 +14,58 @@ namespace Twinder.Helpers
 		private const string USER_AGENT = "Tinder/4.6.1 (iPhone; iOS 9.0.1; Scale/2.00)";
 		private const string APP_VERSION = "371";
 
-		private static string _fbToken, _fbId, _tinderToken;
+		private static string _tinderToken;
 		private static RestClient _client;
-		
-		public static AuthModel Auth { get; private set; }
-		public static UserModel User { get; private set; }
-		public static UpdatesModel Updates { get; private set; }
-
 
 		/// <summary>
 		/// Authenticates with Tinder server with Facebook ID and Facebook Token
 		/// </summary>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <returns>True if authentication is successful</returns>
-		public static async Task<bool> Authenticate()
+		public static async Task<AuthModel> Authenticate(string fbId, string fbToken)
 		{
-			_fbId = Settings.Default.fb_id;
-			_fbToken = Settings.Default.fb_token;
-
 			_client = new RestClient(TINDER_API_URL);
 			_client.UserAgent = USER_AGENT;
 			_client.AddDefaultHeader("app-version", APP_VERSION);
 
 			RestRequest request = new RestRequest("auth", Method.POST);
-			request.AddParameter("facebook_id", _fbId);
-			request.AddParameter("facebook_token", _fbToken);
+			request.AddParameter("facebook_id", fbId);
+			request.AddParameter("facebook_token", fbToken);
 
 			IRestResponse response = await _client.ExecuteTaskAsync<dynamic>(request);
-			
+
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				Auth = await Task.Run(() => JsonConvert.DeserializeObject<AuthModel>(response.Content));
-				_tinderToken = Auth.Token;
+				var auth = await Task.Run(() => JsonConvert.DeserializeObject<AuthModel>(response.Content));
+				_tinderToken = auth.Token;
 				_client.AddDefaultHeader("X-Auth-Token", _tinderToken);
-				
-				// Sends second request to get all user data
-				request = new RestRequest("profile", Method.POST);
-				response = await _client.ExecuteTaskAsync<dynamic>(request);
-				User = await Task.Run(() => JsonConvert.DeserializeObject<UserModel>(response.Content));
-				
-				return true;
+				return auth;
 			}
-			return false;
+			else
+				throw new TinderRequestException("Error authorizing: " + response.StatusDescription, response);
+		}
+
+		/// <summary>
+		/// Gets full user data from server, because on authorization it is not full
+		/// </summary>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
+		public static async Task<UserModel> GetFullUserData()
+		{
+			var request = new RestRequest("profile", Method.POST);
+			IRestResponse response = await _client.ExecuteTaskAsync<dynamic>(request);
+
+			if (response.StatusCode == HttpStatusCode.OK)
+				return await Task.Run(() => JsonConvert.DeserializeObject<UserModel>(response.Content));
+			else
+				throw new TinderRequestException("Error getting full user data: " + response.StatusDescription, response);
+
 		}
 
 		/// <summary>
 		/// Gets updates since date
 		/// </summary>
-		/// <param name="since">Date from which to get updates</param>
+		/// <param name="since">Date from which to get updates, in universal format</param>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <returns>Returns the Update model</returns>
 		public static async Task<UpdatesModel> GetUpdates(DateTime since)
 		{
@@ -78,12 +79,14 @@ namespace Twinder.Helpers
 			{
 				return await Task.Run(() => JsonConvert.DeserializeObject<UpdatesModel>(response.Content));
 			}
-			return null;
+			else
+				throw new TinderRequestException("Error getting updates: " + response.StatusDescription, response);
 		}
 
 		/// <summary>
 		/// Gets all updates
 		/// </summary>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <returns>Returns the update model</returns>
 		public static async Task<UpdatesModel> GetUpdates()
 		{
@@ -91,34 +94,69 @@ namespace Twinder.Helpers
 		}
 
 		/// <summary>
+		/// Gets full data about specified match
+		/// </summary>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
+		/// <param name="matchPersonId">ID of the person</param>
+		public static async Task<MatchModel> GetFullMatchData(string matchPersonId)
+		{
+			var request = new RestRequest("user/" + matchPersonId, Method.GET);
+			request.AddHeader("Content-type", "application/json");
+
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
+			if (response.StatusCode == HttpStatusCode.OK)
+				return await Task.Run(() => JsonConvert.DeserializeObject<MatchModel>(response.Content));
+			else
+				throw new TinderRequestException("Error getting full match data: " + response.StatusDescription, response);
+		}
+
+		/// <summary>
+		/// Unmatches with specified match
+		/// </summary>
+		/// <param name="matchId">ID of the match</param>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
+		public static async void UnmatchPerson(string matchId)
+		{
+			var request = new RestRequest("user/matches/" + matchId, Method.DELETE);
+			request.AddHeader("Content-type", "application/json");
+
+			var response = await _client.ExecuteTaskAsync<dynamic>(request);
+			if (response.StatusCode != HttpStatusCode.OK)
+				throw new TinderRequestException("Error unmatching: " + response.StatusDescription, response);
+		}
+
+
+		/// <summary>
 		/// Sends a message to specified match
 		/// </summary>
-		/// <param name="matchId">Match to whom to send message</param>
+		/// <param name="matchId">ID of the match</param>
 		/// <param name="messageToSend">Message to send</param>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <returns>Returns MessageModel if message was sent succesfully.</returns>
 		public static async Task<MessageModel> SendMessage(string matchId, string messageToSend)
 		{
-			RestRequest request = new RestRequest("user/matches/" + matchId, Method.POST);
+			var request = new RestRequest("user/matches/" + matchId, Method.POST);
 			request.AddHeader("Content-type", "application/json");
 			request.AddParameter("message", messageToSend);
 
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
+
 			if (response.StatusCode == HttpStatusCode.OK)
-			{
 				return await Task.Run(() => JsonConvert.DeserializeObject<MessageModel>(response.Content));
-			}
-			return null;
+			else
+				throw new TinderRequestException("Error sending message: " + response.StatusDescription, response);
 		}
 
 		/// <summary>
 		/// Likes recommendation
 		/// </summary>
-		/// <param name="id">Recommendation ID</param>
-		/// <param name="superLike">True for making a super like</param>
+		/// <param name="recId">ID of the recommendation</param>
+		/// <param name="superLike">True for sending a super like</param>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <returns>Returns a MatchModel with match information</returns>
-		public static async Task<MatchModel> LikeRecommendation(string id, bool superLike = false)
+		public static async Task<MatchModel> LikeRecommendation(string recId, bool superLike = false)
 		{
-			var request = new RestRequest("like/" + id);
+			var request = new RestRequest("like/" + recId);
 			if (superLike)
 			{
 				request.Method = Method.POST;
@@ -130,36 +168,40 @@ namespace Twinder.Helpers
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 
 			if (response.StatusCode == HttpStatusCode.OK)
-			{
 				return await Task.Run(() => JsonConvert.DeserializeObject<RecMatchedModel>(response.Content).Match);
-			}
-			return null;
+			else
+				throw new TinderRequestException("Error liking person: " + response.StatusDescription, response);
 		}
 
 		/// <summary>
 		/// Passes recommendation
 		/// </summary>
-		/// <param name="id">Recommendation ID</param>
-		public static async void PassRecommendation(string id)
+		/// <param name="recId">ID of the recommendation</param>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
+		public static async void PassRecommendation(string recId)
 		{
-			var request = new RestRequest("pass/" + id, Method.GET);
+			var request = new RestRequest("pass/" + recId, Method.GET);
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
+
+			if (response.StatusCode != HttpStatusCode.OK)
+				throw new TinderRequestException("Error passing person: " + response.StatusDescription, response);
 		}
 
 		/// <summary>
 		/// Gets all available recommendations
 		/// </summary>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <returns>RecsResultsModel contains either recommendations or an error message</returns>
 		public static async Task<RecsResultsModel> GetRecommendations()
 		{
 			var request = new RestRequest("user/recs", Method.GET);
 
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
+
 			if (response.StatusCode == HttpStatusCode.OK)
-			{
 				return await Task.Run(() => JsonConvert.DeserializeObject<RecsResultsModel>(response.Content));
-			}
-			return null;
+			else
+				throw new TinderRequestException("Error getting recommendations: " + response.StatusDescription, response);
 		}
 
 		/// <summary>
@@ -167,6 +209,7 @@ namespace Twinder.Helpers
 		/// </summary>
 		/// <param name="latitude">Latitude</param>
 		/// <param name="longtitude">Longtitude</param>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
 		public static async void PingLocation(string latitude, string longtitude)
 		{
 			latitude = latitude.Replace(',', '.');
@@ -176,13 +219,25 @@ namespace Twinder.Helpers
 			request.AddHeader("Content-type", "application/json");
 			request.AddJsonBody(new { lat = latitude, lon = longtitude });
 
-			var response = await _client.ExecuteTaskAsync<dynamic>(request);
-			var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<dynamic>(response.Content));
+			IRestResponse response = await _client.ExecuteTaskAsync<dynamic>(request);
+			//var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<dynamic>(response.Content));
+
+			if (response.StatusCode != HttpStatusCode.OK)
+				throw new TinderRequestException("Error pinging location: " + response.StatusDescription, response);
 		}
 
+		/// <summary>
+		/// Sends updated user info to Tinder
+		/// </summary>
+		/// <param name="bio"></param>
+		/// <param name="minAge"></param>
+		/// <param name="maxAge"></param>
+		/// <param name="distance">Distance filter in miles</param>
+		/// <param name="interestedIn"></param>
+		/// <exception cref="TinderRequestException">Bad request data</exception>
+		/// <returns>Last active time according to Tinder</returns>
 		public static async Task<DateTime> UpdateUser(string bio, int minAge, int maxAge, int distance, Gender interestedIn)
 		{
-
 			var request = new RestRequest("profile", Method.POST);
 			request.AddHeader("Content-type", "application/json");
 			request.AddJsonBody(new
@@ -200,7 +255,31 @@ namespace Twinder.Helpers
 				var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<UserModel>(response.Content));
 				return deserialized.ActiveTime;
 			}
-			return default(DateTime);
+			else
+				throw new TinderRequestException("Error updating user: " + response.StatusDescription, response);
+		}
+	}
+
+	[Serializable]
+	public class TinderRequestException : Exception
+	{
+		public IRestResponse Response { get; private set; }
+
+		public TinderRequestException()
+		{
+		}
+
+		public TinderRequestException(string message) : base(message)
+		{
+		}
+
+		public TinderRequestException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
+		public TinderRequestException(string message, IRestResponse response) : base (message)
+		{
+			response = Response;
 		}
 	}
 }

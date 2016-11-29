@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Twinder.Helpers;
-using Twinder.Models;
+using Twinder.Model;
 
 namespace Twinder.ViewModel
 {
@@ -88,10 +88,10 @@ namespace Twinder.ViewModel
 		#region Save command
 		private async void Save()
 		{
-			var activeTime = await TinderHelper.UpdateUser(Bio, MinAge, MaxAge, Distance, InterestedIn);
-
-			if (activeTime != default(DateTime))
+			try
 			{
+				// If no exception is caught, it means update was succesful and we can continue updating everything
+				var activeTime = await TinderHelper.UpdateUser(Bio, MinAge, MaxAge, Distance, InterestedIn);
 				User.ActiveTime = activeTime;
 				User.Bio = Bio;
 				User.AgeFilterMin = MinAge;
@@ -107,10 +107,10 @@ namespace Twinder.ViewModel
 					User.InterestedIn.Add(InterestedIn);
 
 			}
-			else
-				MessageBox.Show("Now that's a pity. There was an error.");
-
-
+			catch (TinderRequestException e)
+			{
+				MessageBox.Show(e.Message);
+			}
 		}
 
 		private bool CanSave()

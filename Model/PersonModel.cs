@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Twinder.Models.UserRelated.PhotosRelated;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Twinder.Model.Photos;
 
-namespace Twinder.Models.Updates
+namespace Twinder.Model
 {
 	public sealed class PersonModel
 	{
@@ -13,13 +12,6 @@ namespace Twinder.Models.Updates
 
 		[JsonProperty("bio")]
 		public string Bio { get; set; }
-		public string BioTrimmed
-		{
-			get
-			{
-				return Bio.Substring(0, (Bio.Length > 100 ? 100 : Bio.Length)).Replace("\n", " ");
-			}
-		}
 
 		[JsonProperty("birth_date")]
 		public DateTime BirthDate { get; set; }

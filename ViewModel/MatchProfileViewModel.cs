@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
-using Twinder.Models;
-using Twinder.Models.Updates;
+using System.Windows;
+using Twinder.Helpers;
+using Twinder.Model;
 
 namespace Twinder.ViewModel
 {
@@ -14,8 +14,20 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _match, value);
+				GetFullInfo();
 			}
 		}
-		
+
+		private async void GetFullInfo()
+		{
+			try
+			{
+				await TinderHelper.GetFullMatchData(Match.Person.Id);
+			}
+			catch (TinderRequestException e)
+			{
+				MessageBox.Show(e.Message);
+			}
+		}
 	}
 }

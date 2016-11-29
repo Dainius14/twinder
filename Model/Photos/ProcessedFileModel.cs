@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twinder.Models.UserRelated.PhotosRelated
+namespace Twinder.Model.Photos
 {
 	public sealed class ProcessedFileModel
 	{
@@ -12,6 +12,5 @@ namespace Twinder.Models.UserRelated.PhotosRelated
 
 		[JsonProperty("url")]
 		public string Url { get; set; }
-		
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twinder.Models.UserRelated
+namespace Twinder.Model.UserRelated
 {
 	public sealed class SchoolModel
 	{

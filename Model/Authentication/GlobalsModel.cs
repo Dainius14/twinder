@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twinder.Models.Authentication
+namespace Twinder.Model.Authentication
 {
 	public sealed class GlobalsModel
 	{

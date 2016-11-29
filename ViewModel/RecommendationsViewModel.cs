@@ -2,17 +2,12 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Twinder.Helpers;
 using Twinder.Model;
-using Twinder.Models;
-using Twinder.Models.Updates;
 
 namespace Twinder.ViewModel
 {
@@ -62,8 +57,8 @@ namespace Twinder.ViewModel
 			SelectPreviousCommand = new RelayCommand(SelectPrevious);
 			SelectNextCommand = new RelayCommand(SelectNext);
 			PassCommand = new RelayCommand(Pass);
-			LikeCommand = new RelayCommand<bool>(param => Like(false));
-			SuperLikeCommand = new RelayCommand<bool>(param => Like(true));
+			LikeCommand = new RelayCommand<bool>(param => Like(SelectedRec, false));
+			SuperLikeCommand = new RelayCommand<bool>(param => Like(SelectedRec, true));
 			LikeAllCommand = new RelayCommand(LikeAll);
 		}
 
@@ -89,6 +84,7 @@ namespace Twinder.ViewModel
 			LoadingStateChange.Invoke(this, args);
 		}
 
+		// TODO one method to get recommendations
 		public async Task<bool> GetRecommendations()
 		{
 			RecsLoadingStateEventArgs args = new RecsLoadingStateEventArgs();
@@ -152,8 +148,15 @@ namespace Twinder.ViewModel
 		{
 			if (SelectedRec != null)
 			{
-				TinderHelper.PassRecommendation(SelectedRec.Id);
-				RemoveSelectedRecommendation();
+				try
+				{
+					TinderHelper.PassRecommendation(SelectedRec.Id);
+					RemoveRecomendations(SelectedRec);
+				}
+				catch (TinderRequestException e)
+				{
+					MessageBox.Show(e.Message);
+				}
 			}
 		}
 		#endregion
@@ -163,20 +166,27 @@ namespace Twinder.ViewModel
 		/// Likes the selected recommendation
 		/// </summary>
 		/// <param name="superLike">True if a superlike should be send, default is false</param>
-		private async void Like(bool superLike = false)
+		private async void Like(RecModel rec, bool superLike = false)
 		{
 			if (SelectedRec != null)
 			{
-				var match = await TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
-
-				// If the method returns a non-null value, it means it's a match
-				if (match != null)
+				try
 				{
-					Messenger.Default.Send("", MessengerToken.ForceUpdate);
-					MessageBox.Show("It's a match!");
-				}
+					var match = await TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
 
-				RemoveSelectedRecommendation();
+					// If the method returns a non-null value, it means it's a match
+					if (match != null)
+					{
+						Messenger.Default.Send("", MessengerToken.ForceUpdate);
+						MessageBox.Show("It's a match!");
+					}
+
+					RemoveRecomendations(SelectedRec);
+				}
+				catch (TinderRequestException e)
+				{
+					MessageBox.Show(e.Message);
+				}
 			}
 		}
 		#endregion
@@ -208,29 +218,24 @@ namespace Twinder.ViewModel
 		/// <param name="rec">Recommendation to remove</param>
 		private void RemoveRecomendations(RecModel rec)
 		{
-			if (rec == SelectedRec)
-				RemoveSelectedRecommendation();
 			RecList.Remove(rec);
-		}
 
-		/// <summary>
-		/// Removes recommendation which is currently selected
-		/// </summary>
-		private void RemoveSelectedRecommendation()
-		{
-			RecList.Remove(SelectedRec);
-			// If it was the last item, selects a new last item
-			if (SelectedIndex >= RecList.Count)
+			// Since the recommendation was currently selected, we have to change it with another one
+			if (rec == SelectedRec)
 			{
-				SelectedIndex = RecList.Count - 1;
-				if (SelectedIndex >= 0)
+				// If it was the last item, selects a new last item
+				if (SelectedIndex >= RecList.Count)
+				{
+					SelectedIndex = RecList.Count - 1;
+					if (SelectedIndex >= 0)
+						SelectedRec = RecList[SelectedIndex];
+				}
+				// If no more recommendations are left, removes selection
+				if (RecList.Count == 0)
+					SelectedRec = null;
+				else
 					SelectedRec = RecList[SelectedIndex];
 			}
-			// If no more recommendations are left, removes selection
-			if (RecList.Count == 0)
-				SelectedRec = null;
-			else
-				SelectedRec = RecList[SelectedIndex];
 		}
 
 		/// <summary>

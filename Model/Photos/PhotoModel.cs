@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Twinder.Models.UserRelated.PhotosRelated
+namespace Twinder.Model.Photos
 {
 	public sealed class PhotoModel
 	{

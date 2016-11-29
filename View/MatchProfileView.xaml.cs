@@ -1,9 +1,7 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Twinder.Models;
-using Twinder.Models.Updates;
+using Twinder.Model;
 using Twinder.ViewModel;
 
 namespace Twinder.View

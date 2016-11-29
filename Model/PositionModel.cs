@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twinder.Model.Auth
+namespace Twinder.Model
 {
 	public class PositionModel
 	{

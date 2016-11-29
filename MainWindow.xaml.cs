@@ -1,17 +1,12 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Twinder.Models.Updates;
 using Twinder.ViewModel;
 using System;
 using Twinder.View;
 using System.Collections.ObjectModel;
 using Twinder.Model;
-using Twinder.Models;
-using System.Windows.Interop;
-using Twinder.Helpers;
 using System.ComponentModel;
 using System.Windows.Data;
 

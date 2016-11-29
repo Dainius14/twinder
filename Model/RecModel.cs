@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Twinder.Model.Auth.User;
+using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
-using Twinder.Models.UserRelated;
-using Twinder.Models.UserRelated.PhotosRelated;
+using Twinder.Model.UserRelated;
 
 namespace Twinder.Model
 {

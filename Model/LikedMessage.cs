@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twinder.Models.Updates
+namespace Twinder.Model
 {
 	public sealed class LikedMessage
 	{
@@ -18,6 +18,5 @@ namespace Twinder.Models.Updates
 
 		[JsonProperty("is_liked")]
 		public bool IsLiked { get; set; }
-
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using Twinder.Model.Photos;
 
 namespace Twinder.Model
 {
@@ -13,7 +14,7 @@ namespace Twinder.Model
 		public bool CompletedInitialFetch { get; set; }
 
 		[JsonProperty("photos")]
-		public ObservableCollection<InstagramModel> InstagramPhotos { get; set; }
+		public ObservableCollection<InstagramPhoto> InstagramPhotos { get; set; }
 
 		[JsonProperty("media_count")]
 		public int MediaCount { get; set; }
