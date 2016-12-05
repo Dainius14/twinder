@@ -2,26 +2,33 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Twinder.Model.Auth.User
+namespace Twinder.Model
 {
-	public class JobModel
+	public sealed class JobModel
 	{
 		[JsonProperty("company")]
 		[JsonConverter(typeof(JobConverter<CompanyModel>))]
 		public CompanyModel Company { get; set; }
 
 		[JsonProperty("title")]
-		[JsonConverter(typeof(JobConverter<JobTitle>))]
-		public JobTitle Title { get; set; }
+		[JsonConverter(typeof(JobConverter<JobTitleModel>))]
+		public JobTitleModel Title { get; set; }
 	}
 
-	public class JobTitle
+	public sealed class JobTitleModel
 	{
 		[JsonProperty("title")]
 		public string Title { get; set; }
 	}
 
-	// TODO fix this mess
+	public sealed class CompanyModel
+	{
+		[JsonProperty("name")]
+		public string Name { get; set; }
+
+	}
+	
+	// Tinder sometimes gives a string, or an object containing a string :)
 	class JobConverter<T> : JsonConverter
 	{
 		public override bool CanConvert(Type objectType)

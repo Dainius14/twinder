@@ -2,7 +2,7 @@
 
 namespace Twinder.Model
 {
-	public class TeaserModel
+	public sealed class TeaserModel
 	{
 		[JsonProperty("string")]
 		public string String { get; set; }

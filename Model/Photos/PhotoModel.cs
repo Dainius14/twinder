@@ -11,7 +11,7 @@ namespace Twinder.Model.Photos
 
 		[JsonProperty("successRate")]
 		public string SuccessRate { get; set; }
-		
+
 
 		[JsonProperty("main")]
 		public string Main { get; set; }

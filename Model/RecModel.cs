@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Twinder.Model.Auth.User;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 using Twinder.Model.UserRelated;
@@ -13,7 +11,6 @@ namespace Twinder.Model
 	{
 		[JsonProperty("distance_mi")]
 		public int DistanceMiles { get; set; }
-		public int DistanceKilometers { get { return (int) Math.Round(DistanceMiles * 1.609); } }
 
 		[JsonProperty("connection_count")]
 		public int ConnectionCount { get; set; }
@@ -42,7 +39,7 @@ namespace Twinder.Model
 		[JsonProperty("_id")]
 		public string Id { get; set; }
 
-		[JsonProperty("badges")]
+		//[JsonProperty("badges")]
 		public dynamic Badges { get; set; }
 
 		[JsonProperty("bio")]
@@ -68,10 +65,10 @@ namespace Twinder.Model
 		public InstagramModel Instagram { get; set; }
 
 		[JsonProperty("jobs")]
-		public List<JobModel> Jobs { get; set; }
+		public ObservableCollection<JobModel> Jobs { get; set; }
 
 		[JsonProperty("schools")]
-		public List<SchoolModel> Schools { get; set; }
+		public ObservableCollection<SchoolModel> Schools { get; set; }
 
 		[JsonProperty("teaser")]
 		public TeaserModel Teaser { get; set; }
@@ -83,12 +80,17 @@ namespace Twinder.Model
 		public string SNumber { get; set; }
 
 		[JsonProperty("spotify_top_artists")]
-		public List<SpotifyTopArtistModel> SpotifyTopArtists { get; set; }
+		public ObservableCollection<SpotifyTopArtistModel> SpotifyTopArtists { get; set; }
 
 		[JsonProperty("spotify_theme_track")]
 		public SpotifyTrackModel SpotifyThemeTrack { get; set; }
 
 		[JsonProperty("is_traveling")]
 		public bool IsTraveling { get; set; }
+
+		public override string ToString()
+		{
+			return string.Format($"{Name}.{Id}");
+		}
 	}
 }

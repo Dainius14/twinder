@@ -4,7 +4,7 @@ using System;
 
 namespace Twinder.Model
 {
-	public class RecMatchedModel
+	public sealed class RecMatchedModel
 	{
 		[JsonProperty("match")]
 		[JsonConverter(typeof(MatchConverter))]

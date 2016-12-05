@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using Twinder.Model.Photos;
+using Twinder.Model.Spotify;
 
 namespace Twinder.Model
 {
@@ -12,11 +14,20 @@ namespace Twinder.Model
 		[JsonProperty("closed")]
 		public bool Closed { get; set; }
 
+		[JsonProperty("connection_count")]
+		public int ConnectionCount { get; set; }
+
 		[JsonProperty("common_friend_count")]
 		public int CommonFriendCount { get; set; }
 
 		[JsonProperty("common_like_count")]
 		public int CommonLikeCount { get; set; }
+
+		[JsonProperty("common_likes")]
+		public ObservableCollection<string> CommonLikes { get; set; }
+
+		[JsonProperty("common_friends")]
+		public ObservableCollection<string> CommonFriends { get; set; }
 
 		[JsonProperty("created_date")]
 		public DateTime CreatedDate { get; set; }
@@ -42,6 +53,7 @@ namespace Twinder.Model
 		[JsonProperty("pending")]
 		public bool Pending { get; set; }
 
+
 		[JsonProperty("is_super_like")]
 		public bool IsSuperLike { get; set; }
 
@@ -51,13 +63,39 @@ namespace Twinder.Model
 		[JsonProperty("following_moments")]
 		public bool FollowingMoments { get; set; }
 
+		[JsonProperty("spotify_top_artists")]
+		public ObservableCollection<SpotifyTopArtistModel> SpotifyTopArtists { get; set; }
+
+		[JsonProperty("spotify_theme_track")]
+		public SpotifyTrackModel SpotifyThemeTrack { get; set; }
+
+		[JsonProperty("instagram")]
+		public InstagramModel Instagram { get; set; }
+
 		[JsonProperty("person")]
 		public PersonModel Person { get; set; }
+
+		[JsonProperty("distance_mi")]
+		public int DistanceMiles { get; set; }
 
 
 		public override string ToString()
 		{
-			return string.Format($"{Person.Name} {Person.Id}");
+			return string.Format($"{Person.Name}.{Person.Id}");
 		}
+
+		public bool ShouldSerializeMessages()
+		{
+			return false;
+		}
+	}
+
+	public sealed class MatchUpdateModel
+	{
+		[JsonProperty("status")]
+		public int Status { get; set; }
+
+		[JsonProperty("results")]
+		public MatchModel Results { get; set; }
 	}
 }

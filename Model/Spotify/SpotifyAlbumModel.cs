@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Twinder.Model.Spotify
 {
-	public class SpotifyAlbumModel
+	public sealed class SpotifyAlbumModel
 	{
 		[JsonProperty("id")]
 		public string Id { get; set; }

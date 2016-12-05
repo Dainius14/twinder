@@ -2,7 +2,7 @@
 
 namespace Twinder.Model
 {
-	public class PositionModel
+	public sealed class PositionModel
 	{
 		[JsonProperty("Lat")]
 		public string Latitude { get; set; }

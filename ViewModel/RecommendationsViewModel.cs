@@ -57,8 +57,8 @@ namespace Twinder.ViewModel
 			SelectPreviousCommand = new RelayCommand(SelectPrevious);
 			SelectNextCommand = new RelayCommand(SelectNext);
 			PassCommand = new RelayCommand(Pass);
-			LikeCommand = new RelayCommand<bool>(param => Like(SelectedRec, false));
-			SuperLikeCommand = new RelayCommand<bool>(param => Like(SelectedRec, true));
+			LikeCommand = new RelayCommand<bool>(param => Like(false));
+			SuperLikeCommand = new RelayCommand<bool>(param => Like(true));
 			LikeAllCommand = new RelayCommand(LikeAll);
 		}
 
@@ -95,6 +95,7 @@ namespace Twinder.ViewModel
 			if (recs.Recommendations != null)
 			{
 				var recList = new ObservableCollection<RecModel>(recs.Recommendations);
+				SerializationHelper.SerializeRecList(recList, null);
 				SetRecommendations(recList);
 				
 				return true;
@@ -150,6 +151,7 @@ namespace Twinder.ViewModel
 			{
 				try
 				{
+					SerializationHelper.MoveRecToPassed(SelectedRec);
 					TinderHelper.PassRecommendation(SelectedRec.Id);
 					RemoveRecomendations(SelectedRec);
 				}
@@ -166,7 +168,7 @@ namespace Twinder.ViewModel
 		/// Likes the selected recommendation
 		/// </summary>
 		/// <param name="superLike">True if a superlike should be send, default is false</param>
-		private async void Like(RecModel rec, bool superLike = false)
+		private async void Like(bool superLike = false)
 		{
 			if (SelectedRec != null)
 			{
@@ -177,9 +179,12 @@ namespace Twinder.ViewModel
 					// If the method returns a non-null value, it means it's a match
 					if (match != null)
 					{
+						SerializationHelper.MoveRecToMatches(SelectedRec);
 						Messenger.Default.Send("", MessengerToken.ForceUpdate);
 						MessageBox.Show("It's a match!");
 					}
+					else
+						SerializationHelper.MoveRecToPending(SelectedRec);
 
 					RemoveRecomendations(SelectedRec);
 				}
@@ -243,11 +248,16 @@ namespace Twinder.ViewModel
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private async void GetMoreRecs(object sender, NotifyCollectionChangedEventArgs e)
+		private void GetMoreRecs(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			if (RecList.Count == 0)
 			{
-				await GetRecommendations();
+				Messenger.Default.Send("", MessengerToken.GetMoreRecs);
+			}
+			if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex == 0)
+			{
+				SelectedRec = RecList[0];
+				SelectedIndex = 0;
 			}
 		}
 	}

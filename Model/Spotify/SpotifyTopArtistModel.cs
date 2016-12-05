@@ -2,7 +2,7 @@
 
 namespace Twinder.Model.Spotify
 {
-	public class SpotifyTopArtistModel : SpotifyArtistModel
+	public sealed class SpotifyTopArtistModel : SpotifyArtistModel
 	{
 		[JsonProperty("selected")]
 		public bool Selected { get; set; }

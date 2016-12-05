@@ -97,7 +97,7 @@ namespace Twinder.Model
 		public bool PhotosProcessing { get; set; }
 
 		[JsonProperty("jobs")]
-		public dynamic Jobs { get; set; }
+		public ObservableCollection<JobModel> Jobs { get; set; }
 
 		[JsonProperty("high_school")]
 		public ObservableCollection<string> HighSchool { get; set; }
@@ -131,7 +131,7 @@ namespace Twinder.Model
 
 		public override string ToString()
 		{
-			return string.Format($"{Name} User");
+			return string.Format($"{Name}.{Id}");
 		}
 	}
 }

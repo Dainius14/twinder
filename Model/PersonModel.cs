@@ -29,7 +29,7 @@ namespace Twinder.Model
 		[JsonProperty("photos")]
 		public ObservableCollection<PhotoModel> Photos { get; set; }
 
-		[JsonProperty("badges")]
+		//[JsonProperty("badges")]
 		public dynamic Badges{ get; set; }
 
 		public override string ToString()

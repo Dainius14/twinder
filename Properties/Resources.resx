@@ -281,7 +281,7 @@
     <value>Recommendations error</value>
   </data>
   <data name="error_exception_occured" xml:space="preserve">
-    <value>Unhandled exception occured</value>
+    <value>An error has occured</value>
   </data>
   <data name="window_title_error" xml:space="preserve">
     <value>Error</value>
@@ -339,5 +339,23 @@
   </data>
   <data name="recs_button_prev" xml:space="preserve">
     <value>Previous</value>
+  </data>
+  <data name="download_data_matches" xml:space="preserve">
+    <value>Downloading matches...</value>
+  </data>
+  <data name="download_data_recs" xml:space="preserve">
+    <value>Downloading recommendations...</value>
+  </data>
+  <data name="download_data_user" xml:space="preserve">
+    <value>Downloading user...</value>
+  </data>
+  <data name="window_title_download_data" xml:space="preserve">
+    <value>Downloading Data</value>
+  </data>
+  <data name="menu_tools_force_recs" xml:space="preserve">
+    <value>Force download _recommendations</value>
+  </data>
+  <data name="menu_tools_force_matches" xml:space="preserve">
+    <value>Force download _matches</value>
   </data>
 </root>

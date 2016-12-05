@@ -16,6 +16,8 @@ namespace Twinder
 		ForceUpdate,
 		RefreshMatchList,
 		SortMatchList,
-		OpenMyProfile
+		OpenMyProfile,
+		ShowSerializationDialog,
+		GetMoreRecs
 	}
 }

@@ -9,6 +9,7 @@
 		xmlns:view="clr-namespace:Twinder.View"
 		
 		Closed="Window_Closed"
+		WindowStartupLocation="CenterScreen"
 		
 		MinHeight="400" MinWidth="500"
 		Height="500" Width="550"
@@ -43,6 +44,10 @@
 			<MenuItem Header="{x:Static p:Resources.menu_tools}">
 				<MenuItem Header="{x:Static p:Resources.menu_tools_login}"
 						  Command="{Binding LoginCommand}"/>
+				<MenuItem Header="{x:Static p:Resources.menu_tools_force_matches}"
+						  Command="{Binding ForceDownloadMatchesCommand}"/>
+				<MenuItem Header="{x:Static p:Resources.menu_tools_force_recs}"
+						  Command="{Binding ForceDownloadRecsCommand}"/>
 			</MenuItem>
 
 			<!-- Help -->
@@ -132,39 +137,44 @@
 			</Grid.RowDefinitions>
 
 			<!--Toolbar-->
-			<StackPanel Grid.Row="0"
-						Orientation="Horizontal" HorizontalAlignment="Center">
-				<StackPanel.Resources>
-					<Style TargetType="Button">
-						<Setter Property="Width" Value="110"/>
-						<Setter Property="Margin" Value="2"/>
-					</Style>
-				</StackPanel.Resources>
+			<Grid Background="#f0f0f0">
+				<StackPanel Grid.Row="0"
+							Orientation="Horizontal"
+							HorizontalAlignment="Center">
+					<StackPanel.Resources>
+						<Style TargetType="Button">
+							<Setter Property="Width" Value="110"/>
+							<Setter Property="Margin" Value="2"/>
+						</Style>
+					</StackPanel.Resources>
 
-				<Button Command="{Binding OpenRecsCommand}">
-					<StackPanel>
-						<Image Source="{StaticResource icon_recs}" Height="25"/>
-						<TextBlock Text="{x:Static p:Resources.command_open_recommendations}"/>
-					</StackPanel>
-				</Button>
+					<Button Command="{Binding OpenRecsCommand}">
+						<StackPanel>
+							<Image Source="{StaticResource icon_recs}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.command_open_recommendations}"/>
+						</StackPanel>
+					</Button>
 
-				<Button Command="{Binding SetLocationCommand}">
-					<StackPanel>
-						<Image Source="{StaticResource icon_location}" Height="25"/>
-						<TextBlock Text="{x:Static p:Resources.command_set_location}"/>
-					</StackPanel>
-				</Button>
+					<Button Command="{Binding SetLocationCommand}">
+						<StackPanel>
+							<Image Source="{StaticResource icon_location}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.command_set_location}"/>
+						</StackPanel>
+					</Button>
 
-				<Button Command="{Binding OpenUserProfileCommand}">
-					<StackPanel>
-						<Image Source="{StaticResource icon_user}" Height="25"/>
-						<TextBlock Text="{x:Static p:Resources.command_user_profile}"/>
-					</StackPanel>
-				</Button>
-			</StackPanel>
+					<Button Command="{Binding OpenUserProfileCommand}">
+						<StackPanel>
+							<Image Source="{StaticResource icon_user}" Height="25"/>
+							<TextBlock Text="{x:Static p:Resources.command_user_profile}"/>
+						</StackPanel>
+					</Button>
+				</StackPanel>
+			</Grid>
 
 			<!--Match list-->
-			<ListView Name="matchList" Grid.Row="1" HorizontalAlignment="Stretch" ItemsSource="{Binding MatchList}" VirtualizingPanel.ScrollUnit="Pixel">
+			<ListView Name="matchList" Grid.Row="1" HorizontalAlignment="Stretch"
+					  ItemsSource="{Binding MatchList}" VirtualizingPanel.ScrollUnit="Pixel"
+					  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ListView.Resources>
 					<Style TargetType="ListViewItem">
 						<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -191,8 +201,8 @@
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<view:MatchListItemView
-							Width="{Binding ElementName=matchList, Path=ActualWidth,
-							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=35}"/>
+							Width="{Binding ElementName=matchList, Path=ActualWidth}"/>
+						<!--Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"-->
 					</DataTemplate>
 				</ListView.ItemTemplate>
 

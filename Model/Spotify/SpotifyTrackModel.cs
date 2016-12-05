@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Twinder.Model.Spotify
 {
@@ -9,7 +10,7 @@ namespace Twinder.Model.Spotify
 		public string Id { get; set; }
 
 		[JsonProperty("artists")]
-		public List<SpotifyArtistModel> Artists{ get; set; }
+		public ObservableCollection<SpotifyArtistModel> Artists{ get; set; }
 
 		[JsonProperty("preview_url")]
 		public string PreviewUrl { get; set; }

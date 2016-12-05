@@ -49,12 +49,12 @@ namespace Twinder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.DateTime last_update {
+        public global::System.DateTime LastUpdate {
             get {
-                return ((global::System.DateTime)(this["last_update"]));
+                return ((global::System.DateTime)(this["LastUpdate"]));
             }
             set {
-                this["last_update"] = value;
+                this["LastUpdate"] = value;
             }
         }
         
@@ -91,6 +91,54 @@ namespace Twinder.Properties {
             }
             set {
                 this["UpgradeRequired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TinderToken {
+            get {
+                return ((string)(this["TinderToken"]));
+            }
+            set {
+                this["TinderToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FirstStart {
+            get {
+                return ((bool)(this["FirstStart"]));
+            }
+            set {
+                this["FirstStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AppDataFolder {
+            get {
+                return ((string)(this["AppDataFolder"]));
+            }
+            set {
+                this["AppDataFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SerializationComplete {
+            get {
+                return ((bool)(this["SerializationComplete"]));
+            }
+            set {
+                this["SerializationComplete"] = value;
             }
         }
     }

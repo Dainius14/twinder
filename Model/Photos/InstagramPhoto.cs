@@ -2,7 +2,7 @@
 
 namespace Twinder.Model.Photos
 {
-	public class InstagramPhoto
+	public sealed class InstagramPhoto
 	{
 		[JsonProperty("image")]
 		public string Image { get; set; }

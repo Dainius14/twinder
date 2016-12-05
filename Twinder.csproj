@@ -147,6 +147,7 @@
     <Compile Include="Converter\ArrayIndexConverter.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Helpers\FbHelper.cs" />
+    <Compile Include="Helpers\SerializationHelper.cs" />
     <Compile Include="Helpers\WindowFlasher.cs" />
     <Compile Include="MessengerToken.cs" />
     <Compile Include="Model\Authentication\AuthModel.cs" />
@@ -158,11 +159,10 @@
     <Compile Include="Model\SchoolModel.cs" />
     <Compile Include="Model\Authentication\VersionsModel.cs" />
     <Compile Include="Helpers\TinderHelper.cs" />
-    <Compile Include="Model\CompanyModel.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
-    <Compile Include="Model\InstagramModel.cs" />
+    <Compile Include="Model\Photos\InstagramModel.cs" />
     <Compile Include="Model\Photos\InstagramPhoto.cs" />
     <Compile Include="Model\Photos\PhotoModel.cs" />
     <Compile Include="Model\Photos\ProcessedFileModel.cs" />
@@ -182,6 +182,7 @@
     <Compile Include="Model\PersonModel.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
     <Compile Include="SampleData\SampleMainVM.cs" />
+    <Compile Include="ViewModel\DownloadDataViewModel.cs" />
     <Compile Include="ViewModel\ErrorDialogViewModel.cs" />
     <Compile Include="ViewModel\FbLoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -192,6 +193,9 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DownloadDataView.xaml.cs">
+      <DependentUpon>DownloadDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ErrorDialogView.xaml.cs">
       <DependentUpon>ErrorDialogView.xaml</DependentUpon>
@@ -234,6 +238,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ChatView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DownloadDataView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

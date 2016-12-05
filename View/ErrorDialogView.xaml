@@ -9,53 +9,54 @@
 		xmlns:p="clr-namespace:Twinder.Properties"
 		
         DataContext="{Binding ErrorDialog, Source={StaticResource Locator}}"
-		Height="300" Width="400" ResizeMode="NoResize"
-		Background="WhiteSmoke"
-        Title="{x:Static p:Resources.window_title_error}">
-    <Grid >
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="auto"/>
-		</Grid.RowDefinitions>
+		MinHeight="200" MinWidth="400"
+		Height="300" Width="500"
+		Background="WhiteSmoke">
+	<Window.Title>
+		<MultiBinding StringFormat="{}{0} - {1}">
+			<Binding Source="{x:Static p:Resources.window_title_error}"/>
+			<Binding Source="{x:Static p:Resources.app_title}"/>
+		</MultiBinding>
+	</Window.Title>
+	<DockPanel Margin="10">
+		<Grid DockPanel.Dock="Bottom"
+			  Margin="0,10,0,0">
+			<StackPanel Orientation="Horizontal"
+						HorizontalAlignment="Right">
 
-		<TextBlock Padding="5" Grid.Row="0"
+				<Button Content="{x:Static p:Resources.btn_copy_error}"
+						Command="{Binding CopyErrorCommand}"
+						Grid.Column="1"
+						Width="80" Height="22"
+						Margin="0,0,7,0"/>
+
+				<Button Content="{x:Static p:Resources.btn_ok}"
+						Command="{Binding OkCommand}"
+						Grid.Column="2"
+						IsDefault="True"
+						Width="80" Height="22"/>
+			</StackPanel>
+		</Grid>
+
+		<TextBlock DockPanel.Dock="Top"
+				   Margin="0,0,0,10"
 				   TextWrapping="Wrap">
-			<TextBlock.Text>
-				<MultiBinding StringFormat="{}{0}: {1}">
-					<Binding Source="{x:Static p:Resources.error_exception_occured}"/>
-					<Binding Path="ErrorMessage"/>
-				</MultiBinding>
-			</TextBlock.Text>
+			<TextBlock.Inlines>
+				<Run Text="{Binding Source={x:Static p:Resources.error_exception_occured},
+					Mode=OneTime, StringFormat='{}{0}: '}"
+					 FontWeight="DemiBold"/>
+				<Run Text="{Binding ErrorMessage}"/>
+			</TextBlock.Inlines>
 		</TextBlock>
 
-		<TextBox Text="{Binding ErrorStackTrace}"
-				 Grid.Row="1"
-				 Padding="5"
-				 IsReadOnly="True"/>
-		
-
-		<Grid Grid.Row="2"
-			  Background="LightGray">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="auto"/>
-				<ColumnDefinition Width="auto"/>
-			</Grid.ColumnDefinitions>
-
-			<Button Content="{x:Static p:Resources.btn_copy_error}"
-					Command="{Binding CopyErrorCommand}"
-					Grid.Column="1"
-					Width="60" Height="20"
-					Margin="20, 5"/>
+		<ScrollViewer>
+			<TextBox Text="{Binding ErrorStackTrace}"
+					 Padding="5"
+					 FontFamily="Consolas"
+					 IsReadOnly="True"
+					 TextWrapping="Wrap"/>
 			
-			<Button Content="{x:Static p:Resources.btn_ok}"
-					Command="{Binding OkCommand}"
-					Grid.Column="2"
-					IsDefault="True"
-					Width="60" Height="20"
-					Margin="20, 5"/>
+		</ScrollViewer>
 
-		</Grid>
-	</Grid>
+	</DockPanel>
 </Window>

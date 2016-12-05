@@ -14,7 +14,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _match, value);
-				GetFullInfo();
+				//GetFullInfo();
 			}
 		}
 

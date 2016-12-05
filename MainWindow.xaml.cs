@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using Twinder.Model;
 using System.ComponentModel;
 using System.Windows.Data;
+using Twinder.Helpers;
 
 namespace Twinder
 {
@@ -25,6 +26,7 @@ namespace Twinder
 			Messenger.Default.Register<string>(this, MessengerToken.ShowSetLocationWindow, CreateSetLocationWindow);
 			Messenger.Default.Register<string>(this, MessengerToken.ShowLoginDialog, CreateLoginWindow);
 			Messenger.Default.Register<string>(this, MessengerToken.RefreshMatchList, RefreshMatchList);
+			Messenger.Default.Register<SerializationPacket>(this, MessengerToken.ShowSerializationDialog, ShowDownloadDialog);
 
 			var myViewModel = DataContext as MainViewModel;
 			myViewModel.MyView = this;
@@ -32,6 +34,14 @@ namespace Twinder
 			
 
 			Messenger.Default.Register<string>(this, MessengerToken.SortMatchList, SortMatchList);
+		}
+
+		private void ShowDownloadDialog(SerializationPacket packet)
+		{
+			var downloadDialog = new DownloadDataView(packet);
+			downloadDialog.Owner = this;
+			downloadDialog.ShowDialog();
+
 		}
 
 		private void SortMatchList(string obj)

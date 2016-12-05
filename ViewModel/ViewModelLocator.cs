@@ -45,6 +45,7 @@ namespace Twinder.ViewModel
 			SimpleIoc.Default.Register<SetLocationViewModel>();
 			SimpleIoc.Default.Register<ErrorDialogViewModel>();
 			SimpleIoc.Default.Register<UserProfileViewModel>();
+			SimpleIoc.Default.Register<DownloadDataViewModel>();
 
 			// Design time
 			SimpleIoc.Default.Register<SampleMainVM>();
@@ -120,6 +121,14 @@ namespace Twinder.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<UserProfileViewModel>();
+			}
+		}
+
+		public DownloadDataViewModel DownloadData
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<DownloadDataViewModel>();
 			}
 		}
 

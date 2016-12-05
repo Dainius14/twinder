@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
-using Twinder.Model.Photos;
 
-namespace Twinder.Model
+namespace Twinder.Model.Photos
 {
-	public class InstagramModel
+	public sealed class InstagramModel
 	{
 		[JsonProperty("last_fetch_time")]
 		public DateTime LastFetchTime { get; set; }

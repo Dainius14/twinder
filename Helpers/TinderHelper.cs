@@ -14,15 +14,30 @@ namespace Twinder.Helpers
 		private const string USER_AGENT = "Tinder/4.6.1 (iPhone; iOS 9.0.1; Scale/2.00)";
 		private const string APP_VERSION = "371";
 
-		private static string _tinderToken;
 		private static RestClient _client;
 
+
 		/// <summary>
-		/// Authenticates with Tinder server with Facebook ID and Facebook Token
+		/// Initializes RestClient with Tinder token
+		/// </summary>
+		/// <param name="tinderToken">Tinder token</param>
+		public static void InitClient(string tinderToken)
+		{
+			if (_client == null)
+			{
+				_client = new RestClient(TINDER_API_URL);
+				_client.UserAgent = USER_AGENT;
+				_client.AddDefaultHeader("app-version", APP_VERSION);
+				_client.AddDefaultHeader("X-Auth-Token", tinderToken);
+			}
+		}
+
+		/// <summary>
+		/// Initializes client and authenticates with Tinder server with Facebook ID and Facebook token
 		/// </summary>
 		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <returns>True if authentication is successful</returns>
-		public static async Task<AuthModel> Authenticate(string fbId, string fbToken)
+		public static async Task<AuthModel> GetAuthData(string fbId, string fbToken)
 		{
 			_client = new RestClient(TINDER_API_URL);
 			_client.UserAgent = USER_AGENT;
@@ -37,13 +52,13 @@ namespace Twinder.Helpers
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
 				var auth = await Task.Run(() => JsonConvert.DeserializeObject<AuthModel>(response.Content));
-				_tinderToken = auth.Token;
-				_client.AddDefaultHeader("X-Auth-Token", _tinderToken);
+				_client.AddDefaultHeader("X-Auth-Token", auth.Token);
 				return auth;
 			}
 			else
-				throw new TinderRequestException("Error authorizing: " + response.StatusDescription, response);
+				throw new TinderRequestException("Error getting auth data: " + response.StatusDescription, response);
 		}
+
 
 		/// <summary>
 		/// Gets full user data from server, because on authorization it is not full
@@ -105,7 +120,7 @@ namespace Twinder.Helpers
 
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 			if (response.StatusCode == HttpStatusCode.OK)
-				return await Task.Run(() => JsonConvert.DeserializeObject<MatchModel>(response.Content));
+				return await Task.Run(() => JsonConvert.DeserializeObject<MatchUpdateModel>(response.Content).Results);
 			else
 				throw new TinderRequestException("Error getting full match data: " + response.StatusDescription, response);
 		}

@@ -169,7 +169,34 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unhandled exception occured.
+        ///   Looks up a localized string similar to Downloading matches....
+        /// </summary>
+        public static string download_data_matches {
+            get {
+                return ResourceManager.GetString("download_data_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading recommendations....
+        /// </summary>
+        public static string download_data_recs {
+            get {
+                return ResourceManager.GetString("download_data_recs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading user....
+        /// </summary>
+        public static string download_data_user {
+            get {
+                return ResourceManager.GetString("download_data_user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error has occured.
         /// </summary>
         public static string error_exception_occured {
             get {
@@ -399,6 +426,24 @@ namespace Twinder.Properties {
         public static string menu_tools {
             get {
                 return ResourceManager.GetString("menu_tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Force download _matches.
+        /// </summary>
+        public static string menu_tools_force_matches {
+            get {
+                return ResourceManager.GetString("menu_tools_force_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Force download _recommendations.
+        /// </summary>
+        public static string menu_tools_force_recs {
+            get {
+                return ResourceManager.GetString("menu_tools_force_recs", resourceCulture);
             }
         }
         
@@ -669,6 +714,15 @@ namespace Twinder.Properties {
         public static string window_title_chat {
             get {
                 return ResourceManager.GetString("window_title_chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading Data.
+        /// </summary>
+        public static string window_title_download_data {
+            get {
+                return ResourceManager.GetString("window_title_download_data", resourceCulture);
             }
         }
         
