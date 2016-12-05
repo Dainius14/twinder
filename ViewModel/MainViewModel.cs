@@ -536,7 +536,7 @@ namespace Twinder.ViewModel
 		private void About()
 		{
 			string appName = Properties.Resources.app_title;
-			string version = "Version " + Assembly.GetEntryAssembly().GetName().Version.ToString();
+			string version = "Version " + Assembly.GetEntryAssembly().GetName().Version.ToString(3);
 			MessageBox.Show(version, appName);
 
 		}
