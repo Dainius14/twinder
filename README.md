@@ -5,6 +5,8 @@ A sophisticated (not so much actually) Tinder client made using Windows Presenta
 
 ***
 
+[Download here](https://github.com/Dainius14/twinder/releases)
+
 ### Features:
 
 * Like and pass available recommendations
