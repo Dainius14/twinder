@@ -31,7 +31,6 @@ namespace Twinder
 			var myViewModel = DataContext as MainViewModel;
 			myViewModel.MyView = this;
 			myViewModel.ConnectionStatusChanged += UpdateStatusBar;
-			
 
 			Messenger.Default.Register<string>(this, MessengerToken.SortMatchList, SortMatchList);
 		}
@@ -41,7 +40,6 @@ namespace Twinder
 			var downloadDialog = new DownloadDataView(packet);
 			downloadDialog.Owner = this;
 			downloadDialog.ShowDialog();
-
 		}
 
 		private void SortMatchList(string obj)
@@ -196,6 +194,25 @@ namespace Twinder
 				}
 			}
 		}
-		
+
+		//private void MinAge_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		//{
+		//	if (MinAge_Slider != null && MaxAge_Slider != null)
+		//		if (e.NewValue > MaxAge_Slider.Value && MaxAge_Slider.Value != 0)
+		//		{
+		//			MinAge_Slider.Value = MaxAge_Slider.Value;
+		//			e.Handled = true;
+		//		}
+		//}
+
+		//private void MaxAge_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		//{
+		//	if (MinAge_Slider != null && MaxAge_Slider != null)
+		//		if (e.NewValue < MinAge_Slider.Value)
+		//		{
+		//			MaxAge_Slider.Value = MinAge_Slider.Value;
+		//			e.Handled = true;
+		//		}
+		//}
 	}
 }

@@ -128,6 +128,26 @@
 
 				</StackPanel>
 			</StatusBarItem>
+
+			<Separator Visibility="{Binding Visibility, ElementName=recCount_StatusBarItem}"
+					   Style="{StaticResource StatusBarSeperator}"/>
+
+
+			<!-- Filtered count -->
+			<StatusBar>
+				<StackPanel Orientation="Horizontal">
+
+					<TextBlock >
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0} {1}">
+								<Binding Path="FilteredMatchListCount"/>
+								<Binding Source="{x:Static p:Resources.statusbar_filtered_count}"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</StackPanel>
+
+			</StatusBar>
 		</StatusBar>
 
 		<Grid Name="LayoutRoot">
@@ -138,6 +158,13 @@
 
 			<!--Toolbar-->
 			<Grid Background="#f0f0f0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+				</Grid.RowDefinitions>
+				
+				<!-- Toolbar -->
 				<StackPanel Grid.Row="0"
 							Orientation="Horizontal"
 							HorizontalAlignment="Center">
@@ -169,11 +196,320 @@
 						</StackPanel>
 					</Button>
 				</StackPanel>
+				
+				<!-- Search box -->
+				<Grid Grid.Row="1" Margin="5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="auto"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- Search box -->
+					<Grid Grid.Row="0"
+						  Background="White">
+						
+						<TextBox Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"
+								 Padding="3">
+							<TextBox.Style>
+								<Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+									<Style.Resources>
+										<VisualBrush x:Key="CueBannerBrush"
+													 AlignmentX="Left" AlignmentY="Center"
+													 Stretch="None">
+											<VisualBrush.Visual>
+												<Label Content="{x:Static p:Resources.filter_name_hint}"
+													   Foreground="LightGray" 
+													   Padding="3"/>
+											</VisualBrush.Visual>
+										</VisualBrush>
+									</Style.Resources>
+									<Style.Triggers>
+										<Trigger Property="Text" Value="">
+											<Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+										</Trigger>
+										<Trigger Property="Text" Value="{x:Null}">
+											<Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+										</Trigger>
+										<Trigger Property="IsKeyboardFocused" Value="True">
+											<Setter Property="Background" Value="White" />
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</TextBox.Style>
+						</TextBox>
+						
+					</Grid>
+					
+					<!-- More filtering -->
+					<Label Grid.Column="1" HorizontalAlignment="Right" Padding="4">
+						<Label.InputBindings>
+							<MouseBinding MouseAction="LeftClick" Command="{Binding ShowMoreFilteringCommand}"/>
+						</Label.InputBindings>
+						
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{x:Static p:Resources.filter_show_filters}"
+									   Margin="5,0"/>
+							<Image Height="12">
+								<Image.Style>
+									<Style TargetType="{x:Type Image}">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding ShowMoreFiltering}" Value="True">
+												<Setter Property="Source" Value="{StaticResource icon_expand_up}"/>
+											</DataTrigger>
+											<DataTrigger Binding="{Binding ShowMoreFiltering}" Value="False">
+												<Setter Property="Source" Value="{StaticResource icon_expand_down}"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</Image.Style>
+							</Image>
+
+						</StackPanel>
+						
+					</Label>
+				</Grid>
+				
+				<!-- Filter menu -->
+				<Grid Grid.Row="2"
+					  Visibility="{Binding ShowMoreFiltering, Converter={StaticResource BoolToVisibleConverter}}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+					</Grid.RowDefinitions>
+
+					<Grid.Resources>
+						<Style TargetType="GroupBox">
+							<Setter Property="Padding" Value="3"/>
+							<Setter Property="Margin" Value="5,0,5,5"/>
+						</Style>
+					</Grid.Resources>
+
+					<!-- With description or not -->
+					<GroupBox Header="{x:Static p:Resources.filter_description_header}"
+							  Grid.Row="0">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+							</Grid.RowDefinitions>
+
+							<RadioButton Content="{x:Static p:Resources.filter_description_with_bio}"
+										 IsChecked="{Binding DescriptionFilter, Mode=TwoWay,
+											Converter={StaticResource FilterDescriptionConverter},
+											ConverterParameter='WithDescription'}"
+											 Grid.Column="0" Grid.Row="0"
+										 Margin="0,5"/>
+							<RadioButton Content="{x:Static p:Resources.filter_description_without_bio}"
+										 IsChecked="{Binding DescriptionFilter, Mode=TwoWay,
+											Converter={StaticResource FilterDescriptionConverter},
+											ConverterParameter='WithoutDescription'}"
+											 Grid.Column="1" Grid.Row="0"
+										 Margin="0,5"/>
+							<RadioButton Content="{x:Static p:Resources.filter_description_both}"
+										 IsChecked="{Binding DescriptionFilter, Mode=TwoWay,
+											Converter={StaticResource FilterDescriptionConverter},
+											ConverterParameter='Both'}"
+											 Grid.Column="2" Grid.Row="0"
+										 Margin="0,5"/>
+
+							<Grid Grid.Row="1" Grid.ColumnSpan="3"
+								  Margin="0,5,0,0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="auto"/>
+								</Grid.ColumnDefinitions>
+								
+								<TextBlock Text="{Binding Source={x:Static p:Resources.filter_description_includes}}"
+										   Grid.Column="0"
+										   VerticalAlignment="Center"/>
+								
+								<TextBox Text="{Binding DescriptionWordFilter, UpdateSourceTrigger=PropertyChanged}"
+										 Grid.Column="1"
+										 Padding="3,2"
+										 Margin="5,0"/>
+
+								<CheckBox IsChecked="{Binding DescriptionWholeWordsFilter}"
+										  Content="{Binding Source={x:Static p:Resources.filter_whole_words}}"
+										  Grid.Column="2"
+										  VerticalAlignment="Center"/>
+							</Grid>
+
+						</Grid>
+					</GroupBox>
+					
+					<!-- Age and Gender -->
+					<Grid Grid.Row="2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<!-- Age -->
+						<GroupBox Header="{x:Static p:Resources.filter_age_header}"
+							  Grid.Column="0">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="2*"/>
+									<ColumnDefinition Width="10"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="2*"/>
+								</Grid.ColumnDefinitions>
+
+								<TextBlock Text="{x:Static p:Resources.filter_age_min_age}"
+									   Grid.Column="0"
+									   VerticalAlignment="Center"/>
+
+
+								<TextBox Text="{Binding MinAgeFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+										 Grid.Column="1"
+										 Padding="2,2"
+										 VerticalAlignment="Center"/>
+								
+								<TextBlock Text="{x:Static p:Resources.filter_age_max_age}"
+									   Grid.Column="3"
+									   VerticalAlignment="Center"/>
+
+								<TextBox Text="{Binding MaxAgeFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+										 Grid.Column="4"
+										 VerticalAlignment="Center"
+										 Padding="2"/>
+
+								<!--<Slider Value="{Binding MinAgeFilter}" Name="MinAge_Slider"
+									Grid.Column="2"
+									Minimum="18" Maximum="60"
+									ValueChanged="MinAge_Slider_ValueChanged"
+									TickFrequency="1" IsSnapToTickEnabled="True"
+									VerticalAlignment="Center"/>-->
+
+
+								<!--<Slider Value="{Binding MaxAgeFilter}" Name="MaxAge_Slider"
+									Grid.Column="6"
+									Minimum="18" Maximum="60"
+									ValueChanged="MaxAge_Slider_ValueChanged"
+									TickFrequency="1" IsSnapToTickEnabled="True"
+									VerticalAlignment="Center"/>-->
+
+							</Grid>
+						</GroupBox>
+
+						<GroupBox Header="{x:Static p:Resources.filer_gender_header}"
+								  Grid.Column="1">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+								<RadioButton Content="{x:Static p:Resources.gender_men}"
+										 IsChecked="{Binding GenderFilter, Mode=TwoWay,
+											Converter={StaticResource FilterGenderConverter},
+											ConverterParameter='Man'}"
+											 Grid.Column="0" Grid.Row="0"
+										 Margin="0,5"/>
+								<RadioButton Content="{x:Static p:Resources.gender_women}"
+										 IsChecked="{Binding GenderFilter, Mode=TwoWay,
+											Converter={StaticResource FilterGenderConverter},
+											ConverterParameter='Woman'}"
+											 Grid.Column="1" Grid.Row="0"
+										 Margin="0,5"/>
+								<RadioButton Content="{x:Static p:Resources.gender_both}"
+										 IsChecked="{Binding GenderFilter, Mode=TwoWay,
+											Converter={StaticResource FilterGenderConverter},
+											ConverterParameter='Both'}"
+											 Grid.Column="2" Grid.Row="0"
+										 Margin="0,5"/>
+							</Grid>
+
+						</GroupBox>
+
+					</Grid>
+
+					<!-- Messages -->
+					<GroupBox Header="{x:Static p:Resources.filter_messages_header}"
+							  Grid.Row="1">
+
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+							</Grid.RowDefinitions>
+
+							
+							<!-- Message count -->
+							<Grid Width="250" HorizontalAlignment="Left">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="2*"/>
+									<ColumnDefinition Width="10"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="2*"/>
+								</Grid.ColumnDefinitions>
+
+								<TextBlock Text="{x:Static p:Resources.filter_age_min_age}"
+									   Grid.Column="0"
+									   VerticalAlignment="Center"/>
+
+
+								<TextBox Text="{Binding MinMessagesFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+										 Grid.Column="1"
+										 Padding="2,2"
+										 VerticalAlignment="Center"/>
+
+								<TextBlock Text="{x:Static p:Resources.filter_age_max_age}"
+									   Grid.Column="3"
+									   VerticalAlignment="Center"/>
+
+								<TextBox Text="{Binding MaxMessagesFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
+										 Grid.Column="4"
+										 VerticalAlignment="Center"
+										 Padding="2"/>
+							</Grid>
+
+							<!-- Message includes-->
+							<Grid Grid.Row="1" Grid.ColumnSpan="3"
+								  Margin="0,5,0,0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="auto"/>
+								</Grid.ColumnDefinitions>
+
+								<TextBlock Text="{Binding Source={x:Static p:Resources.filter_messages_includes}}"
+										   Grid.Column="0"
+										   VerticalAlignment="Center"/>
+
+								<TextBox Text="{Binding MessagesWordFilter, UpdateSourceTrigger=PropertyChanged}"
+										 Grid.Column="1"
+										 Padding="3,2"
+										 Margin="5,0"/>
+
+								<CheckBox IsChecked="{Binding MessagesWholeWordsFilter}"
+									  Content="{Binding Source={x:Static p:Resources.filter_whole_words}}"
+									  Grid.Column="2"
+									  VerticalAlignment="Center"/>
+							</Grid>
+
+						</Grid>
+						
+
+
+
+					</GroupBox>
+
+				</Grid>
 			</Grid>
 
 			<!--Match list-->
 			<ListView Name="matchList" Grid.Row="1" HorizontalAlignment="Stretch"
-					  ItemsSource="{Binding MatchList}" VirtualizingPanel.ScrollUnit="Pixel"
+					  ItemsSource="{Binding MatchListCvs.View}" VirtualizingPanel.ScrollUnit="Pixel"
 					  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ListView.Resources>
 					<Style TargetType="ListViewItem">

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Twinder.Helpers;
 using Twinder.Model;
+using Twinder.View;
 
 namespace Twinder.ViewModel
 {
@@ -60,6 +61,8 @@ namespace Twinder.ViewModel
 			LikeCommand = new RelayCommand<bool>(param => Like(false));
 			SuperLikeCommand = new RelayCommand<bool>(param => Like(true));
 			LikeAllCommand = new RelayCommand(LikeAll);
+
+
 		}
 
 		/// <summary>
@@ -71,38 +74,25 @@ namespace Twinder.ViewModel
 			RecsLoadingStateEventArgs args = new RecsLoadingStateEventArgs();
 			if (recList != null)
 			{
-				RecList = recList;
-				RecList.CollectionChanged += GetMoreRecs;
-				SelectedRec = RecList[0];
-				SelectedIndex = 0;
+				// First time 
+				if (RecList == null)
+				{
+					RecList = recList;
+					RecList.CollectionChanged += RecList_CollectionChanged;
+					SelectedRec = RecList[0];
+					SelectedIndex = 0;
+				}
+				else
+				{
 
+				}
+				
 				args.RecsStatus = RecsStatus.Okay;
 			}
 			else
 				args.RecsStatus = RecsStatus.Exhausted;
 
-			LoadingStateChange.Invoke(this, args);
-		}
-
-		// TODO one method to get recommendations
-		public async Task<bool> GetRecommendations()
-		{
-			RecsLoadingStateEventArgs args = new RecsLoadingStateEventArgs();
-			args.RecsStatus = RecsStatus.Getting;
-
-			LoadingStateChange.Invoke(this, args);
-			var recs = await TinderHelper.GetRecommendations();
-			if (recs.Recommendations != null)
-			{
-				var recList = new ObservableCollection<RecModel>(recs.Recommendations);
-				SerializationHelper.SerializeRecList(recList, null);
-				SetRecommendations(recList);
-				
-				return true;
-			}
-			args.RecsStatus = RecsStatus.Exhausted;
-			LoadingStateChange.Invoke(this, args);
-			return false;
+			//LoadingStateChange.Invoke(this, args);
 		}
 		
 		#region Select Previous command
@@ -145,14 +135,14 @@ namespace Twinder.ViewModel
 		/// <summary>
 		/// Passes the selected recommendation
 		/// </summary>
-		private void Pass()
+		private async void Pass()
 		{
 			if (SelectedRec != null)
 			{
 				try
 				{
 					SerializationHelper.MoveRecToPassed(SelectedRec);
-					TinderHelper.PassRecommendation(SelectedRec.Id);
+					await TinderHelper.PassRecommendation(SelectedRec.Id);
 					RemoveRecomendations(SelectedRec);
 				}
 				catch (TinderRequestException e)
@@ -241,20 +231,23 @@ namespace Twinder.ViewModel
 				else
 					SelectedRec = RecList[SelectedIndex];
 			}
-		}
 
-		/// <summary>
-		/// When there no more recommendations - tries to get more
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void GetMoreRecs(object sender, NotifyCollectionChangedEventArgs e)
-		{
 			if (RecList.Count == 0)
 			{
 				Messenger.Default.Send("", MessengerToken.GetMoreRecs);
+				Messenger.Default.Send<SerializationPacket, RecommendationsView>(new SerializationPacket(RecList));
 			}
-			if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex == 0)
+
+		}
+
+		/// <summary>
+		/// Is executed when reclist gets new recommendations added
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void RecList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.OldItems.Count == 0 && e.Action == NotifyCollectionChangedAction.Add)
 			{
 				SelectedRec = RecList[0];
 				SelectedIndex = 0;

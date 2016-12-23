@@ -1,12 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using BinaryAnalysis.UnidecodeSharp;
+using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using Twinder.Helpers;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 
 namespace Twinder.Model
 {
-	public sealed class MatchModel
+	public class MatchModel
 	{
 		[JsonProperty("_id")]
 		public string Id { get; set; }
@@ -81,7 +83,7 @@ namespace Twinder.Model
 
 		public override string ToString()
 		{
-			return string.Format($"{Person.Name}.{Person.Id}");
+			return string.Format($"{Person.Name.Unidecode()}.{Person.Id}");
 		}
 
 		public bool ShouldSerializeMessages()
@@ -96,6 +98,21 @@ namespace Twinder.Model
 		public int Status { get; set; }
 
 		[JsonProperty("results")]
-		public MatchModel Results { get; set; }
+		public MatchUpdateResultsModel Results { get; set; }
+	}
+
+	public sealed class MatchUpdateResultsModel : MatchModel
+	{
+		[JsonProperty("bio")]
+		public string Bio { get; set; }
+
+		[JsonProperty("birth_date")]
+		public DateTime BirthDate { get; set; }
+
+		[JsonProperty("ping_time")]
+		public DateTime PingTime { get; set; }
+
+		[JsonProperty("photos")]
+		public ObservableCollection<PhotoModel> Photos { get; set; }
 	}
 }

@@ -358,4 +358,61 @@
   <data name="menu_tools_force_matches" xml:space="preserve">
     <value>Force download _matches</value>
   </data>
+  <data name="filer_gender_header" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="filter_age_header" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="filter_age_max_age" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="filter_age_min_age" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="filter_description_both" xml:space="preserve">
+    <value>Both</value>
+  </data>
+  <data name="filter_description_header" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="filter_description_includes" xml:space="preserve">
+    <value>Includes words</value>
+  </data>
+  <data name="filter_description_without_bio" xml:space="preserve">
+    <value>Without description only</value>
+  </data>
+  <data name="filter_description_with_bio" xml:space="preserve">
+    <value>With description only</value>
+  </data>
+  <data name="filter_messages_apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="filter_messages_count" xml:space="preserve">
+    <value>Total message count</value>
+  </data>
+  <data name="filter_messages_header" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="filter_messages_includes" xml:space="preserve">
+    <value>Includes words</value>
+  </data>
+  <data name="filter_name_hint" xml:space="preserve">
+    <value>Search...</value>
+  </data>
+  <data name="filter_show_filters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="filter_whole_words" xml:space="preserve">
+    <value>Whole words</value>
+  </data>
+  <data name="gender_man" xml:space="preserve">
+    <value>Man</value>
+  </data>
+  <data name="gender_woman" xml:space="preserve">
+    <value>Woman</value>
+  </data>
+  <data name="statusbar_filtered_count" xml:space="preserve">
+    <value>Filtered matches</value>
+  </data>
 </root>

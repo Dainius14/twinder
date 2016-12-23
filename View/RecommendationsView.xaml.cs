@@ -1,9 +1,11 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Twinder.Helpers;
 using Twinder.Model;
 using Twinder.ViewModel;
 
@@ -20,8 +22,18 @@ namespace Twinder.View
 		{
 			InitializeComponent();
 			var viewModel = DataContext as RecommendationsViewModel;
-			viewModel.LoadingStateChange += SwitchLoadingIndicators;
+			//viewModel.LoadingStateChange += SwitchLoadingIndicators;
 			viewModel.SetRecommendations(recList);
+
+			Messenger.Default.Register<SerializationPacket>(this, ShowDownloadDialog);
+
+		}
+
+		private void ShowDownloadDialog(SerializationPacket packet)
+		{
+			var downloadDialog = new DownloadDataView(packet);
+			downloadDialog.Owner = this;
+			downloadDialog.ShowDialog();
 		}
 
 

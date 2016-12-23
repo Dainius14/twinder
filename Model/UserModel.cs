@@ -3,6 +3,8 @@ using Twinder.Model.UserRelated;
 using System;
 using System.Collections.ObjectModel;
 using Twinder.Model.Photos;
+using Twinder.Helpers;
+using BinaryAnalysis.UnidecodeSharp;
 
 namespace Twinder.Model
 {
@@ -131,7 +133,7 @@ namespace Twinder.Model
 
 		public override string ToString()
 		{
-			return string.Format($"{Name}.{Id}");
+			return string.Format($"{Name.Unidecode()}.{Id}");
 		}
 	}
 }

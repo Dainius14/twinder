@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using BinaryAnalysis.UnidecodeSharp;
+using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using Twinder.Helpers;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 using Twinder.Model.UserRelated;
@@ -90,7 +92,7 @@ namespace Twinder.Model
 
 		public override string ToString()
 		{
-			return string.Format($"{Name}.{Id}");
+			return string.Format($"{Name.Unidecode()}.{Id}");
 		}
 	}
 }

@@ -8,6 +8,7 @@ using System;
 using System.Reflection;
 using System.IO;
 using Twinder.Helpers;
+using BinaryAnalysis.UnidecodeSharp;
 
 namespace Twinder
 {
@@ -22,13 +23,13 @@ namespace Twinder
 		}
 
 		/// <summary>
-		/// Evaluates wether to launch Fb login window or not
+		/// Start logic right here
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
-			// If version is upgraded, copies user settings
+			// If version is upgraded, copies user settings from previous version
 			if (Settings.Default.UpgradeRequired)
 			{
 				Settings.Default.Upgrade();
@@ -41,7 +42,7 @@ namespace Twinder
 			{
 				// App data will be in \Local\Tinder\ folder
 				Settings.Default["AppDataFolder"] = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-					+ "\\" + Assembly.GetEntryAssembly().GetName().Name + "\\";
+					+ "\\Twinder\\";
 
 				// checks if the folder exists
 				if (!Directory.Exists(Settings.Default.AppDataFolder))

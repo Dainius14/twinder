@@ -28,6 +28,8 @@
 		<converter:InterestedInConverter x:Key="InterestedInConverter"/>
 		<converter:MiToKmConverter x:Key="MiToKmConverter"/>
 		<converter:DateTimeToLocalConverter x:Key="DateTimeToLocalConverter"/>
+		<converter:FilterDescriptionConverter x:Key="FilterDescriptionConverter"/>
+		<converter:FilterGenderConverter x:Key="FilterGenderConverter"/>
 
 		<Style TargetType="Separator" x:Key="StatusBarSeperator">
 			<Setter Property="Width" Value="1"/>
@@ -51,6 +53,9 @@
 		<BitmapImage x:Key="icon_location" UriSource="Icons/Location-50.png"/>
 		<BitmapImage x:Key="icon_user" UriSource="Icons/User-50.png"/>
 		<BitmapImage x:Key="icon_recs" UriSource="Icons/Novel-50.png"/>
+		
+		<BitmapImage x:Key="icon_expand_down" UriSource="Icons/expand-down.png"/>
+		<BitmapImage x:Key="icon_expand_up" UriSource="Icons/expand-up.png"/>
 
 	</Application.Resources>
     

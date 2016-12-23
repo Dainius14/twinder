@@ -14,6 +14,8 @@ using System.Windows.Threading;
 using Twinder.Model.Authentication;
 using System.Threading;
 using System.IO;
+using System.Windows.Data;
+using System.Text.RegularExpressions;
 
 namespace Twinder.ViewModel
 {
@@ -33,9 +35,19 @@ namespace Twinder.ViewModel
 		public ObservableCollection<MatchModel> MatchList
 		{
 			get { return _matchList; }
-			set { Set(ref _matchList, value); }
+			set
+			{
+				Set(ref _matchList, value);
+
+				MatchListCvs = new CollectionViewSource();
+				MatchListCvs.Source = MatchList;
+				MatchListCvs.Filter += MatchList_ApplyFilter;
+				MatchListCvs.View.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+					FilteredMatchListCount = MatchListCvs.View.Cast<object>().Count();
+			}
 		}
-		
+
+
 		private ObservableCollection<RecModel> _recList;
 		public ObservableCollection<RecModel> RecList
 		{
@@ -60,9 +72,9 @@ namespace Twinder.ViewModel
 		// Holds reference to my view to subsribe to events
 		public MainWindow MyView { get; set; }
 
-		public AuthStatus AuthStatus { get; private set; }
-		public MatchesStatus MatchesStatus { get; private set; }
-		public RecsStatus RecsStatus { get; private set; }
+		public AuthStatus AuthStatus { get; internal set; }
+		public MatchesStatus MatchesStatus { get; internal set; }
+		public RecsStatus RecsStatus { get; internal set; }
 
 		public RelayCommand<MatchModel> OpenChatCommand { get; private set; }
 		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
@@ -76,6 +88,159 @@ namespace Twinder.ViewModel
 		public RelayCommand AboutCommand { get; private set; }
 		public RelayCommand ForceDownloadMatchesCommand { get; private set; }
 		public RelayCommand ForceDownloadRecsCommand { get; private set; }
+
+		public RelayCommand ShowMoreFilteringCommand { get; private set; }
+
+		private CollectionViewSource _matchListCvs;
+		public CollectionViewSource MatchListCvs
+		{
+			get { return _matchListCvs; }
+			set { Set(ref _matchListCvs, value); }
+		}
+
+		private int _filteredMatchListCount;
+		public int FilteredMatchListCount
+		{
+			get { return _filteredMatchListCount; }
+			set { Set(ref _filteredMatchListCount, value); }
+		}
+
+
+		private bool _showMoreFiltering;
+		public bool ShowMoreFiltering
+		{
+			get { return _showMoreFiltering; }
+			set
+			{
+				Set(ref _showMoreFiltering, value);
+			}
+		}
+
+		private string _nameFilter;
+		public string NameFilter
+		{
+			get { return _nameFilter; }
+			set
+			{
+				Set(ref _nameFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+		private int? _minAgeFilter;
+		public int? MinAgeFilter
+		{
+			get { return _minAgeFilter; }
+			set
+			{
+				Set(ref _minAgeFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+		private int? _maxAgeFilter;
+		public int? MaxAgeFilter
+		{
+			get { return _maxAgeFilter; }
+			set
+			{
+				Set(ref _maxAgeFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+
+		private DescriptionFilter _descriptionFilter;
+		public DescriptionFilter DescriptionFilter
+		{
+			get { return _descriptionFilter; }
+			set
+			{
+				Set(ref _descriptionFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+		private string _descriptionWordFilter;
+		public string DescriptionWordFilter
+		{
+			get { return _descriptionWordFilter; }
+			set
+			{
+				Set(ref _descriptionWordFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+		private bool _descriptionWholeWordsFilter = false;
+		public bool DescriptionWholeWordsFilter
+		{
+			get { return _descriptionWholeWordsFilter; }
+			set
+			{
+				Set(ref _descriptionWholeWordsFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+
+		private string _messagesWordFilter;
+		public string MessagesWordFilter
+		{
+			get { return _messagesWordFilter; }
+			set
+			{
+				Set(ref _messagesWordFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+		private bool _messagesWholeWordsFilter = false;
+		public bool MessagesWholeWordsFilter
+		{
+			get { return _messagesWholeWordsFilter; }
+			set
+			{
+				Set(ref _messagesWholeWordsFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+
+		private int? _minMessagesFilter;
+		public int? MinMessagesFilter
+		{
+			get { return _minMessagesFilter; }
+			set
+			{
+				Set(ref _minMessagesFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+		private int? _maxMessagesFilter;
+		public int? MaxMessagesFilter
+		{
+			get { return _maxMessagesFilter; }
+			set
+			{
+				Set(ref _maxMessagesFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
+
+		private Gender _genderFilter = Gender.Both;
+		public Gender GenderFilter
+		{
+			get { return _genderFilter; }
+			set
+			{
+				Set(ref _genderFilter, value);
+				MatchListCvs.View.Refresh();
+			}
+		}
+
 
 		/// <summary>
 		/// Matches are added here when they receive an update or have new messages
@@ -109,11 +274,128 @@ namespace Twinder.ViewModel
 			Messenger.Default.Register<string>(this, MessengerToken.GetMoreRecs, GetMoreRecs);
 
 			Application.Current.Exit += Current_Exit;
+
+			ShowMoreFilteringCommand = new RelayCommand(() => ShowMoreFiltering = !ShowMoreFiltering);
+
 		}
+
+		private void MatchList_ApplyFilter(object sender, FilterEventArgs e)
+		{
+			var match = (MatchModel) e.Item;
+
+			bool isNameAccepted;
+			if (string.IsNullOrWhiteSpace(NameFilter))
+				isNameAccepted = true;
+			else
+				isNameAccepted = match.Person.Name.ToLower().StartsWith(NameFilter.ToLower());
+
+
+			bool isDescriptionAccepted;
+			if (DescriptionFilter == DescriptionFilter.Both)
+				isDescriptionAccepted = true;
+			else if (DescriptionFilter == DescriptionFilter.WithDescription)
+				isDescriptionAccepted = !string.IsNullOrWhiteSpace(match.Person.Bio);
+			else
+				isDescriptionAccepted = string.IsNullOrWhiteSpace(match.Person.Bio);
+
+
+			bool isDescriptionWordsAccepted;
+			if (!string.IsNullOrWhiteSpace(DescriptionWordFilter))
+			{
+
+				isDescriptionWordsAccepted = false;
+				string regex;
+				if (DescriptionWholeWordsFilter)
+					regex = "\\b" + DescriptionWordFilter.Replace(" ", "\\b|\\b") + "\\b";
+				else
+					regex = DescriptionWordFilter.Replace(' ', '|');
+
+				isDescriptionWordsAccepted = Regex.Match(match.Person.Bio, regex, RegexOptions.IgnoreCase).Success;
+
+			}
+			else
+				isDescriptionWordsAccepted = true;
+
+			// Age
+			bool isMinAgeAccepted;
+			if (MinAgeFilter != null)
+			{
+				if (match.Person.Age >= MinAgeFilter)
+					isMinAgeAccepted = true;
+				else
+					isMinAgeAccepted = false;
+			}
+			else
+				isMinAgeAccepted = true;
+
+			bool isMaxAgeAccepted;
+			if (MaxAgeFilter != null)
+			{
+				if (match.Person.Age <= MaxAgeFilter)
+					isMaxAgeAccepted = true;
+				else
+					isMaxAgeAccepted = false;
+			}
+			else
+				isMaxAgeAccepted = true;
+
+			// Message count
+			bool isMinMessagesAccepted;
+			if (MinMessagesFilter != null)
+			{
+				if (match.Messages.Count >= MinMessagesFilter)
+					isMinMessagesAccepted = true;
+				else
+					isMinMessagesAccepted = false;
+			}
+			else
+				isMinMessagesAccepted = true;
+
+			bool isMaxMessagesAccepted;
+			if (MaxMessagesFilter != null)
+			{
+				if (match.Messages.Count <= MaxMessagesFilter)
+					isMaxMessagesAccepted = true;
+				else
+					isMaxMessagesAccepted = false;
+			}
+			else
+				isMaxMessagesAccepted = true;
+
+			// Messages include
+			bool isMessagesWordAccepted;
+			if (!string.IsNullOrWhiteSpace(MessagesWordFilter))
+			{
+				isMessagesWordAccepted = false;
+				string regex;
+				if (MessagesWholeWordsFilter)
+					regex = "\\b" + MessagesWordFilter.Replace(" ", "\\b|\\b") + "\\b";
+				else
+					regex = MessagesWordFilter.Replace(' ', '|');
+
+				isMessagesWordAccepted = match.Messages.Any
+					(x => Regex.Match(x.Message, regex, RegexOptions.IgnoreCase).Success);
+				
+			}
+			else
+				isMessagesWordAccepted = true;
+
+			// Gender
+			bool isGenderAccepted;
+			if (GenderFilter == Gender.Both)
+				isGenderAccepted = true;
+			else
+				isGenderAccepted = (Gender) Enum.Parse(typeof(Gender), match.Person.Gender.ToString()) == GenderFilter;
+			
+			e.Accepted = isNameAccepted && isDescriptionAccepted && isDescriptionWordsAccepted
+				&& isMinAgeAccepted && isMaxAgeAccepted
+				&& isMinMessagesAccepted && isMaxMessagesAccepted && isMessagesWordAccepted
+				&& isGenderAccepted;
+		}
+
 		private async void GetMoreRecs(string obj)
 		{
 			await GetRecs();
-			Messenger.Default.Send(new SerializationPacket(RecList), MessengerToken.ShowSerializationDialog);
 		}
 
 		public async Task<bool> FullConnect()
@@ -157,15 +439,25 @@ namespace Twinder.ViewModel
 			if (Properties.Settings.Default.FirstStart || !Properties.Settings.Default.SerializationComplete)
 			{
 				if (await FullConnect())
-				{
-					
+				{ 
 					int time = MatchList.Count * 3 / 60;
-					var result = MessageBox.Show($"Do you want to save all match data? It may take up to {time} minutes.",
-						"Saved data not found", MessageBoxButton.YesNo, MessageBoxImage.Question);
-					if (result == MessageBoxResult.Yes)
-						Messenger.Default.Send(new SerializationPacket(MatchList, RecList, User),
+					//var result = MessageBox.Show($"Do you want to save all match data? It may take up to {time} minutes.",
+					//	"Saved data not found", MessageBoxButton.YesNo, MessageBoxImage.Question);
+					//if (result == MessageBoxResult.Yes)
+					//	Messenger.Default.Send(new SerializationPacket(MatchList, RecList, User),
+					//		MessengerToken.ShowSerializationDialog);
+					// Dont ask just save, 
+
+					MessageBox.Show($"All your matches will be saved. It may take up to {time} minutes"
+						+ "for the download to complete. I recommend not to cancel this action.",
+						"Downloading data", MessageBoxButton.OK, MessageBoxImage.Information);
+
+					Messenger.Default.Send(new SerializationPacket(MatchList, RecList, User),
 							MessengerToken.ShowSerializationDialog);
-					
+
+					Properties.Settings.Default["FirstStart"] = false;
+					Properties.Settings.Default.Save();
+
 					StartUpdatingMatches();
 					StartUpdatingRecs();
 				}
@@ -199,10 +491,7 @@ namespace Twinder.ViewModel
 
 					args.RecsStatus = RecsStatus.Okay;
 					ConnectionStatusChanged.Invoke(this, args);
-
-					// Gets updates
-					UpdateMatches(this, null);
-
+					
 					// Starts automatic updates
 					UpdateMatches(this, null);
 					UpdateRecs(this, null);
@@ -258,7 +547,17 @@ namespace Twinder.ViewModel
 			try
 			{
 				Updates = await TinderHelper.GetUpdates();
-				MatchList = Updates.Matches;
+
+				// If doing complete update, we only want to add new, so we don't lose bindings n shit
+				if (MatchList == null)
+					MatchList = Updates.Matches;
+				else
+				{
+					MatchList.Clear();
+
+					foreach (var newItem in Updates.Matches)
+						MatchList.Add(newItem);
+				}
 
 				MatchListSetup();
 
@@ -287,10 +586,13 @@ namespace Twinder.ViewModel
 					// If it's the first time getting recs
 					if (RecList == null)
 						RecList = new ObservableCollection<RecModel>(recs.Recommendations);
-					// If it's recs update, just inserts new recs to current list
+					// Either we force a new reclist or rec list was empty
 					else
+					{
+						RecList.Clear();
 						foreach (var item in recs.Recommendations)
 							RecList.Add(item);
+					}
 
 					RecsStatus = RecsStatus.Okay;
 				}
@@ -368,7 +670,6 @@ namespace Twinder.ViewModel
 						// There's an update to an existing match
 						if (matchToUpdate != null)
 						{
-
 							// Adds new messages the to list
 							foreach (var newMessage in newMatch.Messages)
 							{
@@ -386,6 +687,11 @@ namespace Twinder.ViewModel
 							MatchList.Insert(0, newMatch);
 						}
 					}
+				}
+
+				if (newUpdates.Blocks.Count != 0)
+				{
+
 				}
 			}
 			catch (TinderRequestException ex)
@@ -436,6 +742,7 @@ namespace Twinder.ViewModel
 			{
 				try
 				{
+					SerializationHelper.MoveMatchToUnMatchedByMe(match);
 					TinderHelper.UnmatchPerson(match.Id);
 					MatchList.Remove(match);
 				}
@@ -473,11 +780,16 @@ namespace Twinder.ViewModel
 		/// <param name="match"></param>
 		private async void OpenMatchProfile(MatchModel match)
 		{
-			UpdateMatchModel(match, await TinderHelper.GetFullMatchData(match.Person.Id));
+			Messenger.Default.Send(match, MessengerToken.ShowMatchProfile);
 
+			var updatedMatch = await TinderHelper.GetFullMatchData(match.Person.Id);
+
+			UpdateMatchModel(match, updatedMatch);
 			new Thread(() => SerializationHelper.SerializeMatch(match)).Start();
 
-			Messenger.Default.Send(match, MessengerToken.ShowMatchProfile);
+
+			Messenger.Default.Send("", MessengerToken.RefreshMatchList);
+
 		}
 
 		/// <summary>
@@ -485,8 +797,18 @@ namespace Twinder.ViewModel
 		/// </summary>
 		/// <param name="match"></param>
 		/// <param name="matchUpdate"></param>
-		private void UpdateMatchModel(MatchModel match, MatchModel matchUpdate)
+		private void UpdateMatchModel(MatchModel match, MatchUpdateResultsModel matchUpdate)
 		{
+			match.Person.Bio = matchUpdate.Bio;
+			match.Person.BirthDate = matchUpdate.BirthDate;
+			match.Person.PingTime = matchUpdate.PingTime;
+
+			match.Person.Photos.Clear();
+			foreach (var item in matchUpdate.Photos)
+				match.Person.Photos.Add(item);
+
+			match.Person.Photos = matchUpdate.Photos;
+
 			match.Instagram = matchUpdate.Instagram;
 			match.DistanceMiles = matchUpdate.DistanceMiles;
 			match.SpotifyThemeTrack = matchUpdate.SpotifyThemeTrack;
@@ -520,6 +842,7 @@ namespace Twinder.ViewModel
 			args.RecsStatus = RecsStatus.Getting;
 			ConnectionStatusChanged.Invoke(this, args);
 
+			SerializationHelper.EmptyRecommendations();
 			await GetRecs();
 			Messenger.Default.Send(new SerializationPacket(RecList), MessengerToken.ShowSerializationDialog);
 
@@ -597,5 +920,12 @@ namespace Twinder.ViewModel
 		Okay,
 		Exhausted,
 		Error
+	}
+
+	public enum DescriptionFilter
+	{
+		Both = 0,
+		WithDescription,
+		WithoutDescription
 	}
 }

@@ -21,10 +21,18 @@ namespace Twinder.ViewModel.Design
 			set { Set(ref _matchList, value); }
 		}
 
+
+
 		public SampleMainVM()
 		{
 			Updates = new UpdatesModel();
 			MatchList = new ObservableCollection<MatchModel>();
+
+			ShowMoreFiltering = true;
+			AuthStatus = AuthStatus.Okay;
+			MatchesStatus = MatchesStatus.Okay;
+			RecsStatus = RecsStatus.Okay;
+
 
 			MatchModel Dolores = new MatchModel()
 			{

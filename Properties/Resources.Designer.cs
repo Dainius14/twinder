@@ -259,6 +259,150 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gender.
+        /// </summary>
+        public static string filer_gender_header {
+            get {
+                return ResourceManager.GetString("filer_gender_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Age.
+        /// </summary>
+        public static string filter_age_header {
+            get {
+                return ResourceManager.GetString("filter_age_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max.
+        /// </summary>
+        public static string filter_age_max_age {
+            get {
+                return ResourceManager.GetString("filter_age_max_age", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min.
+        /// </summary>
+        public static string filter_age_min_age {
+            get {
+                return ResourceManager.GetString("filter_age_min_age", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Both.
+        /// </summary>
+        public static string filter_description_both {
+            get {
+                return ResourceManager.GetString("filter_description_both", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string filter_description_header {
+            get {
+                return ResourceManager.GetString("filter_description_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Includes words.
+        /// </summary>
+        public static string filter_description_includes {
+            get {
+                return ResourceManager.GetString("filter_description_includes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With description only.
+        /// </summary>
+        public static string filter_description_with_bio {
+            get {
+                return ResourceManager.GetString("filter_description_with_bio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Without description only.
+        /// </summary>
+        public static string filter_description_without_bio {
+            get {
+                return ResourceManager.GetString("filter_description_without_bio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string filter_messages_apply {
+            get {
+                return ResourceManager.GetString("filter_messages_apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total message count.
+        /// </summary>
+        public static string filter_messages_count {
+            get {
+                return ResourceManager.GetString("filter_messages_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Messages.
+        /// </summary>
+        public static string filter_messages_header {
+            get {
+                return ResourceManager.GetString("filter_messages_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Includes words.
+        /// </summary>
+        public static string filter_messages_includes {
+            get {
+                return ResourceManager.GetString("filter_messages_includes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string filter_name_hint {
+            get {
+                return ResourceManager.GetString("filter_name_hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string filter_show_filters {
+            get {
+                return ResourceManager.GetString("filter_show_filters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whole words.
+        /// </summary>
+        public static string filter_whole_words {
+            get {
+                return ResourceManager.GetString("filter_whole_words", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Both.
         /// </summary>
         public static string gender_both {
@@ -268,11 +412,29 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Man.
+        /// </summary>
+        public static string gender_man {
+            get {
+                return ResourceManager.GetString("gender_man", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Men.
         /// </summary>
         public static string gender_men {
             get {
                 return ResourceManager.GetString("gender_men", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Woman.
+        /// </summary>
+        public static string gender_woman {
+            get {
+                return ResourceManager.GetString("gender_woman", resourceCulture);
             }
         }
         
@@ -525,6 +687,15 @@ namespace Twinder.Properties {
         public static string set_location_btn_auto_detect {
             get {
                 return ResourceManager.GetString("set_location_btn_auto_detect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtered matches.
+        /// </summary>
+        public static string statusbar_filtered_count {
+            get {
+                return ResourceManager.GetString("statusbar_filtered_count", resourceCulture);
             }
         }
         

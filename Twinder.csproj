@@ -140,6 +140,10 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UnidecodeSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\UnidecodeSharp.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -152,6 +156,8 @@
     <Compile Include="Converter\BoolToVisibleConverter.cs" />
     <Compile Include="Converter\DataBindingDebugger.cs" />
     <Compile Include="Converter\DateTimeToLocalConverter.cs" />
+    <Compile Include="Converter\FilterGenderConverter.cs" />
+    <Compile Include="Converter\FilterDescriptionConverter.cs" />
     <Compile Include="Converter\InterestedInConverter.cs" />
     <Compile Include="Converter\MiToKmConverter.cs" />
     <Compile Include="Converter\LastMessageConverter.cs" />
@@ -315,7 +321,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Twinder_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -345,6 +350,12 @@
   </ItemGroup>
   <ItemGroup>
     <DesignData Include="SampleData\DoloresPics\dolores1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\expand-down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\expand-up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

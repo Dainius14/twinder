@@ -113,7 +113,7 @@ namespace Twinder.Helpers
 		/// </summary>
 		/// <exception cref="TinderRequestException">Bad request data</exception>
 		/// <param name="matchPersonId">ID of the person</param>
-		public static async Task<MatchModel> GetFullMatchData(string matchPersonId)
+		public static async Task<MatchUpdateResultsModel> GetFullMatchData(string matchPersonId)
 		{
 			var request = new RestRequest("user/" + matchPersonId, Method.GET);
 			request.AddHeader("Content-type", "application/json");
@@ -193,7 +193,7 @@ namespace Twinder.Helpers
 		/// </summary>
 		/// <param name="recId">ID of the recommendation</param>
 		/// <exception cref="TinderRequestException">Bad request data</exception>
-		public static async void PassRecommendation(string recId)
+		public static async Task PassRecommendation(string recId)
 		{
 			var request = new RestRequest("pass/" + recId, Method.GET);
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
