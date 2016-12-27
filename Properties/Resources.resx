@@ -272,7 +272,7 @@
     <value>Send</value>
   </data>
   <data name="statusbar_rec_count" xml:space="preserve">
-    <value>New recommendations</value>
+    <value>Recommendations</value>
   </data>
   <data name="tinder_getting_recs_matches" xml:space="preserve">
     <value>Getting matches and recommendations...</value>
@@ -352,11 +352,11 @@
   <data name="window_title_download_data" xml:space="preserve">
     <value>Downloading Data</value>
   </data>
-  <data name="menu_tools_force_recs" xml:space="preserve">
-    <value>Force download _recommendations</value>
+  <data name="force_recs" xml:space="preserve">
+    <value>Download _Recommendations</value>
   </data>
-  <data name="menu_tools_force_matches" xml:space="preserve">
-    <value>Force download _matches</value>
+  <data name="force_matches" xml:space="preserve">
+    <value>Download _Matches</value>
   </data>
   <data name="filer_gender_header" xml:space="preserve">
     <value>Gender</value>
@@ -400,11 +400,17 @@
   <data name="filter_name_hint" xml:space="preserve">
     <value>Search...</value>
   </data>
+  <data name="filter_reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
   <data name="filter_show_filters" xml:space="preserve">
     <value>Filters</value>
   </data>
   <data name="filter_whole_words" xml:space="preserve">
     <value>Whole words</value>
+  </data>
+  <data name="force_matches_full" xml:space="preserve">
+    <value>Download _Full Match Data</value>
   </data>
   <data name="gender_man" xml:space="preserve">
     <value>Man</value>
@@ -414,5 +420,26 @@
   </data>
   <data name="statusbar_filtered_count" xml:space="preserve">
     <value>Filtered matches</value>
+  </data>
+  <data name="match_context_menu_download_full" xml:space="preserve">
+    <value>Download _Full Data</value>
+  </data>
+  <data name="sort_activity_asc" xml:space="preserve">
+    <value>Activity Ascending</value>
+  </data>
+  <data name="sort_activity_desc" xml:space="preserve">
+    <value>Activity Descending</value>
+  </data>
+  <data name="sort_matched_asc" xml:space="preserve">
+    <value>Matched On Ascending</value>
+  </data>
+  <data name="sort_matched_desc" xml:space="preserve">
+    <value>Matched On Descending</value>
+  </data>
+  <data name="sort_name_asc" xml:space="preserve">
+    <value>Name Ascending</value>
+  </data>
+  <data name="sort_name_desc" xml:space="preserve">
+    <value>Name Descending</value>
   </data>
 </root>

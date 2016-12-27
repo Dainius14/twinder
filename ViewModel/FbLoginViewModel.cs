@@ -39,8 +39,8 @@ namespace Twinder.ViewModel
 
 		public FbLoginViewModel()
 		{
-			FbId = Settings.Default.fb_id;
-			FbToken = Settings.Default.fb_token;
+			FbId = Settings.Default.FbId;
+			FbToken = Settings.Default.FbToken;
 
 
 			GetFbIdCommand = new RelayCommand(GetFbId);
@@ -75,8 +75,8 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void SetUser(Window window)
 		{
-			Settings.Default["fb_id"] = FbId;
-			Settings.Default["fb_token"] = FbToken;
+			Settings.Default["FbId"] = FbId;
+			Settings.Default["FbToken"] = FbToken;
 			Settings.Default.Save();
 
 			window.DialogResult = true;
@@ -89,7 +89,7 @@ namespace Twinder.ViewModel
 		private bool CanSetUser(Window window)
 		{
 			if (!string.IsNullOrWhiteSpace(FbId) && !string.IsNullOrWhiteSpace(FbToken))
-				if (FbId != Settings.Default.fb_id || FbToken != Settings.Default.fb_token)
+				if (FbId != Settings.Default.FbId || FbToken != Settings.Default.FbToken)
 					return true;
 			return false;
 		}

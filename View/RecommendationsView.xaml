@@ -67,9 +67,10 @@
 					<!--Bio-->
 					<ScrollViewer Grid.Row="1" Grid.Column="0"
 								  VerticalScrollBarVisibility="Visible">
-						<TextBlock 
-						   Text="{Binding Bio, FallbackValue='Bio full'}"
-						   TextWrapping="Wrap"/>
+						<TextBox Text="{Binding Bio, FallbackValue='Bio full'}"
+								 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+								 TextWrapping="Wrap"
+								 IsReadOnly="True" />
 					</ScrollViewer>
 				</Grid>
 

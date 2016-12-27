@@ -2,34 +2,34 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Twinder.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="fb_id" Type="System.String" Scope="User">
+    <Setting Name="FbId" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="fb_token" Type="System.String" Scope="User">
+    <Setting Name="FbToken" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="LastUpdate" Type="System.DateTime" Scope="User">
+    <Setting Name="LastUpdate" Provider="PortableSettingsProvider" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="latitude" Type="System.String" Scope="User">
+    <Setting Name="Latitude" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="longtitude" Type="System.String" Scope="User">
+    <Setting Name="Longtitude" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="UpgradeRequired" Type="System.Boolean" Scope="User">
+    <Setting Name="UpgradeRequired" Provider="PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="TinderToken" Type="System.String" Scope="User">
+    <Setting Name="TinderToken" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="FirstStart" Type="System.Boolean" Scope="User">
+    <Setting Name="FirstStart" Provider="PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="AppDataFolder" Type="System.String" Scope="User">
+    <Setting Name="AppDataFolder" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SerializationComplete" Type="System.Boolean" Scope="User">
+    <Setting Name="SerializationComplete" Provider="PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

@@ -24,6 +24,7 @@ namespace Twinder.View
 			var viewModel = DataContext as RecommendationsViewModel;
 			//viewModel.LoadingStateChange += SwitchLoadingIndicators;
 			viewModel.SetRecommendations(recList);
+			viewModel.RecsView = this;
 
 			Messenger.Default.Register<SerializationPacket>(this, ShowDownloadDialog);
 
@@ -54,25 +55,6 @@ namespace Twinder.View
 				ScrollBar.LineLeftCommand.Execute(null, e.OriginalSource as IInputElement);
 			}
 			e.Handled = true;
-		}
-
-		private void SwitchLoadingIndicators(object sender, RecsLoadingStateEventArgs e)
-		{
-			if (e.RecsStatus == RecsStatus.Getting)
-			{
-				gettingRecs_StatusBarItem.Visibility = Visibility.Visible;
-				gettingRecs_TextBlock.Text = Properties.Resources.tinder_recs_getting_recs;
-			}
-			else if (e.RecsStatus == RecsStatus.Exhausted)
-			{
-				gettingRecs_StatusBarItem.Visibility = Visibility.Visible;
-				gettingRecs_TextBlock.Text = Properties.Resources.tinder_recs_exchausted;
-			}
-			else if (e.RecsStatus == RecsStatus.Okay)
-			{
-				gettingRecs_StatusBarItem.Visibility = Visibility.Collapsed;
-				recCount_StatusBarItem.Visibility = Visibility.Visible;
-			}
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Twinder.ViewModel.Design
 			Updates = new UpdatesModel();
 			MatchList = new ObservableCollection<MatchModel>();
 
-			ShowMoreFiltering = true;
+			FilterVM.ShowMoreFiltering = true;
 			AuthStatus = AuthStatus.Okay;
 			MatchesStatus = MatchesStatus.Okay;
 			RecsStatus = RecsStatus.Okay;
@@ -82,6 +82,9 @@ namespace Twinder.ViewModel.Design
 				LastActivityDate = new DateTime(2016, 11, 11, 2, 3, 4),
 				IsSuperLike = true
 			};
+
+			RecList = new ObservableCollection<RecModel>();
+			RecList.Add(new RecModel());
 
 			MatchList.Add(Dolores);
 

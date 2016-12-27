@@ -12,5 +12,8 @@ namespace Twinder.Model.Photos
 
 		[JsonProperty("url")]
 		public string Url { get; set; }
+
+		[JsonProperty("local-url")]
+		public string LocalUrl { get; set; }
 	}
 }

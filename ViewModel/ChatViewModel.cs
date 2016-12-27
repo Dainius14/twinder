@@ -29,25 +29,6 @@ namespace Twinder.ViewModel
 			}
 		}
 
-		private void Messages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
-			if (e.NewItems != null)
-				foreach (MessageModel item in e.NewItems)
-				{
-					AddMessageToChat(item);
-
-					// Invokes event if the new message is not from me
-					if (!IsMessageFromMe(item))
-						NewChatMessageReceived.Invoke(this, null);
-
-
-					Match.LastActivityDate = item.SentDate;
-
-					Messenger.Default.Send("", MessengerToken.SortMatchList);
-
-
-				}
-		}
 
 		private string _chat;
 		public string Chat
@@ -139,5 +120,26 @@ namespace Twinder.ViewModel
 		{
 			return Match.Person.Id != msg.From;
 		}
+
+		private void Messages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.NewItems != null)
+				foreach (MessageModel item in e.NewItems)
+				{
+					AddMessageToChat(item);
+
+					// Invokes event if the new message is not from me
+					if (!IsMessageFromMe(item))
+						NewChatMessageReceived.Invoke(this, null);
+
+
+					Match.LastActivityDate = item.SentDate;
+
+					Messenger.Default.Send("", MessengerToken.SortMatchList);
+
+
+				}
+		}
+
 	}
 }

@@ -1,7 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Twinder.Model.Photos;
 
 namespace Twinder.View
 {
@@ -32,6 +36,23 @@ namespace Twinder.View
 			}
 			e.Handled = true;
 		}
+		
+		private void Image_Loaded(object sender, RoutedEventArgs e)
+		{
+			BitmapImage b = new BitmapImage();
+			Image img = sender as Image;
+			try
+			{
+				b.BeginInit();
+				b.CacheOption = BitmapCacheOption.OnLoad;
+				b.UriSource = new Uri((img.DataContext as PhotoModel).ProcessedFiles[0].LocalUrl);
+				b.EndInit();
 
+				img.Source = b;
+			}
+			catch (Exception)
+			{
+			}
+		}
 	}
 }

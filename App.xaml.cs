@@ -36,6 +36,7 @@ namespace Twinder
 				Settings.Default["UpgradeRequired"] = false;
 				Settings.Default.Save();
 			}
+			
 
 			// First start configuration
 			if (Settings.Default.FirstStart)
@@ -52,7 +53,7 @@ namespace Twinder
 			bool? returned = true;
 
 			// No login data found, so shows login screen
-			if (string.IsNullOrEmpty(Settings.Default.fb_id))
+			if (string.IsNullOrEmpty(Settings.Default.FbId))
 			{
 				var loginWindow = new FbLoginView();
 				returned = loginWindow.ShowDialog();

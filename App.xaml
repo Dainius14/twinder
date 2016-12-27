@@ -30,6 +30,7 @@
 		<converter:DateTimeToLocalConverter x:Key="DateTimeToLocalConverter"/>
 		<converter:FilterDescriptionConverter x:Key="FilterDescriptionConverter"/>
 		<converter:FilterGenderConverter x:Key="FilterGenderConverter"/>
+		<converter:MatchSortingConverter x:Key="MatchSortingConverter"/>
 
 		<Style TargetType="Separator" x:Key="StatusBarSeperator">
 			<Setter Property="Width" Value="1"/>

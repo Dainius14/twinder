@@ -9,6 +9,10 @@ namespace Twinder.ViewModel
 {
 	public class DownloadDataViewModel : ViewModelBase
 	{
+		public event DataDownloadHandler DownloadProgressChanges;
+		public delegate void DataDownloadHandler(object sender, DownloadProgressEventArgs e);
+
+
 		private int _currentProgress;
 		public int CurrentProgress
 		{
@@ -20,7 +24,11 @@ namespace Twinder.ViewModel
 		public int CurrentItem
 		{
 			get { return _currentItem; }
-			set { Set(ref _currentItem, value); }
+			set
+			{
+				Set(ref _currentItem, value);
+				//CurrentProgress = (int) (Math.Round((float) CurrentItem / _totalItems * 100));
+			}
 		}
 
 		private int _currentTotalCount;
@@ -77,6 +85,7 @@ namespace Twinder.ViewModel
 			_totalCount += Packet.User != null ? 1 : 0;
 			_totalCount += Packet.RecList != null ? Packet.RecList.Count : 0;
 			_totalCount += Packet.MatchList != null ? Packet.MatchList.Count : 0;
+			
 			Worker.RunWorkerAsync();
 		}
 
@@ -110,7 +119,7 @@ namespace Twinder.ViewModel
 				CurrentItem = 1;
 				CurrentStatus = Properties.Resources.download_data_matches;
 				CurrentTotalCount = Packet.MatchList.Count;
-				SerializationHelper.SerializeMatchList(Packet.MatchList, Worker);
+				SerializationHelper.SerializeMatchList(Packet.MatchList, Worker, Packet.FullMatchData);
 			}
 
 			// Only here the baby is done
@@ -131,5 +140,11 @@ namespace Twinder.ViewModel
 			CurrentProgress = (int) (Math.Round(_totalItems / _totalCount * 100));
 		}
 
+	}
+
+	public class DownloadProgressEventArgs : EventArgs
+	{
+		public int CurrentItem { get; set; }
+		public int TotalItems { get; set; }
 	}
 }

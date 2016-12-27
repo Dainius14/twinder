@@ -46,6 +46,7 @@ namespace Twinder.ViewModel
 			SimpleIoc.Default.Register<ErrorDialogViewModel>();
 			SimpleIoc.Default.Register<UserProfileViewModel>();
 			SimpleIoc.Default.Register<DownloadDataViewModel>();
+			SimpleIoc.Default.Register<MatchListFilterViewModel>();
 
 			// Design time
 			SimpleIoc.Default.Register<SampleMainVM>();
@@ -129,6 +130,15 @@ namespace Twinder.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<DownloadDataViewModel>();
+			}
+		}
+
+
+		public MatchListFilterViewModel MatchListFilter
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<MatchListFilterViewModel>();
 			}
 		}
 

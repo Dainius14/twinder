@@ -124,6 +124,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Device" />
     <Reference Include="System.ServiceProcess" />
@@ -158,6 +159,7 @@
     <Compile Include="Converter\DateTimeToLocalConverter.cs" />
     <Compile Include="Converter\FilterGenderConverter.cs" />
     <Compile Include="Converter\FilterDescriptionConverter.cs" />
+    <Compile Include="Converter\MatchSortingConverter.cs" />
     <Compile Include="Converter\InterestedInConverter.cs" />
     <Compile Include="Converter\MiToKmConverter.cs" />
     <Compile Include="Converter\LastMessageConverter.cs" />
@@ -199,12 +201,15 @@
     <Compile Include="Model\MatchModel.cs" />
     <Compile Include="Model\MessageModel.cs" />
     <Compile Include="Model\PersonModel.cs" />
+    <Compile Include="PortableSettingsProvider.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
     <Compile Include="SampleData\SampleMainVM.cs" />
     <Compile Include="ViewModel\DownloadDataViewModel.cs" />
     <Compile Include="ViewModel\ErrorDialogViewModel.cs" />
     <Compile Include="ViewModel\FbLoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MatchListFilterViewModel.cs" />
     <Compile Include="ViewModel\UserProfileViewModel.cs" />
     <Compile Include="ViewModel\SetLocationViewModel.cs" />
     <Compile Include="ViewModel\MatchProfileViewModel.cs" />
@@ -218,6 +223,9 @@
     </Compile>
     <Compile Include="View\ErrorDialogView.xaml.cs">
       <DependentUpon>ErrorDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MatchListFilterView.xaml.cs">
+      <DependentUpon>MatchListFilterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserProfileView.xaml.cs">
       <DependentUpon>UserProfileView.xaml</DependentUpon>
@@ -265,6 +273,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ErrorDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MatchListFilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

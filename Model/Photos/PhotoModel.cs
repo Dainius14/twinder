@@ -11,8 +11,7 @@ namespace Twinder.Model.Photos
 
 		[JsonProperty("successRate")]
 		public string SuccessRate { get; set; }
-
-
+		
 		[JsonProperty("main")]
 		public string Main { get; set; }
 
@@ -45,5 +44,16 @@ namespace Twinder.Model.Photos
 
 		[JsonProperty("url")]
 		public string Url { get; set; }
+
+		public override bool Equals(object obj)
+		{
+			PhotoModel myObj = obj as PhotoModel;
+			return myObj != null && Id == myObj.Id;
+		}
+
+		public override int GetHashCode()
+		{
+			return Id.GetHashCode();
+		}
 	}
 }

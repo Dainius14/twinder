@@ -27,9 +27,11 @@
 
 			<ListView.ItemTemplate>
 				<DataTemplate>
-					<Image Source="{Binding Url}" 
+					<Image 
 						   Height="{Binding ElementName=photoList, Path=ActualHeight,
-							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"/>
+							Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"
+						   Loaded="Image_Loaded"/>
+					<!--Source="{Binding ProcessedFiles[0].LocalUrl}"-->
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>

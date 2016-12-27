@@ -385,6 +385,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string filter_reset {
+            get {
+                return ResourceManager.GetString("filter_reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filters.
         /// </summary>
         public static string filter_show_filters {
@@ -399,6 +408,33 @@ namespace Twinder.Properties {
         public static string filter_whole_words {
             get {
                 return ResourceManager.GetString("filter_whole_words", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download _Matches.
+        /// </summary>
+        public static string force_matches {
+            get {
+                return ResourceManager.GetString("force_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download _Full Match Data.
+        /// </summary>
+        public static string force_matches_full {
+            get {
+                return ResourceManager.GetString("force_matches_full", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download _Recommendations.
+        /// </summary>
+        public static string force_recs {
+            get {
+                return ResourceManager.GetString("force_recs", resourceCulture);
             }
         }
         
@@ -444,6 +480,15 @@ namespace Twinder.Properties {
         public static string gender_women {
             get {
                 return ResourceManager.GetString("gender_women", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download _Full Data.
+        /// </summary>
+        public static string match_context_menu_download_full {
+            get {
+                return ResourceManager.GetString("match_context_menu_download_full", resourceCulture);
             }
         }
         
@@ -592,24 +637,6 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Force download _matches.
-        /// </summary>
-        public static string menu_tools_force_matches {
-            get {
-                return ResourceManager.GetString("menu_tools_force_matches", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Force download _recommendations.
-        /// </summary>
-        public static string menu_tools_force_recs {
-            get {
-                return ResourceManager.GetString("menu_tools_force_recs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to _Login.
         /// </summary>
         public static string menu_tools_login {
@@ -691,6 +718,60 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity Ascending.
+        /// </summary>
+        public static string sort_activity_asc {
+            get {
+                return ResourceManager.GetString("sort_activity_asc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activity Descending.
+        /// </summary>
+        public static string sort_activity_desc {
+            get {
+                return ResourceManager.GetString("sort_activity_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matched On Ascending.
+        /// </summary>
+        public static string sort_matched_asc {
+            get {
+                return ResourceManager.GetString("sort_matched_asc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matched On Descending.
+        /// </summary>
+        public static string sort_matched_desc {
+            get {
+                return ResourceManager.GetString("sort_matched_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name Ascending.
+        /// </summary>
+        public static string sort_name_asc {
+            get {
+                return ResourceManager.GetString("sort_name_asc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name Descending.
+        /// </summary>
+        public static string sort_name_desc {
+            get {
+                return ResourceManager.GetString("sort_name_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filtered matches.
         /// </summary>
         public static string statusbar_filtered_count {
@@ -709,7 +790,7 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New recommendations.
+        ///   Looks up a localized string similar to Recommendations.
         /// </summary>
         public static string statusbar_rec_count {
             get {

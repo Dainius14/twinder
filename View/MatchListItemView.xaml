@@ -44,26 +44,6 @@
 
 	</UserControl.Resources>
 
-	<!--<UserControl.ContextMenu>
-		<ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-			<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
-					  Command="{Binding OpenChatCommand}"
-					  CommandParameter="{Binding}"
-					  InputGestureText="Enter" />
-			<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
-					  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
-					  CommandParameter="{Binding}"
-					  InputGestureText="Ctrl+Enter" />
-			<MenuItem Header="{x:Static p:Resources.match_context_menu_unmatch}"
-					  Command="{Binding DataContext.UnmatchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
-					  CommandParameter="{Binding}"
-					  InputGestureText="Delete" />
-
-
-		</ContextMenu>
-	</UserControl.ContextMenu>-->
-	
-	
 	
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -77,7 +57,7 @@
 				CommandParameter="{Binding}"
 				ToolTip="{x:Static p:Resources.tooltip_show_profile}">
 
-			<Image Source="{Binding Person.Photos[0].ProcessedFiles[2].Url}"/>
+			<Image Source="{Binding Person.Photos[0].ProcessedFiles[2].LocalUrl}"/>
 			
 			<!-- Shadow on mouse hover -->
 			<Button.Resources>

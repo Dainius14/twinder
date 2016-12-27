@@ -1,8 +1,9 @@
 ﻿using BinaryAnalysis.UnidecodeSharp;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.ObjectModel;
-using Twinder.Helpers;
+using System.ComponentModel;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 using Twinder.Model.UserRelated;
@@ -12,7 +13,7 @@ namespace Twinder.Model
 	public class RecModel
 	{
 		[JsonProperty("distance_mi")]
-		public int DistanceMiles { get; set; }
+		public int? DistanceMiles { get; set; } = 0;
 
 		[JsonProperty("connection_count")]
 		public int ConnectionCount { get; set; }
@@ -95,4 +96,5 @@ namespace Twinder.Model
 			return string.Format($"{Name.Unidecode()}.{Id}");
 		}
 	}
+	
 }

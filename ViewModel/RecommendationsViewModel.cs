@@ -52,6 +52,7 @@ namespace Twinder.ViewModel
 			set { Set(ref _onlyWithoutDescription, value); }
 		}
 
+		public RecommendationsView RecsView { get; internal set; }
 
 		public RecommendationsViewModel()
 		{
@@ -141,9 +142,12 @@ namespace Twinder.ViewModel
 			{
 				try
 				{
-					SerializationHelper.MoveRecToPassed(SelectedRec);
 					await TinderHelper.PassRecommendation(SelectedRec.Id);
+					var matchToDelete = SelectedRec;
 					RemoveRecomendations(SelectedRec);
+					RecsView.UpdateLayout();
+
+					SerializationHelper.MoveRecToPassed(matchToDelete);
 				}
 				catch (TinderRequestException e)
 				{
@@ -165,18 +169,20 @@ namespace Twinder.ViewModel
 				try
 				{
 					var match = await TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
+					var matchToMove = SelectedRec;
+					RemoveRecomendations(SelectedRec);
+					RecsView.UpdateLayout();
 
 					// If the method returns a non-null value, it means it's a match
 					if (match != null)
 					{
-						SerializationHelper.MoveRecToMatches(SelectedRec);
+						SerializationHelper.MoveRecToMatches(matchToMove);
 						Messenger.Default.Send("", MessengerToken.ForceUpdate);
 						MessageBox.Show("It's a match!");
 					}
 					else
-						SerializationHelper.MoveRecToPending(SelectedRec);
+						SerializationHelper.MoveRecToPending(matchToMove);
 
-					RemoveRecomendations(SelectedRec);
 				}
 				catch (TinderRequestException e)
 				{
@@ -235,7 +241,9 @@ namespace Twinder.ViewModel
 			if (RecList.Count == 0)
 			{
 				Messenger.Default.Send("", MessengerToken.GetMoreRecs);
-				Messenger.Default.Send<SerializationPacket, RecommendationsView>(new SerializationPacket(RecList));
+				// Close the god damn window, less hassle
+				RecsView.Close();
+				//Messenger.Default.Send<SerializationPacket, RecommendationsView>(new SerializationPacket(RecList));
 			}
 
 		}
@@ -247,11 +255,7 @@ namespace Twinder.ViewModel
 		/// <param name="e"></param>
 		private void RecList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			if (e.OldItems.Count == 0 && e.Action == NotifyCollectionChangedAction.Add)
-			{
-				SelectedRec = RecList[0];
-				SelectedIndex = 0;
-			}
+
 		}
 	}
 

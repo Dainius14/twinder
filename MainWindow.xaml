@@ -12,7 +12,7 @@
 		WindowStartupLocation="CenterScreen"
 		
 		MinHeight="400" MinWidth="500"
-		Height="500" Width="550"
+		Height="600" Width="600"
         
 		Title="{x:Static p:Resources.app_title}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
@@ -36,18 +36,23 @@
 
 			<!-- Twinder -->
 			<MenuItem Header="{x:Static p:Resources.menu_app}">
+				<MenuItem Header="{x:Static p:Resources.menu_tools_login}"
+						  Command="{Binding LoginCommand}"/>
+				<MenuItem Header="{x:Static p:Resources.force_matches}"
+						  Command="{Binding ForceDownloadMatchesCommand}"/>
+				<MenuItem Header="{x:Static p:Resources.force_matches_full}"
+						  Command="{Binding ForceDownloadMatchesFullCommand}"/>
+				<MenuItem Header="{x:Static p:Resources.force_recs}"
+						  Command="{Binding ForceDownloadRecsCommand}"/>
+
+				<Separator/>
+
 				<MenuItem Header="{x:Static p:Resources.menu_app_exit}"
 						  Command="{Binding ExitCommand}"/>
 			</MenuItem>
 
 			<!-- Tools -->
 			<MenuItem Header="{x:Static p:Resources.menu_tools}">
-				<MenuItem Header="{x:Static p:Resources.menu_tools_login}"
-						  Command="{Binding LoginCommand}"/>
-				<MenuItem Header="{x:Static p:Resources.menu_tools_force_matches}"
-						  Command="{Binding ForceDownloadMatchesCommand}"/>
-				<MenuItem Header="{x:Static p:Resources.menu_tools_force_recs}"
-						  Command="{Binding ForceDownloadRecsCommand}"/>
 			</MenuItem>
 
 			<!-- Help -->
@@ -60,94 +65,69 @@
 		<!-- Status bar-->
 		<StatusBar DockPanel.Dock="Bottom" Padding="5, 0">
 
-			<StatusBar.Resources>
-				<Style TargetType="ProgressBar" BasedOn="{StaticResource StatusBarProgressBar}"/>
-			</StatusBar.Resources>
-			
-			<!-- Autherization status -->
-			<StatusBarItem>
-				<StackPanel Orientation="Horizontal">
-					
-					<ProgressBar Name="connection_ProgressBar"/>
-					
-					<TextBlock Name="connection_TextBlock"
-							   Text="{x:Static p:Resources.tinder_auth_connecting}"/>
-
-				</StackPanel>
-			</StatusBarItem>
-
-			<Separator Visibility="{Binding Visibility, ElementName=matchCount_StatusBarItem}"
-					   Style="{StaticResource StatusBarSeperator}"/>
-
 			<!-- Match count -->
-			<StatusBarItem Name="matchCount_StatusBarItem"
-						   Visibility="Collapsed">
-				<StackPanel Orientation="Horizontal">
-					
-					<TextBlock Name="matchCountOk_TextBlock">
-						<TextBlock.Text>
-							<MultiBinding StringFormat="{}{0} {1}">
-								<Binding Path="MatchList.Count"/>
-								<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
-							</MultiBinding>
-						</TextBlock.Text>
-					</TextBlock>
+			<StatusBarItem Name="matchCount_StatusBarItem">
 
-					<TextBlock Name="matchCountError_TextBlock"
-							   Text="{x:Static p:Resources.tinder_update_matches_error}"
-							   Visibility="Collapsed"/>
+				<TextBlock Name="matchCountOk_TextBlock">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0} {1}">
+							<Binding Path="MatchList.Count" FallbackValue="0"/>
+							<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
 
-
-				</StackPanel>
 			</StatusBarItem>
 
-			<Separator Visibility="{Binding Visibility, ElementName=recCount_StatusBarItem}"
-					   Style="{StaticResource StatusBarSeperator}"/>
-
-			<!-- Recommendations count -->
-			<StatusBarItem Name="recCount_StatusBarItem"
-						   Visibility="Collapsed">
-				<StackPanel Orientation="Horizontal">
-
-					<TextBlock Name="recCountOk_TextBlock">
-						<TextBlock.Text>
-							<MultiBinding StringFormat="{}{0} {1}">
-								<Binding Path="RecList.Count"/>
-								<Binding Source="{x:Static p:Resources.statusbar_rec_count}"/>
-							</MultiBinding>
-						</TextBlock.Text>
-					</TextBlock>
-
-					<TextBlock Name="recCountExhausted_TextBlock"
-							   Text="{x:Static p:Resources.tinder_recs_exchausted}"
-							   Visibility="Collapsed"/>
-					
-					<TextBlock Name="recCountError_TextBlock"
-							   Text="{x:Static p:Resources.tinder_recs_error}"
-							   Visibility="Collapsed"/>
-
-				</StackPanel>
-			</StatusBarItem>
-
-			<Separator Visibility="{Binding Visibility, ElementName=recCount_StatusBarItem}"
-					   Style="{StaticResource StatusBarSeperator}"/>
-
+			<Separator Style="{StaticResource StatusBarSeperator}"/>
 
 			<!-- Filtered count -->
-			<StatusBar>
+			<StatusBarItem>
+
+				<TextBlock>
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0} {1}">
+							<Binding Path="FilterVM.FilteredMatchListCount" FallbackValue="0"/>
+							<Binding Source="{x:Static p:Resources.statusbar_filtered_count}"/>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+
+			</StatusBarItem>
+
+			<Separator Style="{StaticResource StatusBarSeperator}"/>
+
+			<!-- Recommendations count -->
+			<StatusBarItem Name="recCount_StatusBarItem">
+
+				<TextBlock Name="recCountOk_TextBlock">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0} {1}">
+							<Binding Path="RecList.Count" FallbackValue="0"/>
+							<Binding Source="{x:Static p:Resources.statusbar_rec_count}"/>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				
+			</StatusBarItem>
+
+			<!-- Autherization status -->
+			<StatusBarItem HorizontalAlignment="Right">
 				<StackPanel Orientation="Horizontal">
+					
+					<ProgressBar Name="connection_ProgressBar"
+								 Visibility="{Binding IsConnecting, Converter={StaticResource BoolToVisibleConverter}}"
+								 IsIndeterminate="True"
+								 Width="50" Height="10"
+								 Margin="5,0"/>
 
-					<TextBlock >
-						<TextBlock.Text>
-							<MultiBinding StringFormat="{}{0} {1}">
-								<Binding Path="FilteredMatchListCount"/>
-								<Binding Source="{x:Static p:Resources.statusbar_filtered_count}"/>
-							</MultiBinding>
-						</TextBlock.Text>
-					</TextBlock>
+					<TextBlock Name="connection_TextBlock"
+							   Text="{Binding ConnectionStatus}"/>
+					
+
 				</StackPanel>
+			</StatusBarItem>
 
-			</StatusBar>
 		</StatusBar>
 
 		<Grid Name="LayoutRoot">
@@ -201,6 +181,7 @@
 				<Grid Grid.Row="1" Margin="5">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="170"/>
 						<ColumnDefinition Width="auto"/>
 					</Grid.ColumnDefinitions>
 
@@ -208,7 +189,7 @@
 					<Grid Grid.Row="0"
 						  Background="White">
 						
-						<TextBox Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"
+						<TextBox Text="{Binding FilterVM.NameFilter, UpdateSourceTrigger=PropertyChanged}"
 								 Padding="3">
 							<TextBox.Style>
 								<Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -240,10 +221,24 @@
 						
 					</Grid>
 					
+					<!-- Sorting -->
+					<ComboBox Grid.Column="1"
+							  Margin="5,0"
+							  ItemsSource="{Binding FilterVM.SortingOptions}"
+							  SelectedItem="{Binding FilterVM.SelectedSorting, Converter={StaticResource MatchSortingConverter}, Mode=TwoWay}"
+							  SelectedIndex="1">
+
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Path=., Converter={StaticResource MatchSortingConverter}}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+
 					<!-- More filtering -->
-					<Label Grid.Column="1" HorizontalAlignment="Right" Padding="4">
+					<Label Grid.Column="2" HorizontalAlignment="Right" Padding="4">
 						<Label.InputBindings>
-							<MouseBinding MouseAction="LeftClick" Command="{Binding ShowMoreFilteringCommand}"/>
+							<MouseBinding MouseAction="LeftClick" Command="{Binding FilterVM.ShowMoreFilteringCommand}"/>
 						</Label.InputBindings>
 						
 						<StackPanel Orientation="Horizontal">
@@ -253,10 +248,10 @@
 								<Image.Style>
 									<Style TargetType="{x:Type Image}">
 										<Style.Triggers>
-											<DataTrigger Binding="{Binding ShowMoreFiltering}" Value="True">
+											<DataTrigger Binding="{Binding FilterVM.ShowMoreFiltering}" Value="True">
 												<Setter Property="Source" Value="{StaticResource icon_expand_up}"/>
 											</DataTrigger>
-											<DataTrigger Binding="{Binding ShowMoreFiltering}" Value="False">
+											<DataTrigger Binding="{Binding FilterVM.ShowMoreFiltering}" Value="False">
 												<Setter Property="Source" Value="{StaticResource icon_expand_down}"/>
 											</DataTrigger>
 										</Style.Triggers>
@@ -270,241 +265,7 @@
 				</Grid>
 				
 				<!-- Filter menu -->
-				<Grid Grid.Row="2"
-					  Visibility="{Binding ShowMoreFiltering, Converter={StaticResource BoolToVisibleConverter}}">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="auto"/>
-						<RowDefinition Height="auto"/>
-						<RowDefinition Height="auto"/>
-					</Grid.RowDefinitions>
-
-					<Grid.Resources>
-						<Style TargetType="GroupBox">
-							<Setter Property="Padding" Value="3"/>
-							<Setter Property="Margin" Value="5,0,5,5"/>
-						</Style>
-					</Grid.Resources>
-
-					<!-- With description or not -->
-					<GroupBox Header="{x:Static p:Resources.filter_description_header}"
-							  Grid.Row="0">
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
-							</Grid.ColumnDefinitions>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="auto"/>
-								<RowDefinition Height="auto"/>
-							</Grid.RowDefinitions>
-
-							<RadioButton Content="{x:Static p:Resources.filter_description_with_bio}"
-										 IsChecked="{Binding DescriptionFilter, Mode=TwoWay,
-											Converter={StaticResource FilterDescriptionConverter},
-											ConverterParameter='WithDescription'}"
-											 Grid.Column="0" Grid.Row="0"
-										 Margin="0,5"/>
-							<RadioButton Content="{x:Static p:Resources.filter_description_without_bio}"
-										 IsChecked="{Binding DescriptionFilter, Mode=TwoWay,
-											Converter={StaticResource FilterDescriptionConverter},
-											ConverterParameter='WithoutDescription'}"
-											 Grid.Column="1" Grid.Row="0"
-										 Margin="0,5"/>
-							<RadioButton Content="{x:Static p:Resources.filter_description_both}"
-										 IsChecked="{Binding DescriptionFilter, Mode=TwoWay,
-											Converter={StaticResource FilterDescriptionConverter},
-											ConverterParameter='Both'}"
-											 Grid.Column="2" Grid.Row="0"
-										 Margin="0,5"/>
-
-							<Grid Grid.Row="1" Grid.ColumnSpan="3"
-								  Margin="0,5,0,0">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="auto"/>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="auto"/>
-								</Grid.ColumnDefinitions>
-								
-								<TextBlock Text="{Binding Source={x:Static p:Resources.filter_description_includes}}"
-										   Grid.Column="0"
-										   VerticalAlignment="Center"/>
-								
-								<TextBox Text="{Binding DescriptionWordFilter, UpdateSourceTrigger=PropertyChanged}"
-										 Grid.Column="1"
-										 Padding="3,2"
-										 Margin="5,0"/>
-
-								<CheckBox IsChecked="{Binding DescriptionWholeWordsFilter}"
-										  Content="{Binding Source={x:Static p:Resources.filter_whole_words}}"
-										  Grid.Column="2"
-										  VerticalAlignment="Center"/>
-							</Grid>
-
-						</Grid>
-					</GroupBox>
-					
-					<!-- Age and Gender -->
-					<Grid Grid.Row="2">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="*"/>
-						</Grid.ColumnDefinitions>
-
-						<!-- Age -->
-						<GroupBox Header="{x:Static p:Resources.filter_age_header}"
-							  Grid.Column="0">
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="2*"/>
-									<ColumnDefinition Width="10"/>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="2*"/>
-								</Grid.ColumnDefinitions>
-
-								<TextBlock Text="{x:Static p:Resources.filter_age_min_age}"
-									   Grid.Column="0"
-									   VerticalAlignment="Center"/>
-
-
-								<TextBox Text="{Binding MinAgeFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
-										 Grid.Column="1"
-										 Padding="2,2"
-										 VerticalAlignment="Center"/>
-								
-								<TextBlock Text="{x:Static p:Resources.filter_age_max_age}"
-									   Grid.Column="3"
-									   VerticalAlignment="Center"/>
-
-								<TextBox Text="{Binding MaxAgeFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
-										 Grid.Column="4"
-										 VerticalAlignment="Center"
-										 Padding="2"/>
-
-								<!--<Slider Value="{Binding MinAgeFilter}" Name="MinAge_Slider"
-									Grid.Column="2"
-									Minimum="18" Maximum="60"
-									ValueChanged="MinAge_Slider_ValueChanged"
-									TickFrequency="1" IsSnapToTickEnabled="True"
-									VerticalAlignment="Center"/>-->
-
-
-								<!--<Slider Value="{Binding MaxAgeFilter}" Name="MaxAge_Slider"
-									Grid.Column="6"
-									Minimum="18" Maximum="60"
-									ValueChanged="MaxAge_Slider_ValueChanged"
-									TickFrequency="1" IsSnapToTickEnabled="True"
-									VerticalAlignment="Center"/>-->
-
-							</Grid>
-						</GroupBox>
-
-						<GroupBox Header="{x:Static p:Resources.filer_gender_header}"
-								  Grid.Column="1">
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="*"/>
-								</Grid.ColumnDefinitions>
-								<RadioButton Content="{x:Static p:Resources.gender_men}"
-										 IsChecked="{Binding GenderFilter, Mode=TwoWay,
-											Converter={StaticResource FilterGenderConverter},
-											ConverterParameter='Man'}"
-											 Grid.Column="0" Grid.Row="0"
-										 Margin="0,5"/>
-								<RadioButton Content="{x:Static p:Resources.gender_women}"
-										 IsChecked="{Binding GenderFilter, Mode=TwoWay,
-											Converter={StaticResource FilterGenderConverter},
-											ConverterParameter='Woman'}"
-											 Grid.Column="1" Grid.Row="0"
-										 Margin="0,5"/>
-								<RadioButton Content="{x:Static p:Resources.gender_both}"
-										 IsChecked="{Binding GenderFilter, Mode=TwoWay,
-											Converter={StaticResource FilterGenderConverter},
-											ConverterParameter='Both'}"
-											 Grid.Column="2" Grid.Row="0"
-										 Margin="0,5"/>
-							</Grid>
-
-						</GroupBox>
-
-					</Grid>
-
-					<!-- Messages -->
-					<GroupBox Header="{x:Static p:Resources.filter_messages_header}"
-							  Grid.Row="1">
-
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="auto"/>
-								<RowDefinition Height="auto"/>
-							</Grid.RowDefinitions>
-
-							
-							<!-- Message count -->
-							<Grid Width="250" HorizontalAlignment="Left">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="2*"/>
-									<ColumnDefinition Width="10"/>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="2*"/>
-								</Grid.ColumnDefinitions>
-
-								<TextBlock Text="{x:Static p:Resources.filter_age_min_age}"
-									   Grid.Column="0"
-									   VerticalAlignment="Center"/>
-
-
-								<TextBox Text="{Binding MinMessagesFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
-										 Grid.Column="1"
-										 Padding="2,2"
-										 VerticalAlignment="Center"/>
-
-								<TextBlock Text="{x:Static p:Resources.filter_age_max_age}"
-									   Grid.Column="3"
-									   VerticalAlignment="Center"/>
-
-								<TextBox Text="{Binding MaxMessagesFilter, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}"
-										 Grid.Column="4"
-										 VerticalAlignment="Center"
-										 Padding="2"/>
-							</Grid>
-
-							<!-- Message includes-->
-							<Grid Grid.Row="1" Grid.ColumnSpan="3"
-								  Margin="0,5,0,0">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="auto"/>
-									<ColumnDefinition Width="*"/>
-									<ColumnDefinition Width="auto"/>
-								</Grid.ColumnDefinitions>
-
-								<TextBlock Text="{Binding Source={x:Static p:Resources.filter_messages_includes}}"
-										   Grid.Column="0"
-										   VerticalAlignment="Center"/>
-
-								<TextBox Text="{Binding MessagesWordFilter, UpdateSourceTrigger=PropertyChanged}"
-										 Grid.Column="1"
-										 Padding="3,2"
-										 Margin="5,0"/>
-
-								<CheckBox IsChecked="{Binding MessagesWholeWordsFilter}"
-									  Content="{Binding Source={x:Static p:Resources.filter_whole_words}}"
-									  Grid.Column="2"
-									  VerticalAlignment="Center"/>
-							</Grid>
-
-						</Grid>
-						
-
-
-
-					</GroupBox>
-
-				</Grid>
+				<view:MatchListFilterView Grid.Row="2" DataContext="{Binding FilterVM}"/>
 			</Grid>
 
 			<!--Match list-->
@@ -526,6 +287,13 @@
 								  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
 								  CommandParameter="{Binding}"
 								  InputGestureText="Ctrl+Enter"/>
+
+						<MenuItem Header="{x:Static p:Resources.match_context_menu_download_full}"
+								  Command="{Binding DataContext.DownloadMatchDataCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+								  CommandParameter="{Binding}"/>
+						
+						<Separator/>
+
 						<MenuItem Header="{x:Static p:Resources.match_context_menu_unmatch}"
 								  Command="{Binding DataContext.UnmatchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"

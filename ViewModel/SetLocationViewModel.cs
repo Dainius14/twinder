@@ -53,8 +53,8 @@ namespace Twinder.ViewModel
 			SetLocationCommand = new RelayCommand(SetLocation);
 			AutoDetectCommand = new RelayCommand(AutoDetect);
 
-			MyLatitude = Properties.Settings.Default.latitude;
-			MyLongtitude = Properties.Settings.Default.longtitude;
+			MyLatitude = Properties.Settings.Default.Latitude;
+			MyLongtitude = Properties.Settings.Default.Longtitude;
 			IsAutoDetecting = false;
 			IsAutoDetectingError = false;
 		}
@@ -64,8 +64,8 @@ namespace Twinder.ViewModel
 			try
 			{
 				TinderHelper.PingLocation(MyLatitude, MyLongtitude);
-				Properties.Settings.Default["latitude"] = MyLatitude;
-				Properties.Settings.Default["longtitude"] = MyLongtitude;
+				Properties.Settings.Default["Latitude"] = MyLatitude;
+				Properties.Settings.Default["Longtitude"] = MyLongtitude;
 				Properties.Settings.Default.Save();
 			}
 			catch (TinderRequestException e)

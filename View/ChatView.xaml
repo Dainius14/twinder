@@ -85,6 +85,7 @@
 			<TextBox Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
 					 Name="message_TextBox"
 					 Grid.Column="0"
+					 Padding="3"
 					 FontFamily="Consolas">
 				
 				<TextBox.InputBindings>
@@ -94,12 +95,14 @@
 
 			<Button Content="{x:Static p:Resources.chat_btn_send_message}"
 					Command="{Binding SendMessageCommand}"
+					Padding="3"
 					Grid.Column="1"/>
 		</Grid>
 
 		<!-- Chat -->
 		<ScrollViewer Name="chatScrollViewer" VerticalScrollBarVisibility="Visible">
 			<TextBox Name="chatBox" Text="{Binding Chat}"
+					 Padding="3"
 					 FontFamily="Consolas"
 					 IsReadOnly="True"
 					 TextWrapping="Wrap"

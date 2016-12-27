@@ -12,13 +12,16 @@ using System.Windows;
 using System.Text;
 using System.Globalization;
 using BinaryAnalysis.UnidecodeSharp;
+using Twinder.ViewModel;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Twinder.Helpers
 {
 	public static class SerializationHelper
 	{
 		private const string EXT = ".json";
-		private const string MESSAGES = ".msgs";
+		private const string MSGS = ".msgs";
 
 		private const string DIR_MATCHES = "Matches\\";
 		private const string DIR_UNMATCHED = "Matches-Unmatched\\";
@@ -40,18 +43,21 @@ namespace Twinder.Helpers
 		private const string PIC_320PX = "320px\\";
 
 		private static WebClient _webClient;
-
-
-		private static void SetWebClient()
+		private static WebClient WebClient
 		{
-			_webClient = new WebClient();
-			_webClient.Proxy = new WebProxy();
+			get
+			{
+				if (_webClient == null)
+				{
+					_webClient = new WebClient();
+					_webClient.Proxy = new WebProxy();
+				}
+				return _webClient;
+			}
 		}
 
 		public static void SerializeUser(UserModel user, BackgroundWorker worker)
 		{
-			if (_webClient == null)
-				SetWebClient();
 
 			if (worker != null)
 				worker.ReportProgress(1, 1);
@@ -70,9 +76,6 @@ namespace Twinder.Helpers
 		/// <param name="match"></param>
 		public static void SerializeMatch(MatchModel match)
 		{
-			if (_webClient == null)
-				SetWebClient();
-
 			string workingDir = Default.AppDataFolder + DIR_MATCHES + match.ToString() + "\\";
 
 			// Match doesn't have his own data folder
@@ -83,13 +86,79 @@ namespace Twinder.Helpers
 			DownloadPhotos(match.Person.Photos, workingDir);
 			DownloadInstagramPhotos(match.Instagram, workingDir);
 
+			// After downloading all photos writes back local URLs again
+			DeserializePhotos(match.Person.Photos, workingDir);
+
 			// Writes messages
-			File.WriteAllText(workingDir + match.Person + MESSAGES + EXT,
+			File.WriteAllText(workingDir + match.Person + MSGS + EXT,
 				JsonConvert.SerializeObject(match.Messages, Formatting.Indented));
 
 			// Writes match data
 			File.WriteAllText(workingDir + match.Person + EXT,
 				JsonConvert.SerializeObject(match, Formatting.Indented));
+		}
+
+
+		/// <summary>
+		/// Updates current match model with new data from match update
+		/// </summary>
+		/// <param name="match"></param>
+		/// <param name="matchUpdate"></param>
+		public static void UpdateMatchModel(MatchModel match, MatchUpdateResultsModel matchUpdate)
+		{
+			match.Person.Bio = matchUpdate.Bio;
+			match.Person.BirthDate = matchUpdate.BirthDate;
+
+			// Getting full match list update give older ping time
+			if (match.Person.PingTime < matchUpdate.PingTime)
+				match.Person.PingTime = matchUpdate.PingTime;
+
+			
+			var newPhotos = matchUpdate.Photos.Except(match.Person.Photos);
+			var removedPhotos = match.Person.Photos.Except(matchUpdate.Photos);
+
+			foreach (var item in newPhotos)
+				match.Person.Photos.Add(item);
+			foreach (var item in removedPhotos)
+				match.Person.Photos.Remove(item);
+
+			match.Instagram = matchUpdate.Instagram;
+			match.DistanceMiles = matchUpdate.DistanceMiles;
+			match.SpotifyThemeTrack = matchUpdate.SpotifyThemeTrack;
+			match.SpotifyTopArtists = matchUpdate.SpotifyTopArtists;
+			match.CommonFriendCount = matchUpdate.CommonFriendCount;
+			match.CommonLikeCount = matchUpdate.CommonLikeCount;
+			match.CommonFriends = matchUpdate.CommonFriends;
+			match.CommonLikes = matchUpdate.CommonLikes;
+			match.ConnectionCount = matchUpdate.ConnectionCount;
+		}
+
+		/// <summary>
+		/// Updates current match model with data from general updates 
+		/// </summary>
+		/// <param name="match"></param>
+		/// <param name="matchUpdate"></param>
+		public static void UpdateMatchModel(MatchModel match, MatchModel matchUpdate)
+		{
+			match.Person.Bio = matchUpdate.Person.Bio;
+
+			if (match.Person.PingTime < matchUpdate.Person.PingTime)
+				match.Person.PingTime = matchUpdate.Person.PingTime;
+			
+			var newPhotos = matchUpdate.Person.Photos.Except(match.Person.Photos);
+			var removedPhotos = match.Person.Photos.Except(matchUpdate.Person.Photos);
+
+			foreach (var item in newPhotos)
+				match.Person.Photos.Add(item);
+			foreach (var item in removedPhotos)
+				match.Person.Photos.Remove(item);
+
+			match.Messages.Clear();
+			var newMsgs = matchUpdate.Messages.Except(match.Messages);
+			foreach (var item in newMsgs)
+			{
+				match.Messages.Add(item);
+			}
 		}
 
 		/// <summary>
@@ -98,9 +167,6 @@ namespace Twinder.Helpers
 		/// <param name="rec"></param>
 		public static void SerializeRecommendation(RecModel rec)
 		{
-			if (_webClient == null)
-				SetWebClient();
-
 			string workingDir = Default.AppDataFolder + DIR_RECS + rec.ToString() + "\\";
 
 			// Rec doesn't have his own data folder
@@ -118,10 +184,20 @@ namespace Twinder.Helpers
 		/// Serializes all matches
 		/// </summary>
 		/// <param name="matchList"></param>
-		public static void SerializeMatchList(ObservableCollection<MatchModel> matchList, BackgroundWorker worker)
+		public static void SerializeMatchList(ObservableCollection<MatchModel> matchList, BackgroundWorker worker,
+			bool fullMatchData = false)
 		{
 			for (int i = 0; i < matchList.Count; i++)
 			{
+
+				if (fullMatchData)
+				{
+					// This needs something better but I don't know how
+					Task<MatchUpdateResultsModel> t = TinderHelper.GetFullMatchData(matchList[i].Person.Id);
+					var updatedMatch = t.Result;
+					UpdateMatchModel(matchList[i], updatedMatch);
+				}
+
 				if (worker != null)
 					worker.ReportProgress(1, i + 1);
 
@@ -129,6 +205,7 @@ namespace Twinder.Helpers
 			}
 
 		}
+
 
 		/// <summary>
 		/// Serializes all recommendations
@@ -149,12 +226,26 @@ namespace Twinder.Helpers
 		/// Moves recommendation to "Pending recommendations" directory
 		/// </summary>
 		/// <param name="rec"></param>
-		public static void MoveRecToPending(RecModel rec)
+		public static bool MoveRecToPending(RecModel rec)
 		{
 			var fromDir = Default.AppDataFolder + DIR_RECS + rec;
 			var toDir = Default.AppDataFolder + DIR_RECS_PENDING + rec;
 
-			Directory.Move(fromDir, toDir);
+			try
+			{
+				Directory.Move(fromDir, toDir);
+				return true;
+			}
+			catch (UnauthorizedAccessException e)
+			{
+				MessageBox.Show("Error: " + e.ToString());
+				return false;
+			}
+			catch (IOException e)
+			{
+				MessageBox.Show("Error: " + e.ToString());
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -172,6 +263,11 @@ namespace Twinder.Helpers
 				return true;
 			}
 			catch (UnauthorizedAccessException e)
+			{
+				MessageBox.Show("Error: " + e.ToString());
+				return false;
+			}
+			catch (IOException e)
 			{
 				MessageBox.Show("Error: " + e.ToString());
 				return false;
@@ -290,14 +386,14 @@ namespace Twinder.Helpers
 
 			var match = JsonConvert.DeserializeObject<MatchModel>(File.ReadAllText(folderName + "\\" + matchName + EXT));
 			match.Messages = JsonConvert.DeserializeObject<ObservableCollection<MessageModel>>(
-				File.ReadAllText(folderName + "\\" + matchName + MESSAGES + EXT)) ?? new ObservableCollection<MessageModel>();
+				File.ReadAllText(folderName + "\\" + matchName + MSGS + EXT)) ?? new ObservableCollection<MessageModel>();
 
-			DeserializePhotos(match.Person.Photos, folderName);
+			//DeserializePhotos(match.Person.Photos, folderName);
 
 
 			return match;
 		}
-
+		
 
 		/// <summary>
 		/// Deserializes given recommendation
@@ -311,7 +407,7 @@ namespace Twinder.Helpers
 			recName = recName.Unidecode();
 
 			var rec = JsonConvert.DeserializeObject<RecModel>(File.ReadAllText(folderName + "\\" + recName + EXT));
-			DeserializePhotos(rec.Photos, folderName);
+			//DeserializePhotos(rec.Photos, folderName);
 			return rec;
 		}
 
@@ -360,14 +456,14 @@ namespace Twinder.Helpers
 				string fileName = photos[i].FileName;
 				folderName += "\\" + PHOTOS;
 
-				if (!File.Exists(folderName + fileName))
+				if (File.Exists(folderName + fileName))
 					for (int j = 0; j < photos[i].ProcessedFiles.Count; j++)
 					{
 						var processedFile = photos[i].ProcessedFiles[j];
 						if (processedFile.Height == 640)
-							processedFile.Url = folderName + fileName;
+							processedFile.LocalUrl = folderName + fileName;
 						else
-							processedFile.Url = folderName + processedFile.Width + PIC_PX + fileName;
+							processedFile.LocalUrl = folderName + processedFile.Width + PIC_PX + fileName;
 					}
 			}
 		}
@@ -406,19 +502,19 @@ namespace Twinder.Helpers
 						downloadPath += processedPhoto.Height != 640 ? processedPhoto.Height + PIC_PX : "";
 						downloadPath += photo.FileName ?? photo.Id + ".jpg";
 
+						processedPhoto.LocalUrl = downloadPath;
+
 						// Downloads only if the file does not yet exist
 						if (!File.Exists(downloadPath))
 							try
 							{
 								new WebClient().DownloadFile(new Uri(processedPhoto.Url), downloadPath);
+								processedPhoto.LocalUrl = downloadPath;
 							}
 							catch
 							{
 								// Some pictures throw 403 forbidden, hell knows why
 							}
-						// If it exists, jumps to next photo, skips other processed files
-						//else
-						//	break;
 					});
 				}
 			}
@@ -448,6 +544,9 @@ namespace Twinder.Helpers
 						{
 							new WebClient().DownloadFile(new Uri(photo.Image), instaDir + fileName);
 							new WebClient().DownloadFile(new Uri(photo.Thumbnail), instaDir + IG_THUMBS + fileName);
+
+							photo.LocalImage = instaDir + fileName;
+							photo.LocalThumbnail = instaDir + IG_THUMBS + fileName;
 						}
 						catch
 						{
@@ -455,25 +554,25 @@ namespace Twinder.Helpers
 						}
 					}
 				});
-				foreach (var pic in instagram.InstagramPhotos)
-				{
-					string fileName = pic.Link.Substring(28, pic.Link.Length - 28 - 2) + ".jpg";
+				//foreach (var pic in instagram.InstagramPhotos)
+				//{
+				//	string fileName = pic.Link.Substring(28, pic.Link.Length - 28 - 2) + ".jpg";
 
-					// Downloads only if the file does not yet exist
-					if (!File.Exists(instaDir + fileName))
-					{
-						try
-						{
-							_webClient.DownloadFile(new Uri(pic.Image), instaDir + fileName);
-							_webClient.DownloadFile(new Uri(pic.Thumbnail), instaDir + IG_THUMBS + fileName);
-						}
-						catch
-						{
-							// In case we also get 403 here, we just skip those pics who cares
-						}
-					}
+				//	// Downloads only if the file does not yet exist
+				//	if (!File.Exists(instaDir + fileName))
+				//	{
+				//		try
+				//		{
+				//			_webClient.DownloadFile(new Uri(pic.Image), instaDir + fileName);
+				//			_webClient.DownloadFile(new Uri(pic.Thumbnail), instaDir + IG_THUMBS + fileName);
+				//		}
+				//		catch
+				//		{
+				//			// In case we also get 403 here, we just skip those pics who cares
+				//		}
+				//	}
 
-				}
+				//}
 			}
 		}
 
@@ -517,13 +616,15 @@ namespace Twinder.Helpers
 	/// </summary>
 	public sealed class SerializationPacket
 	{
+		public bool FullMatchData { get; set; }
 		public ObservableCollection<MatchModel> MatchList { get; set; }
 		public ObservableCollection<RecModel> RecList { get; set; }
 		public UserModel User { get; set; }
 
-		public SerializationPacket(ObservableCollection<MatchModel> matchList)
+		public SerializationPacket(ObservableCollection<MatchModel> matchList, bool fullMatchData = false)
 		{
 			MatchList = matchList;
+			FullMatchData = fullMatchData;
 		}
 
 		public SerializationPacket(ObservableCollection<RecModel> recList)
