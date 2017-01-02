@@ -7,6 +7,7 @@ using System.ComponentModel;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 using Twinder.Model.UserRelated;
+using Unidecode.NET;
 
 namespace Twinder.Model
 {

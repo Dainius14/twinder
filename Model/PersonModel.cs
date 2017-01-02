@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using Twinder.Helpers;
 using Twinder.Model.Photos;
+using Unidecode.NET;
 
 namespace Twinder.Model
 {

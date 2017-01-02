@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using Twinder.Model.Photos;
 using Twinder.Helpers;
 using BinaryAnalysis.UnidecodeSharp;
+using Unidecode.NET;
 
 namespace Twinder.Model
 {

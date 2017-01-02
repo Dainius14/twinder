@@ -6,6 +6,7 @@ using Twinder.Helpers;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 using System.Threading.Tasks;
+using Unidecode.NET;
 
 namespace Twinder.Model
 {

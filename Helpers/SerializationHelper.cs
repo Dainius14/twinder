@@ -15,6 +15,7 @@ using BinaryAnalysis.UnidecodeSharp;
 using Twinder.ViewModel;
 using System.Diagnostics;
 using System.Linq;
+using Unidecode.NET;
 
 namespace Twinder.Helpers
 {
