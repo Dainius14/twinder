@@ -1,13 +1,12 @@
-﻿using BinaryAnalysis.UnidecodeSharp;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
-using Twinder.Helpers;
 using Twinder.Model.Photos;
+using Unidecode.NET;
 
 namespace Twinder.Model
 {
-	public sealed class PersonModel
+    public sealed class PersonModel
 	{
 		[JsonProperty("_id")]
 		public string Id { get; set; }

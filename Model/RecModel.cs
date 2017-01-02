@@ -1,16 +1,14 @@
-﻿using BinaryAnalysis.UnidecodeSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 using Twinder.Model.UserRelated;
+using Unidecode.NET;
 
 namespace Twinder.Model
 {
-	public class RecModel
+    public class RecModel
 	{
 		[JsonProperty("distance_mi")]
 		public int? DistanceMiles { get; set; } = 0;
