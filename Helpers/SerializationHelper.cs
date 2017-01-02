@@ -141,8 +141,8 @@ namespace Twinder.Helpers
 			if (match.Person.PingTime < matchUpdate.Person.PingTime)
 				match.Person.PingTime = matchUpdate.Person.PingTime;
 			
-			var newPhotos = matchUpdate.Person.Photos.Except(match.Person.Photos);
-			var removedPhotos = match.Person.Photos.Except(matchUpdate.Person.Photos);
+			var newPhotos = matchUpdate.Person.Photos.Except(match.Person.Photos).ToList();
+			var removedPhotos = match.Person.Photos.Except(matchUpdate.Person.Photos).ToList();
 
 			foreach (var item in newPhotos)
 				match.Person.Photos.Add(item);
@@ -550,26 +550,12 @@ namespace Twinder.Helpers
 						}
 					}
 				});
-				//foreach (var pic in instagram.InstagramPhotos)
-				//{
-				//	string fileName = pic.Link.Substring(28, pic.Link.Length - 28 - 2) + ".jpg";
-
-				//	// Downloads only if the file does not yet exist
-				//	if (!File.Exists(instaDir + fileName))
-				//	{
-				//		try
-				//		{
-				//			_webClient.DownloadFile(new Uri(pic.Image), instaDir + fileName);
-				//			_webClient.DownloadFile(new Uri(pic.Thumbnail), instaDir + IG_THUMBS + fileName);
-				//		}
-				//		catch
-				//		{
-				//			// In case we also get 403 here, we just skip those pics who cares
-				//		}
-				//	}
-
-				//}
 			}
+		}
+
+		public static string GetMatchFolder(MatchModel match)
+		{
+			return Default.AppDataFolder + DIR_MATCHES + match.ToString();
 		}
 
 		/// <summary>

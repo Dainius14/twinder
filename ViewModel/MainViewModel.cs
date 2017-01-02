@@ -120,9 +120,10 @@ namespace Twinder.ViewModel
 		public RecsStatus RecsStatus { get; internal set; }
 
 		public RelayCommand<MatchModel> OpenChatCommand { get; private set; }
-		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
 		public RelayCommand<MatchModel> UnmatchCommand { get; private set; }
 		public RelayCommand<MatchModel> DownloadMatchDataCommand { get; private set; }
+		public RelayCommand<MatchModel> OpenFolderCommand { get; private set; }
+		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
 		
 		public RelayCommand OpenRecsCommand { get; private set; }
 		public RelayCommand OpenUserProfileCommand { get; private set; }
@@ -144,8 +145,9 @@ namespace Twinder.ViewModel
 
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
 			OpenMatchProfileCommand = new RelayCommand<MatchModel>(param => OpenMatchProfile(param));
-			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
 			DownloadMatchDataCommand = new RelayCommand<MatchModel>(param => DownloadFullMatchData(param));
+			OpenFolderCommand = new RelayCommand<MatchModel>(param => OpenFolder(param));
+			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
 
 			OpenRecsCommand = new RelayCommand(OpenRecs, () =>
 			{
@@ -172,7 +174,6 @@ namespace Twinder.ViewModel
 
 
 		}
-
 
 		public async Task<bool> FullConnect()
 		{
@@ -218,7 +219,7 @@ namespace Twinder.ViewModel
 					int time = MatchList.Count * 3 / 60;
 
 					// Dont ask just save nobody cares what user wants
-					MessageBox.Show($"All your matches will be saved. It may take up to {time} minutes"
+					MessageBox.Show($"All your matches will be saved. It may take up to {time} minutes "
 						+ "for the download to complete. I recommend not to cancel this action.",
 						"Downloading data", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -567,6 +568,11 @@ namespace Twinder.ViewModel
 			Messenger.Default.Send(match, MessengerToken.ShowMatchProfile);
 
 			//DownloadFullMatchData(match);
+		}
+
+		private void OpenFolder(MatchModel param)
+		{
+			Process.Start(SerializationHelper.GetMatchFolder(param));
 		}
 
 		/// <summary>

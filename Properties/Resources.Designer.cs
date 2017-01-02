@@ -502,6 +502,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Folder.
+        /// </summary>
+        public static string match_context_menu_open_folder {
+            get {
+                return ResourceManager.GetString("match_context_menu_open_folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open _Profile.
         /// </summary>
         public static string match_context_menu_open_profile {

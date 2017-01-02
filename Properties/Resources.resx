@@ -442,4 +442,7 @@
   <data name="sort_name_desc" xml:space="preserve">
     <value>Name Descending</value>
   </data>
+  <data name="match_context_menu_open_folder" xml:space="preserve">
+    <value>Open Folder</value>
+  </data>
 </root>

@@ -294,6 +294,10 @@
 						
 						<Separator/>
 
+						<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
+								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+						
 						<MenuItem Header="{x:Static p:Resources.match_context_menu_unmatch}"
 								  Command="{Binding DataContext.UnmatchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"
