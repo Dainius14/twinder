@@ -9,7 +9,6 @@ namespace Twinder.ViewModel
 {
 	public class DownloadDataViewModel : ViewModelBase
 	{
-		public event DataDownloadHandler DownloadProgressChanges;
 		public delegate void DataDownloadHandler(object sender, DownloadProgressEventArgs e);
 
 
@@ -27,7 +26,6 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _currentItem, value);
-				//CurrentProgress = (int) (Math.Round((float) CurrentItem / _totalItems * 100));
 			}
 		}
 

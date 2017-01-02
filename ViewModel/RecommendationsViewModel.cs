@@ -14,7 +14,6 @@ namespace Twinder.ViewModel
 {
 	public class RecommendationsViewModel : ViewModelBase
 	{
-		public event LoadingStateChangeHandler LoadingStateChange;
 		public delegate void LoadingStateChangeHandler(object sender, RecsLoadingStateEventArgs e);
 
 		private ObservableCollection<RecModel> _recList;
@@ -92,8 +91,6 @@ namespace Twinder.ViewModel
 			}
 			else
 				args.RecsStatus = RecsStatus.Exhausted;
-
-			//LoadingStateChange.Invoke(this, args);
 		}
 		
 		#region Select Previous command
@@ -243,7 +240,6 @@ namespace Twinder.ViewModel
 				Messenger.Default.Send("", MessengerToken.GetMoreRecs);
 				// Close the god damn window, less hassle
 				RecsView.Close();
-				//Messenger.Default.Send<SerializationPacket, RecommendationsView>(new SerializationPacket(RecList));
 			}
 
 		}

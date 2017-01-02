@@ -20,11 +20,7 @@ namespace Twinder.View
 	/// Interaction logic for ErrorDialogView.xaml
 	/// </summary>
 	public partial class ErrorDialogView : Window
-	{
-		private DispatcherUnhandledExceptionEventArgs e;
-		private Exception exception;
-		private object sender;
-		
+	{	
 		public ErrorDialogView(Exception exception)
 		{
 			InitializeComponent();
