@@ -9,17 +9,12 @@ using Twinder.Model.Photos;
 using static Twinder.Properties.Settings;
 using System.ComponentModel;
 using System.Windows;
-using System.Text;
-using System.Globalization;
-using BinaryAnalysis.UnidecodeSharp;
-using Twinder.ViewModel;
-using System.Diagnostics;
 using System.Linq;
 using Unidecode.NET;
 
 namespace Twinder.Helpers
 {
-	public static class SerializationHelper
+    public static class SerializationHelper
 	{
 		private const string EXT = ".json";
 		private const string MSGS = ".msgs";
