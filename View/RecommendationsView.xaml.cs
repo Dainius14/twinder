@@ -22,7 +22,6 @@ namespace Twinder.View
 		{
 			InitializeComponent();
 			var viewModel = DataContext as RecommendationsViewModel;
-			//viewModel.LoadingStateChange += SwitchLoadingIndicators;
 			viewModel.SetRecommendations(recList);
 			viewModel.RecsView = this;
 
