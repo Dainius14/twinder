@@ -235,7 +235,6 @@ namespace Twinder.Helpers
 			request.AddJsonBody(new { lat = latitude, lon = longtitude });
 
 			IRestResponse response = await _client.ExecuteTaskAsync<dynamic>(request);
-			//var deserialized = await Task.Run(() => JsonConvert.DeserializeObject<dynamic>(response.Content));
 
 			if (response.StatusCode != HttpStatusCode.OK)
 				throw new TinderRequestException("Error pinging location: " + response.StatusDescription, response);

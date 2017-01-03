@@ -187,8 +187,7 @@ namespace Twinder.ViewModel
 				// Gets matches
 				ConnectionStatus = Properties.Resources.tinder_update_getting_matches;
 				await GetMatches();
-
-				//ConnectionStatus = Properties.Resources.tinder_recs_getting_recs;
+                
 				// Gets recs
 				await GetRecs();
 

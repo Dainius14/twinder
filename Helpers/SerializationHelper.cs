@@ -406,7 +406,6 @@ namespace Twinder.Helpers
 			recName = recName.Unidecode();
 
 			var rec = JsonConvert.DeserializeObject<RecModel>(File.ReadAllText(folderName + "\\" + recName + EXT));
-			//DeserializePhotos(rec.Photos, folderName);
 			return rec;
 		}
 
