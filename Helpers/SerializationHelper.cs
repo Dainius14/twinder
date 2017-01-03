@@ -10,11 +10,11 @@ using static Twinder.Properties.Settings;
 using System.ComponentModel;
 using System.Windows;
 using System.Linq;
-using Unidecode.NET;
+using BinaryAnalysis.UnidecodeSharp;
 
 namespace Twinder.Helpers
 {
-    public static class SerializationHelper
+	public static class SerializationHelper
 	{
 		private const string EXT = ".json";
 		private const string MSGS = ".msgs";
@@ -110,8 +110,8 @@ namespace Twinder.Helpers
 				match.Person.PingTime = matchUpdate.PingTime;
 
 			
-			var newPhotos = matchUpdate.Photos.Except(match.Person.Photos);
-			var removedPhotos = match.Person.Photos.Except(matchUpdate.Photos);
+			var newPhotos = matchUpdate.Photos.Except(match.Person.Photos).ToList();
+			var removedPhotos = match.Person.Photos.Except(matchUpdate.Photos).ToList();
 
 			foreach (var item in newPhotos)
 				match.Person.Photos.Add(item);
@@ -140,7 +140,10 @@ namespace Twinder.Helpers
 
 			if (match.Person.PingTime < matchUpdate.Person.PingTime)
 				match.Person.PingTime = matchUpdate.Person.PingTime;
-			
+
+			if (match.LastActivityDate < matchUpdate.LastActivityDate)
+				match.LastActivityDate = matchUpdate.LastActivityDate;
+
 			var newPhotos = matchUpdate.Person.Photos.Except(match.Person.Photos).ToList();
 			var removedPhotos = match.Person.Photos.Except(matchUpdate.Person.Photos).ToList();
 
@@ -478,6 +481,16 @@ namespace Twinder.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Returns directory in which match data is kept
+		/// </summary>
+		/// <param name="match"></param>
+		/// <returns></returns>
+		public static string GetMatchFolder(MatchModel match)
+		{
+			return Default.AppDataFolder + DIR_MATCHES + match.ToString();
+		}
+
 
 		/// <summary>
 		/// Saves person's photos to specified directory
@@ -551,11 +564,6 @@ namespace Twinder.Helpers
 					}
 				});
 			}
-		}
-
-		public static string GetMatchFolder(MatchModel match)
-		{
-			return Default.AppDataFolder + DIR_MATCHES + match.ToString();
 		}
 
 		/// <summary>

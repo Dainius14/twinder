@@ -182,6 +182,8 @@ namespace Twinder.ViewModel
 			// Starts authentication
 			if (await Authenticate())
 			{
+				Properties.Settings.Default["LastUpdate"] = User.LatestUpdateDate;
+
 				// Gets matches
 				ConnectionStatus = Properties.Resources.tinder_update_getting_matches;
 				await GetMatches();
@@ -247,12 +249,19 @@ namespace Twinder.ViewModel
 				if (await Authenticate())
 				{
 					// Updates last five matches
-					Parallel.ForEach(MatchList.OrderByDescending(x => x.LastActivityDate).Take(3), async x =>
+					Parallel.ForEach(MatchList.OrderByDescending(x => x.LastActivityDate).Take(5), async x =>
+					{
+						try
 						{
 							var updatedMatch = await TinderHelper.GetFullMatchData(x.Person.Id);
 							SerializationHelper.UpdateMatchModel(x, updatedMatch);
 							new Task(() => SerializationHelper.SerializeMatch(x)).Start();
-						});
+						}
+						catch (TinderRequestException ex)
+						{
+							MessageBox.Show(ex.Message);
+						}
+					});
 
 					FilterVM.SortMatchList();
 
@@ -284,8 +293,6 @@ namespace Twinder.ViewModel
 				Properties.Settings.Default["TinderToken"] = Auth.Token;
 
 				User = await TinderHelper.GetFullUserData();
-
-				Properties.Settings.Default["LastUpdate"] = User.LatestUpdateDate;
 				
 				// Updates current location of user
 				Properties.Settings.Default["Latitude"] = User.Pos.Latitude.Replace('.', ',');
@@ -480,6 +487,8 @@ namespace Twinder.ViewModel
 			{
 				item.Messages = item.Messages ?? new ObservableCollection<MessageModel>();
 
+				// For when there are already handlers attached
+				item.Messages.CollectionChanged -= Messages_CollectionChanged;
 				item.Messages.CollectionChanged += Messages_CollectionChanged;
 			}
 
@@ -597,7 +606,6 @@ namespace Twinder.ViewModel
 						MatchList.Add(item);
 						setUpMatchList = true;
 					}
-					//UpdatedMatches.Add(match);
 				}
 
 				if (setUpMatchList)

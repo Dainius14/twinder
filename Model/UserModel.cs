@@ -3,11 +3,12 @@ using Twinder.Model.UserRelated;
 using System;
 using System.Collections.ObjectModel;
 using Twinder.Model.Photos;
-using Unidecode.NET;
+using Twinder.Helpers;
+using BinaryAnalysis.UnidecodeSharp;
 
 namespace Twinder.Model
 {
-    public enum Gender
+	public enum Gender
 	{
 		Man = 0,
 		Woman = 1,

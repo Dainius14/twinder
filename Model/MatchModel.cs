@@ -1,13 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using BinaryAnalysis.UnidecodeSharp;
+using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using Twinder.Helpers;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
-using Unidecode.NET;
+using System.Threading.Tasks;
 
 namespace Twinder.Model
 {
-    public class MatchModel
+	public class MatchModel
 	{
 		[JsonProperty("_id")]
 		public string Id { get; set; }
