@@ -10,6 +10,9 @@ namespace Twinder.Converter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
+			if (value == null)
+				return Binding.DoNothing;
+
 			Enum en = (Enum) value;
 			Type type = en.GetType();
 			MemberInfo[] memInfo = type.GetMember(en.ToString());

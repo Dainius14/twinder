@@ -176,6 +176,7 @@
     <Compile Include="MessengerToken.cs" />
     <Compile Include="Model\Authentication\AuthModel.cs" />
     <Compile Include="Model\Authentication\GlobalsModel.cs" />
+    <Compile Include="Model\ISerializableItem.cs" />
     <Compile Include="Model\PositionModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Model\InterestModel.cs" />

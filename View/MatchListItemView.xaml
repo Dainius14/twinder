@@ -57,7 +57,8 @@
 				CommandParameter="{Binding}"
 				ToolTip="{x:Static p:Resources.tooltip_show_profile}">
 
-			<Image Source="{Binding Person.Photos[0].ProcessedFiles[2].LocalUrl}"/>
+			<Image Loaded="Image_Loaded"
+				   RenderOptions.BitmapScalingMode="HighQuality"/>
 			
 			<!-- Shadow on mouse hover -->
 			<Button.Resources>

@@ -7,6 +7,7 @@
         mc:Ignorable="d"
 
 		xmlns:p="clr-namespace:Twinder.Properties"
+		xmlns:helps="clr-namespace:Twinder.Helpers"
 		xmlns:view="clr-namespace:Twinder.View"
 
 		Background="WhiteSmoke"
@@ -229,9 +230,12 @@
 			</StatusBar>
 
 		</Grid>
-		
+
 		<!-- Photos -->
-		<view:PhotoScrollerView DataContext="{Binding SelectedRec.Photos}"/>
+		<view:PhotoScrollerView DataContext="{Binding SelectedRec.Photos}"
+								SerializbleItem="{Binding DataContext.SelectedRec, RelativeSource={
+									RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
+								DirPath="{x:Static helps:DirPath.DIR_RECS}"/>
 
 	</DockPanel>
 </Window>

@@ -38,7 +38,7 @@ namespace Twinder.Model.Photos
 
 		[JsonProperty("extension")]
 		public string Extension { get; set; }
-
+		
 		[JsonProperty("processedFiles")]
 		public ObservableCollection<ProcessedFileModel> ProcessedFiles { get; set; }
 
@@ -53,7 +53,10 @@ namespace Twinder.Model.Photos
 
 		public override int GetHashCode()
 		{
-			return Id.GetHashCode();
+			if (Id != null)
+				return Id.GetHashCode();
+			else
+				return base.GetHashCode();
 		}
 	}
 }

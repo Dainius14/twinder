@@ -10,7 +10,7 @@ using Twinder.Model.UserRelated;
 
 namespace Twinder.Model
 {
-	public class RecModel
+	public class RecModel : ISerializableItem
 	{
 		[JsonProperty("distance_mi")]
 		public int? DistanceMiles { get; set; } = 0;

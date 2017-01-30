@@ -15,7 +15,7 @@ namespace Twinder.Model
 		Both = -1
 	}
 
-	public sealed class UserModel
+	public sealed class UserModel : ISerializableItem
 	{
 		[JsonProperty("_id")]
 		public string Id { get; set; }

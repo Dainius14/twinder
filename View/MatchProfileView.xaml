@@ -7,6 +7,7 @@
         mc:Ignorable="d" 
 		
 		xmlns:p="clr-namespace:Twinder.Properties"
+		xmlns:helps="clr-namespace:Twinder.Helpers"
 		xmlns:view="clr-namespace:Twinder.View"
 		
         d:DesignHeight="650" d:DesignWidth="700"
@@ -108,6 +109,9 @@
 		</Grid>
 		
 		<!-- Images -->
-		<view:PhotoScrollerView DataContext="{Binding Person.Photos}"/>
+		<view:PhotoScrollerView DataContext="{Binding Person.Photos}"
+								SerializbleItem="{Binding DataContext, RelativeSource={
+									RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
+								DirPath="{x:Static helps:DirPath.DIR_MATCHES}"/>
 	</DockPanel>
 </Window>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Twinder.Model
 {
-	public class MatchModel
+	public class MatchModel : ISerializableItem
 	{
 		[JsonProperty("_id")]
 		public string Id { get; set; }

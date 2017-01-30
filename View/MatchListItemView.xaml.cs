@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
+using Twinder.Helpers;
 using Twinder.Model;
 
 namespace Twinder.View
@@ -27,6 +31,32 @@ namespace Twinder.View
 			Binding myBinding = new Binding();
 
 			myBinding.RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(ListView), 1);
+		}
+
+		private void Image_Loaded(object sender, RoutedEventArgs e)
+		{
+			BitmapImage b = new BitmapImage();
+			Image img = sender as Image;
+			try
+			{
+
+				var match = img.DataContext as MatchModel;
+				var src = Properties.Settings.Default.AppDataFolder + SerializationHelper.DIR_MATCHES
+					+ match + "\\" + SerializationHelper.PHOTOS + match.Person.Photos[0].FileName;
+
+				if (File.Exists(src))
+				{
+					b.BeginInit();
+					b.CacheOption = BitmapCacheOption.OnLoad;
+					b.UriSource = new Uri(src);
+					b.EndInit();
+				}
+
+				img.Source = b;
+			}
+			catch (Exception)
+			{
+			}
 		}
 	}
 }
