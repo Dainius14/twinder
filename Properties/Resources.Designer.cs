@@ -70,6 +70,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new account.
+        /// </summary>
+        public static string btn_add_new_account {
+            get {
+                return ResourceManager.GetString("btn_add_new_account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string btn_cancel {
@@ -655,6 +664,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch Account.
+        /// </summary>
+        public static string menu_tools_switch_account {
+            get {
+                return ResourceManager.GetString("menu_tools_switch_account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Like.
         /// </summary>
         public static string recs_button_like {
@@ -696,6 +714,15 @@ namespace Twinder.Properties {
         public static string recs_button_prev {
             get {
                 return ResourceManager.GetString("recs_button_prev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set as default.
+        /// </summary>
+        public static string set_as_default {
+            get {
+                return ResourceManager.GetString("set_as_default", resourceCulture);
             }
         }
         
@@ -1038,6 +1065,15 @@ namespace Twinder.Properties {
         public static string window_title_set_location {
             get {
                 return ResourceManager.GetString("window_title_set_location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch Account.
+        /// </summary>
+        public static string window_title_switch_account {
+            get {
+                return ResourceManager.GetString("window_title_switch_account", resourceCulture);
             }
         }
     }

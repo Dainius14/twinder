@@ -15,7 +15,7 @@ using Microsoft.Practices.ServiceLocation;
 using System;
 using Twinder.Design;
 using Twinder.Model;
-using Twinder.ViewModel.Design;
+using Twinder.SampleData;
 
 namespace Twinder.ViewModel
 {
@@ -47,9 +47,11 @@ namespace Twinder.ViewModel
 			SimpleIoc.Default.Register<UserProfileViewModel>();
 			SimpleIoc.Default.Register<DownloadDataViewModel>();
 			SimpleIoc.Default.Register<MatchListFilterViewModel>();
+			SimpleIoc.Default.Register<AccountSwitchViewModel>();
 
 			// Design time
 			SimpleIoc.Default.Register<SampleMainVM>();
+			SimpleIoc.Default.Register<SampleAccountSwitchVM>();
 		}
 
 		/// <summary>
@@ -143,6 +145,16 @@ namespace Twinder.ViewModel
 		}
 
 
+		public AccountSwitchViewModel AccountSwitch
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<AccountSwitchViewModel>();
+			}
+		}
+
+
+
 
 		// Design time
 		public SampleMainVM SampleMain
@@ -150,6 +162,13 @@ namespace Twinder.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<SampleMainVM>();
+			}
+		}
+		public SampleAccountSwitchVM SampleAccountSwitch
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<SampleAccountSwitchVM>();
 			}
 		}
 

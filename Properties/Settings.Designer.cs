@@ -9,10 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace Twinder.Properties {
-
-
-	[global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
-	[global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    
+    
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
@@ -27,70 +26,6 @@ namespace Twinder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FbId {
-            get {
-                return ((string)(this["FbId"]));
-            }
-            set {
-                this["FbId"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FbToken {
-            get {
-                return ((string)(this["FbToken"]));
-            }
-            set {
-                this["FbToken"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.DateTime LastUpdate {
-            get {
-                return ((global::System.DateTime)(this["LastUpdate"]));
-            }
-            set {
-                this["LastUpdate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Latitude {
-            get {
-                return ((string)(this["Latitude"]));
-            }
-            set {
-                this["Latitude"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Longtitude {
-            get {
-                return ((string)(this["Longtitude"]));
-            }
-            set {
-                this["Longtitude"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UpgradeRequired {
             get {
@@ -98,19 +33,6 @@ namespace Twinder.Properties {
             }
             set {
                 this["UpgradeRequired"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TinderToken {
-            get {
-                return ((string)(this["TinderToken"]));
-            }
-            set {
-                this["TinderToken"] = value;
             }
         }
         
@@ -150,6 +72,19 @@ namespace Twinder.Properties {
             }
             set {
                 this["SerializationComplete"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+		[global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+		public string DefaultUser
+		{
+            get {
+                return ((string)(this["DefaultUser"]));
+            }
+            set {
+                this["DefaultUser"] = value;
             }
         }
     }

@@ -5,6 +5,7 @@ using Twinder.Model;
 using Twinder.Model.Authentication;
 using System.Net;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Twinder.Helpers
 {
@@ -294,6 +295,11 @@ namespace Twinder.Helpers
 		public TinderRequestException(string message, IRestResponse response) : base (message)
 		{
 			response = Response;
+		}
+
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
 		}
 	}
 }

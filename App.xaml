@@ -45,6 +45,22 @@
 		</Style>
 		
 		
+		<Style TargetType="Button" x:Key="StdButton">
+			<Setter Property="Width" Value="75"/>
+			<Setter Property="Height" Value="23"/>
+		</Style>
+
+		<Style TargetType="Separator" x:Key="StdButtonSeperator">
+			<Setter Property="Width" Value="6"/>
+			<Setter Property="Visibility" Value="Hidden"/>
+		</Style>
+
+		<Style TargetType="TextBox" x:Key="StdSingleLineTextBox">
+			<Setter Property="Height" Value="23"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+
 		<!-- Icons -->
 		<BitmapImage x:Key="icon_pass" UriSource="Icons/Cancel-50.png"/>
 		<BitmapImage x:Key="icon_like" UriSource="Icons/Hearts-50.png"/>

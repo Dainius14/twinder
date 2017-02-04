@@ -36,8 +36,8 @@
 
 			<!-- Twinder -->
 			<MenuItem Header="{x:Static p:Resources.menu_app}">
-				<MenuItem Header="{x:Static p:Resources.menu_tools_login}"
-						  Command="{Binding LoginCommand}"/>
+				<MenuItem Header="{x:Static p:Resources.menu_tools_switch_account}"
+						  Command="{Binding SwitchAccountCommand}"/>
 				<MenuItem Header="{x:Static p:Resources.force_matches}"
 						  Command="{Binding ForceDownloadMatchesCommand}"/>
 				<MenuItem Header="{x:Static p:Resources.force_matches_full}"
@@ -192,7 +192,7 @@
 						<TextBox Text="{Binding FilterVM.NameFilter, UpdateSourceTrigger=PropertyChanged}"
 								 Padding="3">
 							<TextBox.Style>
-								<Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+								<Style TargetType="TextBox">
 									<Style.Resources>
 										<VisualBrush x:Key="CueBannerBrush"
 													 AlignmentX="Left" AlignmentY="Center"
@@ -310,7 +310,6 @@
 					<DataTemplate>
 						<view:MatchListItemView
 							Width="{Binding ElementName=matchList, Path=ActualWidth}"/>
-						<!--Converter={StaticResource ScrollBarRemoverConverter}, ConverterParameter=30}"-->
 					</DataTemplate>
 				</ListView.ItemTemplate>
 

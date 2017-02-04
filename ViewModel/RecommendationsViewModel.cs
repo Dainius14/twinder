@@ -14,7 +14,6 @@ namespace Twinder.ViewModel
 {
 	public class RecommendationsViewModel : ViewModelBase
 	{
-		public delegate void LoadingStateChangeHandler(object sender, RecsLoadingStateEventArgs e);
 
 		private ObservableCollection<RecModel> _recList;
 		public ObservableCollection<RecModel> RecList
@@ -58,9 +57,9 @@ namespace Twinder.ViewModel
 			SelectPreviousCommand = new RelayCommand(SelectPrevious);
 			SelectNextCommand = new RelayCommand(SelectNext);
 			PassCommand = new RelayCommand(Pass);
-			LikeCommand = new RelayCommand<bool>(param => Like(false));
-			SuperLikeCommand = new RelayCommand<bool>(param => Like(true));
-			LikeAllCommand = new RelayCommand(LikeAll);
+			LikeCommand = new RelayCommand<bool>(async param => await Like(false));
+			SuperLikeCommand = new RelayCommand<bool>(async param => await Like(true));
+			LikeAllCommand = new RelayCommand(async () => await LikeAll());
 
 
 		}
@@ -71,7 +70,6 @@ namespace Twinder.ViewModel
 		/// <param name="recList"></param>
 		public void SetRecommendations(ObservableCollection<RecModel> recList)
 		{
-			RecsLoadingStateEventArgs args = new RecsLoadingStateEventArgs();
 			if (recList != null)
 			{
 				// First time 
@@ -82,15 +80,7 @@ namespace Twinder.ViewModel
 					SelectedRec = RecList[0];
 					SelectedIndex = 0;
 				}
-				else
-				{
-
-				}
-				
-				args.RecsStatus = RecsStatus.Okay;
 			}
-			else
-				args.RecsStatus = RecsStatus.Exhausted;
 		}
 		
 		#region Select Previous command
@@ -159,7 +149,7 @@ namespace Twinder.ViewModel
 		/// Likes the selected recommendation
 		/// </summary>
 		/// <param name="superLike">True if a superlike should be send, default is false</param>
-		private async void Like(bool superLike = false)
+		private async Task Like(bool superLike = false, bool showMessage = true)
 		{
 			if (SelectedRec != null)
 			{
@@ -175,7 +165,9 @@ namespace Twinder.ViewModel
 					{
 						SerializationHelper.MoveRecToMatches(matchToMove);
 						Messenger.Default.Send("", MessengerToken.ForceUpdate);
-						MessageBox.Show("It's a match!");
+
+						if (showMessage)
+							MessageBox.Show("It's a match!");
 					}
 					else
 						SerializationHelper.MoveRecToPending(matchToMove);
@@ -194,16 +186,13 @@ namespace Twinder.ViewModel
 		/// <summary>
 		/// Likes all of the recommendations
 		/// </summary>
-		private async void LikeAll()
+		private async Task LikeAll()
 		{
 			for (int i = 0; i < RecList.Count; i++)
 			{
-				var rec = RecList[i];
-
-				if (OnlyWithoutDescription && string.IsNullOrEmpty(rec.Bio))
+				if (!OnlyWithoutDescription || (OnlyWithoutDescription && string.IsNullOrEmpty(SelectedRec.Bio)))
 				{
-					await TinderHelper.LikeRecommendation(rec.Id);
-					RemoveRecomendations(rec);
+					await Like(showMessage: false);
 					i--;
 				}
 			}
@@ -254,9 +243,5 @@ namespace Twinder.ViewModel
 
 		}
 	}
-
-	public class RecsLoadingStateEventArgs : EventArgs
-	{
-		public RecsStatus RecsStatus { get; set; }
-	}
+	
 }

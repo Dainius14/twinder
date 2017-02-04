@@ -445,4 +445,16 @@
   <data name="match_context_menu_open_folder" xml:space="preserve">
     <value>Open Folder</value>
   </data>
+  <data name="window_title_switch_account" xml:space="preserve">
+    <value>Switch Account</value>
+  </data>
+  <data name="btn_add_new_account" xml:space="preserve">
+    <value>Add new account</value>
+  </data>
+  <data name="menu_tools_switch_account" xml:space="preserve">
+    <value>Switch Account</value>
+  </data>
+  <data name="set_as_default" xml:space="preserve">
+    <value>Set as default</value>
+  </data>
 </root>

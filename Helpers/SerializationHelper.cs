@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Linq;
 using BinaryAnalysis.UnidecodeSharp;
+using System.Xml.Linq;
 
 namespace Twinder.Helpers
 {
@@ -19,24 +20,20 @@ namespace Twinder.Helpers
 		private const string EXT = ".json";
 		private const string MSGS = ".msgs";
 
-		private const string DIR_MATCHES = "Matches\\";
-		private const string DIR_UNMATCHED = "Matches-Unmatched\\";
-		private const string DIR_UNMATCHED_BY_ME = "Matches-Unmatched-By-Me\\";
+		public const string USER_FILE = "user.json";
 
-		private const string DIR_RECS = "Recommendations\\";
-		private const string DIR_RECS_PENDING = "Recommendations-Pending\\";
-		private const string DIR_RECS_PASSED = "Recommendations-Passed\\";
+		public const string DIR_MATCHES = "Matches\\";
+		public const string DIR_UNMATCHED = "Matches-Unmatched\\";
+		public const string DIR_UNMATCHED_BY_ME = "Matches-Unmatched-By-Me\\";
 
-		private const string DIR_USER = "User\\";
+		public const string DIR_RECS = "Recommendations\\";
+		public const string DIR_RECS_PENDING = "Recommendations-Pending\\";
+		public const string DIR_RECS_PASSED = "Recommendations-Passed\\";
 
-		private const string PHOTOS = "Photos\\";
-		private const string IG_PICS = "Instagram\\";
-		private const string IG_THUMBS = "Thumbnails\\";
+		public const string DIR_USER = "User\\";
 
-		private const string PIC_PX = "px\\";
-		private const string PIC_84PX = "84px\\";
-		private const string PIC_172PX = "172px\\";
-		private const string PIC_320PX = "320px\\";
+		public const string PHOTOS = "Photos\\";
+		public const string IG_PHOTOS = "Instagram\\";
 
 		private static WebClient _webClient;
 		private static WebClient WebClient
@@ -52,17 +49,20 @@ namespace Twinder.Helpers
 			}
 		}
 
+		public static string CurrentUser { get; internal set; }
+		public static string WorkingDir { get { return Default.AppDataFolder + CurrentUser + "\\"; } }
+
 		public static void SerializeUser(UserModel user, BackgroundWorker worker)
 		{
 
 			if (worker != null)
 				worker.ReportProgress(1, 1);
 
-			string workingDir = Default.AppDataFolder + DIR_USER;
+			string workingDir = WorkingDir + DIR_USER;
 
 			DownloadPhotos(user.Photos, workingDir);
 
-			File.WriteAllText(workingDir + user.ToString() + EXT,
+			File.WriteAllText(workingDir + USER_FILE,
 				JsonConvert.SerializeObject(user, Formatting.Indented));
 		}
 
@@ -72,7 +72,7 @@ namespace Twinder.Helpers
 		/// <param name="match"></param>
 		public static void SerializeMatch(MatchModel match)
 		{
-			string workingDir = Default.AppDataFolder + DIR_MATCHES + match.ToString() + "\\";
+			string workingDir = WorkingDir + DIR_MATCHES + match.ToString() + "\\";
 
 			// Match doesn't have his own data folder
 			if (!Directory.Exists(workingDir))
@@ -81,9 +81,6 @@ namespace Twinder.Helpers
 
 			DownloadPhotos(match.Person.Photos, workingDir);
 			DownloadInstagramPhotos(match.Instagram, workingDir);
-
-			// After downloading all photos writes back local URLs again
-			DeserializePhotos(match.Person.Photos, workingDir);
 
 			// Writes messages
 			File.WriteAllText(workingDir + match.Person + MSGS + EXT,
@@ -166,7 +163,7 @@ namespace Twinder.Helpers
 		/// <param name="rec"></param>
 		public static void SerializeRecommendation(RecModel rec)
 		{
-			string workingDir = Default.AppDataFolder + DIR_RECS + rec.ToString() + "\\";
+			string workingDir = WorkingDir + DIR_RECS + rec.ToString() + "\\";
 
 			// Rec doesn't have his own data folder
 			if (!Directory.Exists(workingDir))
@@ -225,14 +222,17 @@ namespace Twinder.Helpers
 		/// Moves recommendation to "Pending recommendations" directory
 		/// </summary>
 		/// <param name="rec"></param>
-		public static bool MoveRecToPending(RecModel rec)
+		private static bool MoveRec(RecModel rec, string dir)
 		{
-			var fromDir = Default.AppDataFolder + DIR_RECS + rec;
-			var toDir = Default.AppDataFolder + DIR_RECS_PENDING + rec;
+			var fromDir = WorkingDir + DIR_RECS + rec;
+			var toDir = WorkingDir + dir + rec;
 
 			try
 			{
-				Directory.Move(fromDir, toDir);
+				if (Directory.Exists(toDir))
+					Directory.Delete(fromDir, true);
+				else
+					Directory.Move(fromDir, toDir);
 				return true;
 			}
 			catch (UnauthorizedAccessException e)
@@ -247,37 +247,15 @@ namespace Twinder.Helpers
 			}
 		}
 
-		/// <summary>
-		/// Moves recommendation to "Passed recommendations" directory
-		/// </summary>
-		/// <param name="rec"></param>
 		public static bool MoveRecToPassed(RecModel rec)
 		{
-			var fromDir = Default.AppDataFolder + DIR_RECS + rec;
-			var toDir = Default.AppDataFolder + DIR_RECS_PASSED + rec;
-
-			try
-			{
-				Directory.Move(fromDir, toDir);
-				return true;
-			}
-			catch (UnauthorizedAccessException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
-			catch (IOException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
+			return MoveRec(rec, DIR_RECS_PASSED);
+		}
+		public static bool MoveRecToPending(RecModel rec)
+		{
+			return MoveRec(rec, DIR_RECS_PENDING);
 		}
 
-		/// <summary>
-		/// Moves photos of recommendation from "Recommendations" to "Matches" directory
-		/// </summary>
-		/// <param name="rec"></param>
-		/// <returns></returns>
 		public static bool MoveRecToMatches(RecModel rec)
 		{
 			return MoveRecPhotosToMatches(rec.ToString(), DIR_RECS);
@@ -300,28 +278,33 @@ namespace Twinder.Helpers
 		/// <returns></returns>
 		private static bool MoveRecPhotosToMatches(string recName, string dir)
 		{
-			var fromRecDir = Default.AppDataFolder + dir + recName + "\\";
+			var fromRecDir = WorkingDir + dir + recName + "\\";
 			var fromDirPhotos = fromRecDir + PHOTOS;
-			var fromDirIG = fromRecDir + IG_PICS;
+			var fromDirIG = fromRecDir + IG_PHOTOS;
 
-			var toRecDir = Default.AppDataFolder + DIR_MATCHES + recName + "\\";
+			var toRecDir = WorkingDir + DIR_MATCHES + recName + "\\";
 			var toDirPhotos = toRecDir + PHOTOS;
-			var toDirIG = toRecDir + IG_PICS;
+			var toDirIG = toRecDir + IG_PHOTOS;
 
 			Directory.CreateDirectory(toRecDir);
 
 			try
 			{
-				if (Directory.Exists(fromDirPhotos))
+				if (Directory.Exists(fromDirPhotos) && !Directory.Exists(toDirPhotos))
 					Directory.Move(fromDirPhotos, toDirPhotos);
 
-				if (Directory.Exists(fromDirIG))
+				if (Directory.Exists(fromDirIG) && !Directory.Exists(toDirIG))
 					Directory.Move(fromDirIG, toDirIG);
 
 				Directory.Delete(fromRecDir, true);
 				return true;
 			}
 			catch (UnauthorizedAccessException e)
+			{
+				MessageBox.Show("Error: " + e.ToString());
+				return false;
+			}
+			catch (IOException e)
 			{
 				MessageBox.Show("Error: " + e.ToString());
 				return false;
@@ -356,11 +339,14 @@ namespace Twinder.Helpers
 		/// <returns></returns>
 		private static bool MoveToUnmatched(string matchName, string dir)
 		{
-			var fromDir = Default.AppDataFolder + DIR_MATCHES + matchName + "\\";
-			var toDir = Default.AppDataFolder + dir + matchName + "\\";
+			var fromDir = WorkingDir + DIR_MATCHES + matchName + "\\";
+			var toDir = WorkingDir + dir + matchName + "\\";
 			try
 			{
-				Directory.Move(fromDir, toDir);
+				if (Directory.Exists(toDir))
+					Directory.Delete(fromDir, true);
+				else
+					Directory.Move(fromDir, toDir);
 				return true;
 			}
 			catch (UnauthorizedAccessException e)
@@ -368,111 +354,144 @@ namespace Twinder.Helpers
 				MessageBox.Show("Error: " + e.ToString());
 				return false;
 			}
+			catch (IOException e)
+			{
+				MessageBox.Show("Error: " + e.ToString());
+				return false;
+			}
 
 		}
 
+		/// <summary>
+		/// Due to update removes old folder entries. WILL BE REMOVED
+		/// </summary>
+		/// <param name="folderName"></param>
+		private static void RemoveSmallPhotos(string folderName)
+		{
+			// A lot of tries, because sometimes out of blue sky unauthorized exception is thrown
+
+			if (Directory.Exists(folderName + "\\" + IG_PHOTOS))
+			{
+				if (Directory.Exists(folderName + "\\" + IG_PHOTOS + "\\Thumbnails"))
+				{
+					try
+					{
+						Directory.Delete(folderName + "\\" + IG_PHOTOS + "\\Thumbnails", true);
+					}
+					catch
+					{
+					}
+				}
+			}
+
+			folderName += "\\" + PHOTOS;
+
+			if (Directory.Exists(folderName + "\\84px"))
+			{
+				try
+				{
+					Directory.Delete(folderName + "\\84px", true);
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					Directory.Delete(folderName + "\\172px", true);
+				}
+				catch
+				{
+				}
+
+				try
+				{
+					Directory.Delete(folderName + "\\320px", true);
+				}
+				catch
+				{
+				}
+			}
+		}
 
 		/// <summary>
-		/// Deserializes given match
+		/// Deserializes given item - <see cref="MatchModel"/>, <see cref="RecModel"/> or <see cref="UserModel"/>
 		/// </summary>
 		/// <param name="folderName"></param>
 		/// <returns></returns>
-		public static MatchModel DeserializeMatch(string folderName)
+		private static T DeserializeItem<T>(string folderName) where T : ISerializableItem
 		{
-			var matchName = folderName.Substring(folderName.LastIndexOf("\\") + 1);
-			matchName = matchName.Remove(matchName.LastIndexOf('.'));
-			matchName = matchName.Unidecode();
+			var itemName = folderName.Substring(folderName.LastIndexOf("\\") + 1);
+			itemName = itemName.Remove(itemName.LastIndexOf('.'));
+			itemName = itemName.Unidecode();
+			
+			// TODO remove sometime
+			RemoveSmallPhotos(folderName);
 
-			var match = JsonConvert.DeserializeObject<MatchModel>(File.ReadAllText(folderName + "\\" + matchName + EXT));
-			match.Messages = JsonConvert.DeserializeObject<ObservableCollection<MessageModel>>(
-				File.ReadAllText(folderName + "\\" + matchName + MSGS + EXT)) ?? new ObservableCollection<MessageModel>();
+			var item = JsonConvert.DeserializeObject<T>(File.ReadAllText(folderName + "\\" + itemName + EXT));
 
-			//DeserializePhotos(match.Person.Photos, folderName);
+			// If it is a match, don't forget messages
+			if (typeof(T) == typeof(MatchModel))
+				(item as MatchModel).Messages = JsonConvert.DeserializeObject<ObservableCollection<MessageModel>>(
+					File.ReadAllText(folderName + "\\" + itemName + MSGS + EXT))
+					?? new ObservableCollection<MessageModel>();
 
-
-			return match;
-		}
-		
-
-		/// <summary>
-		/// Deserializes given recommendation
-		/// </summary>
-		/// <param name="folderName"></param>
-		/// <returns></returns>
-		public static RecModel DeserializeRecommendation(string folderName)
-		{
-			var recName = folderName.Substring(folderName.LastIndexOf("\\") + 1);
-			recName = recName.Remove(recName.LastIndexOf('.'));
-			recName = recName.Unidecode();
-
-			var rec = JsonConvert.DeserializeObject<RecModel>(File.ReadAllText(folderName + "\\" + recName + EXT));
-			return rec;
+			return item;
 		}
 
 		/// <summary>
-		/// Deserializes all of the recs in Recommendations directory
+		/// Deserializes all of the items in given directory
 		/// </summary>
 		/// <returns></returns>
-		public static ObservableCollection<RecModel> DeserializeRecList()
+		private static ObservableCollection<T> DeserializeListFolder<T>(string dir) where T : ISerializableItem
 		{
-			var recList = new ObservableCollection<RecModel>();
-			var dirs = Directory.GetDirectories(Default.AppDataFolder + DIR_RECS);
+			var list = new ObservableCollection<T>();
+			var dirs = Directory.GetDirectories(WorkingDir + dir);
 
 			foreach (var item in dirs)
 			{
-				recList.Add(DeserializeRecommendation(item));
+				list.Add(DeserializeItem<T>(item));
 			}
-			return recList;
+			return list;
 		}
 
-
-		/// <summary>
-		/// Deserializes all of the matches in Matches directory
-		/// </summary>
-		/// <returns></returns>
 		public static ObservableCollection<MatchModel> DeserializeMatchList()
 		{
-			var matchList = new ObservableCollection<MatchModel>();
-			var dirs = Directory.GetDirectories(Default.AppDataFolder + DIR_MATCHES);
-
-			foreach (var item in dirs)
-			{
-				matchList.Add(DeserializeMatch(item));
-			}
-			return matchList;
+			return DeserializeListFolder<MatchModel>(DIR_MATCHES);
 		}
 
-		/// <summary>
-		/// Replaces internet URLs by local URLs in storage
-		/// </summary>
-		/// <param name="photos"></param>
-		/// <param name="folderName"></param>
-		public static void DeserializePhotos(ObservableCollection<PhotoModel> photos, string folderName)
+		public static ObservableCollection<MatchModel> DeserializeUnmatchedList()
 		{
-			for (int i = 0; i < photos.Count; i++)
-			{
-				string fileName = photos[i].FileName;
-				folderName += "\\" + PHOTOS;
+			return DeserializeListFolder<MatchModel>(DIR_UNMATCHED);
+		}
 
-				if (File.Exists(folderName + fileName))
-					for (int j = 0; j < photos[i].ProcessedFiles.Count; j++)
-					{
-						var processedFile = photos[i].ProcessedFiles[j];
-						if (processedFile.Height == 640)
-							processedFile.LocalUrl = folderName + fileName;
-						else
-							processedFile.LocalUrl = folderName + processedFile.Width + PIC_PX + fileName;
-					}
-			}
+		public static ObservableCollection<MatchModel> DeserializeUnmatchedByMeList()
+		{
+			return DeserializeListFolder<MatchModel>(DIR_UNMATCHED_BY_ME);
 		}
 
 
+		public static ObservableCollection<RecModel> DeserializeRecList()
+		{
+			return DeserializeListFolder<RecModel>(DIR_RECS);
+		}
+
+		public static ObservableCollection<RecModel> DeserializeRecPassedList()
+		{
+			return DeserializeListFolder<RecModel>(DIR_RECS_PASSED);
+		}
+
+		public static ObservableCollection<RecModel> DeserializeRecPendingList()
+		{
+			return DeserializeListFolder<RecModel>(DIR_RECS_PENDING);
+		}
+		
 		/// <summary>
 		/// Deletes all recs from "Recommendations" folder
 		/// </summary>
 		public static void EmptyRecommendations()
 		{
-			var dirs = Directory.EnumerateDirectories(Default.AppDataFolder + DIR_RECS);
+			var dirs = Directory.EnumerateDirectories(WorkingDir + DIR_RECS);
 
 			foreach (var dir in dirs)
 			{
@@ -487,9 +506,8 @@ namespace Twinder.Helpers
 		/// <returns></returns>
 		public static string GetMatchFolder(MatchModel match)
 		{
-			return Default.AppDataFolder + DIR_MATCHES + match.ToString();
+			return WorkingDir + DIR_MATCHES + match.ToString();
 		}
-
 
 		/// <summary>
 		/// Saves person's photos to specified directory
@@ -501,30 +519,21 @@ namespace Twinder.Helpers
 			if (photos != null)
 			{
 				string picDir = dir + PHOTOS;
-				foreach (var photo in photos)
+
+				Parallel.ForEach(photos, photo =>
 				{
-					Parallel.ForEach(photo.ProcessedFiles, processedPhoto =>
-					{
-						string downloadPath = picDir;
-						// 620px photos go to the main pic folder, smaller pictures into folders
-						downloadPath += processedPhoto.Height != 640 ? processedPhoto.Height + PIC_PX : "";
-						downloadPath += photo.FileName ?? photo.Id + ".jpg";
+					string downloadPath = picDir + (photo.FileName ?? photo.Id + ".jpg");
 
-						processedPhoto.LocalUrl = downloadPath;
+					if (!File.Exists(downloadPath))
+						// Get the 640px photo
+						foreach (var processedPic in photo.ProcessedFiles)
+						if (processedPic.Height == 640)
+						{
+							new WebClient().DownloadFile(new Uri(processedPic.Url), downloadPath);
+							break;
+						}
 
-						// Downloads only if the file does not yet exist
-						if (!File.Exists(downloadPath))
-							try
-							{
-								new WebClient().DownloadFile(new Uri(processedPhoto.Url), downloadPath);
-								processedPhoto.LocalUrl = downloadPath;
-							}
-							catch
-							{
-								// Some pictures throw 403 forbidden, hell knows why
-							}
-					});
-				}
+				});
 			}
 		}
 
@@ -537,24 +546,20 @@ namespace Twinder.Helpers
 		{
 			if (instagram != null)
 			{
-				Directory.CreateDirectory(dir + IG_PICS);
-				Directory.CreateDirectory(dir + IG_PICS + IG_THUMBS);
+				Directory.CreateDirectory(dir + IG_PHOTOS);
 
-				string instaDir = dir + IG_PICS;
+				string instaDir = dir + IG_PHOTOS;
 				Parallel.ForEach(instagram.InstagramPhotos, photo =>
 				{
-					string fileName = photo.Link.Substring(28, photo.Link.Length - 28 - 2) + ".jpg";
+					string fileName = instaDir + photo.Link.Substring(28, photo.Link.Length - 28 - 2) + ".jpg";
 
 					// Downloads only if the file does not yet exist
 					if (!File.Exists(instaDir + fileName))
 					{
 						try
 						{
-							new WebClient().DownloadFile(new Uri(photo.Image), instaDir + fileName);
-							new WebClient().DownloadFile(new Uri(photo.Thumbnail), instaDir + IG_THUMBS + fileName);
-
-							photo.LocalImage = instaDir + fileName;
-							photo.LocalThumbnail = instaDir + IG_THUMBS + fileName;
+							if (!File.Exists(fileName))
+								new WebClient().DownloadFile(new Uri(photo.Image), fileName);
 						}
 						catch
 						{
@@ -566,23 +571,105 @@ namespace Twinder.Helpers
 		}
 
 		/// <summary>
-		/// Creates folders for data saving
+		/// Creates user folder and config file
 		/// </summary>
-		/// <param name="root"></param>
-		public static void CreateFolderStructure(string root)
+		/// <param name="fbId"></param>
+		/// <param name="fbToken"></param>
+		/// <param name="userName"></param>
+		public static void CreateUser(string fbId, string fbToken, string userName, DateTime lastUpdate,
+			string lat, string lon)
 		{
-			Directory.CreateDirectory(Default.AppDataFolder);
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_MATCHES);
+			CurrentUser = userName;
 
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_UNMATCHED);
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_UNMATCHED_BY_ME);
+			Directory.CreateDirectory(WorkingDir);
 
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_RECS);
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_RECS_PENDING);
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_RECS_PASSED);
+			Directory.CreateDirectory(WorkingDir + DIR_MATCHES);
+			Directory.CreateDirectory(WorkingDir + DIR_UNMATCHED);
+			Directory.CreateDirectory(WorkingDir + DIR_UNMATCHED_BY_ME);
 
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_USER);
-			Directory.CreateDirectory(Default.AppDataFolder + DIR_USER + PHOTOS);
+			Directory.CreateDirectory(WorkingDir + DIR_RECS);
+			Directory.CreateDirectory(WorkingDir + DIR_RECS_PENDING);
+			Directory.CreateDirectory(WorkingDir + DIR_RECS_PASSED);
+
+			Directory.CreateDirectory(WorkingDir + DIR_USER);
+			Directory.CreateDirectory(WorkingDir + DIR_USER + PHOTOS);
+			
+
+			// Creates XML file with data
+			var doc = new XDocument(
+				new XElement("LoginData",
+					new XElement("FbId", fbId),
+					new XElement("FbToken", fbToken),
+					new XElement("TinderToken", fbToken),
+					new XElement("LastUpdate", lastUpdate),
+					new XElement("Latitude", string.Empty),
+					new XElement("Longtitude", string.Empty)));
+
+			doc.Save(WorkingDir + "\\config.xml");
+		}
+		
+		public static void UpdateUserPosition(string lat, string lon)
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+				doc.Element("LoginData").Element("Latitude").SetValue(lat);
+				doc.Element("LoginData").Element("Longtitude").SetValue(lon);
+				doc.Save(file);
+			}
+		}
+
+		public static void UpdateTinderToken(string token)
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+				doc.Element("LoginData").Element("TinderToken").SetValue(token);
+				doc.Save(file);
+			}
+		}
+
+		public static void UpdateLastUpdate(DateTime lastUpdate)
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+					doc.Element("LoginData").Element("LastUpdate").SetValue(lastUpdate);
+					doc.Save(file);
+			}
+		}
+
+
+		public static DateTime GetLastUpdate()
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+				return Convert.ToDateTime((doc.Element("LoginData").Element("LastUpdate").Value));
+			}
+			return default(DateTime);
+		}
+
+		/// <summary>
+		/// Returns saved position through parameters, because too lazy
+		/// </summary>
+		/// <param name="lat"></param>
+		/// <param name="lon"></param>
+		public static void GetUserPosition(out string lat, out string lon)
+		{
+			var file = WorkingDir + "config.xml";
+			lat = string.Empty;
+			lon = string.Empty;
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+				lat = doc.Element("LoginData").Element("Latitude").Value;
+				lon = doc.Element("LoginData").Element("Longtitude").Value;
+			}
 		}
 
 		/// <summary>
@@ -593,9 +680,6 @@ namespace Twinder.Helpers
 		{
 			Directory.CreateDirectory(root);
 			Directory.CreateDirectory(root + PHOTOS);
-			Directory.CreateDirectory(root + PHOTOS + PIC_84PX);
-			Directory.CreateDirectory(root + PHOTOS + PIC_172PX);
-			Directory.CreateDirectory(root + PHOTOS + PIC_320PX);
 		}
 		
 	}
@@ -633,5 +717,15 @@ namespace Twinder.Helpers
 			RecList = recList;
 			User = user;
 		}
+	}
+
+	public class DirPath
+	{
+		public static string DIR_MATCHES { get { return "Matches\\"; } }
+		public static string DIR_UNMATCHED { get { return "Matches-Unmatched\\"; } }
+		public static string DIR_UNMATCHED_BY_ME { get { return "Matches-Unmatched-By-Me\\"; } }
+		public static string DIR_RECS { get { return "Recommendations\\"; } }
+		public static string DIR_RECS_PENDING { get { return "Recommendations-Pending\\"; } }
+		public static string DIR_RECS_PASSED { get { return "Recommendations-Passed\\"; } }
 	}
 }

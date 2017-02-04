@@ -41,7 +41,7 @@ namespace Twinder.View
 			{
 
 				var match = img.DataContext as MatchModel;
-				var src = Properties.Settings.Default.AppDataFolder + SerializationHelper.DIR_MATCHES
+				var src = SerializationHelper.WorkingDir + SerializationHelper.DIR_MATCHES
 					+ match + "\\" + SerializationHelper.PHOTOS + match.Person.Photos[0].FileName;
 
 				if (File.Exists(src))

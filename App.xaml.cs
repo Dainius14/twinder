@@ -6,7 +6,8 @@ using Twinder.ViewModel;
 using Twinder.Properties;
 using System;
 using System.IO;
-using Twinder.Helpers;
+using System.Xml.Linq;
+using System.Linq;
 
 namespace Twinder
 {
@@ -15,6 +16,8 @@ namespace Twinder
 	/// </summary>
 	public partial class App : Application
 	{
+		public const string ARG_SHOW_ACCOUNT_SWITCHER = "account_switcher";
+
 		static App()
 		{
 			DispatcherHelper.Initialize();
@@ -27,50 +30,57 @@ namespace Twinder
 		/// <param name="e"></param>
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
-			// If version is upgraded, copies user settings from previous version
-			if (Settings.Default.UpgradeRequired)
-			{
-				Settings.Default.Upgrade();
-				Settings.Default["UpgradeRequired"] = false;
-				Settings.Default.Save();
-			}
-			
-
 			// First start configuration
 			if (Settings.Default.FirstStart)
 			{
-				// App data will be in \Local\Tinder\ folder
+				// App data will be in %appdata%\Local\Twinder\ folder
 				Settings.Default["AppDataFolder"] = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
 					+ "\\Twinder\\";
-
-				// checks if the folder exists
+				
 				if (!Directory.Exists(Settings.Default.AppDataFolder))
-					SerializationHelper.CreateFolderStructure(Settings.Default.AppDataFolder);
+					Directory.CreateDirectory(Settings.Default.AppDataFolder);
 
 			}
-			bool? returned = true;
+			
+			string fbId = string.Empty;
+			string fbToken = string.Empty;
+			string userName = string.Empty;
 
-			// No login data found, so shows login screen
-			if (string.IsNullOrEmpty(Settings.Default.FbId))
+			// Logs in default user, otherwise shows account switcher
+			//if (!string.IsNullOrEmpty(Settings.Default.DefaultUser) && !e.Args.Contains(ARG_SHOW_ACCOUNT_SWITCHER))
+			if (false)
 			{
-				var loginWindow = new FbLoginView();
-				returned = loginWindow.ShowDialog();
-				loginWindow.Close();
-			}
+				userName = Settings.Default.DefaultUser;
 
-			// Creates main window if the dialog returned
-			if ((bool) returned)
-			{
-				var mainWindow = new MainWindow();
-				var MainViewModel = mainWindow.DataContext as MainViewModel;
-				// Once loaded, starts setting up all the data
-				mainWindow.Loaded += MainViewModel.StartInitialize;
-				mainWindow.Show();
+				// Loads XML
+				var doc = XDocument.Load(Settings.Default.AppDataFolder + userName + "\\config.xml");
+
+				fbId = doc.Element("LoginData").Element("FbId").Value;
+				fbToken = doc.Element("LoginData").Element("FbToken").Value;
 			}
+			// No default user or arg given
 			else
 			{
-				Shutdown();
+				var accountSwitchWindow = new AccountSwitchView();
+				var accSwitchVM = accountSwitchWindow.DataContext as AccountSwitchViewModel;
+				if (accountSwitchWindow.ShowDialog() == true)
+				{
+					userName = accSwitchVM.UserName;
+					fbId = accSwitchVM.FbId;
+					fbToken = accSwitchVM.FbToken;
+				}
+				else
+					Shutdown();
+
 			}
+			
+			var mainWindow = new MainWindow();
+			var mainVM = mainWindow.DataContext as MainViewModel;
+			mainVM.UserName = userName;
+			mainVM.FbId = fbId;
+			mainVM.FbToken = fbToken;
+			mainWindow.Show();
+			
 		}
 
 		/// <summary>

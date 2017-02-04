@@ -74,7 +74,7 @@ namespace Twinder.View
 			BitmapImage b = new BitmapImage();
 			Image img = sender as Image;
 
-			var src = Properties.Settings.Default.AppDataFolder + DirPath
+			var src = SerializationHelper.WorkingDir + DirPath
 				+ SerializbleItem + "\\" + SerializationHelper.PHOTOS + (img.DataContext as PhotoModel).Id + ".jpg";
 
 			if (File.Exists(src))

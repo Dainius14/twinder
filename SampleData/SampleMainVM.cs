@@ -2,8 +2,9 @@
 using System.Collections.ObjectModel;
 using Twinder.Model;
 using Twinder.Model.Photos;
+using Twinder.ViewModel;
 
-namespace Twinder.ViewModel.Design
+namespace Twinder.SampleData
 {
 	public class SampleMainVM : MainViewModel
 	{
@@ -29,10 +30,6 @@ namespace Twinder.ViewModel.Design
 			MatchList = new ObservableCollection<MatchModel>();
 
 			FilterVM.ShowMoreFiltering = true;
-			AuthStatus = AuthStatus.Okay;
-			MatchesStatus = MatchesStatus.Okay;
-			RecsStatus = RecsStatus.Okay;
-
 
 			MatchModel Dolores = new MatchModel()
 			{

@@ -18,17 +18,20 @@ namespace Twinder
 		public MainWindow()
 		{
 			InitializeComponent();
-			Closing += (s, e) => ViewModelLocator.Cleanup();
+			var myViewModel = DataContext as MainViewModel;
+			myViewModel.MyView = this;
+			// Once loaded, starts setting up all the data
+
+			this.Loaded += myViewModel.StartInitialize;
+			this.Closing += (s, e) => ViewModelLocator.Cleanup();
+
 			Messenger.Default.Register<MatchModel>(this, MessengerToken.NewChatWindow, CreateChatWindow);
 			Messenger.Default.Register<MatchModel>(this, MessengerToken.ShowMatchProfile, CreateMatchProfileView);
 			Messenger.Default.Register<UserModel>(this, MessengerToken.OpenMyProfile, CreateMyProfileWindow);
 			Messenger.Default.Register<ObservableCollection<RecModel>>(this, MessengerToken.OpenRecommendations, OpenRecsWindow);
 			Messenger.Default.Register<string>(this, MessengerToken.ShowSetLocationWindow, CreateSetLocationWindow);
-			Messenger.Default.Register<string>(this, MessengerToken.ShowLoginDialog, CreateLoginWindow);
 			Messenger.Default.Register<SerializationPacket>(this, MessengerToken.ShowSerializationDialog, ShowDownloadDialog);
 
-			var myViewModel = DataContext as MainViewModel;
-			myViewModel.MyView = this;
 
 		}
 
@@ -44,14 +47,6 @@ namespace Twinder
 			var myProfileWindow = new UserProfileView(user);
 			myProfileWindow.Show();
 		}
-
-		private void CreateLoginWindow(string obj)
-		{
-			var loginWindow = new FbLoginView();
-			loginWindow.Owner = this;
-			loginWindow.ShowDialog();
-		}
-
 
 		private void CreateSetLocationWindow(string obj)
 		{

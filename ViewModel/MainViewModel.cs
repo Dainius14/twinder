@@ -17,6 +17,9 @@ using System.IO;
 using System.Windows.Data;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Xml.Linq;
+using Twinder.Properties;
+using System.Xml;
 
 namespace Twinder.ViewModel
 {
@@ -114,11 +117,7 @@ namespace Twinder.ViewModel
 
 		// Holds reference to my view to subsribe to events
 		public MainWindow MyView { get; set; }
-
-		public AuthStatus AuthStatus { get; internal set; }
-		public MatchesStatus MatchesStatus { get; internal set; }
-		public RecsStatus RecsStatus { get; internal set; }
-
+		
 		public RelayCommand<MatchModel> OpenChatCommand { get; private set; }
 		public RelayCommand<MatchModel> UnmatchCommand { get; private set; }
 		public RelayCommand<MatchModel> DownloadMatchDataCommand { get; private set; }
@@ -129,15 +128,23 @@ namespace Twinder.ViewModel
 		public RelayCommand OpenUserProfileCommand { get; private set; }
 		public RelayCommand SetLocationCommand { get; private set; }
 		public RelayCommand ExitCommand { get; private set; }
-		public RelayCommand LoginCommand { get; private set; }
+		public RelayCommand SwitchAccountCommand { get; private set; }
 		public RelayCommand AboutCommand { get; private set; }
 		public RelayCommand ForceDownloadMatchesCommand { get; private set; }
 		public RelayCommand ForceDownloadMatchesFullCommand { get; private set; }
 		public RelayCommand ForceDownloadRecsCommand { get; private set; }
 
 		public MatchListFilterViewModel FilterVM { get; set; }
+		public string FbId { get; internal set; }
+		public string FbToken { get; internal set; }
+		public string UserName { get; internal set; }
+		public object SetAsDefault { get; internal set; }
 
 		public MainViewModel()
+		{
+			InitializeProps();
+		}
+		private void InitializeProps()
 		{
 			FilterVM = new MatchListFilterViewModel(this);
 
@@ -159,7 +166,7 @@ namespace Twinder.ViewModel
 
 			ExitCommand = new RelayCommand(Exit);
 
-			LoginCommand = new RelayCommand(Login);
+			SwitchAccountCommand = new RelayCommand(SwitchAccount);
 			AboutCommand = new RelayCommand(About);
 
 			ForceDownloadMatchesCommand = new RelayCommand(ForceDownloadMatches);
@@ -170,38 +177,7 @@ namespace Twinder.ViewModel
 			Messenger.Default.Register<string>(this, MessengerToken.GetMoreRecs, (input) => UpdateRecs(this, null));
 
 			Application.Current.Exit += Current_Exit;
-
-
-
 		}
-
-		public async Task<bool> FullConnect()
-		{
-			ConnectionStatus = Properties.Resources.tinder_auth_connecting;
-
-			// Starts authentication
-			if (await Authenticate())
-			{
-				Properties.Settings.Default["LastUpdate"] = User.LatestUpdateDate;
-
-				// Gets matches
-				ConnectionStatus = Properties.Resources.tinder_update_getting_matches;
-				await GetMatches();
-                
-				// Gets recs
-				await GetRecs();
-
-				// Eveyrything done
-				ConnectionStatus = Properties.Resources.tinder_auth_okay;
-				return true;
-			}
-			else
-			{
-				ConnectionStatus = Properties.Resources.tinder_auth_error;
-				return false;
-			}
-		}
-
 
 		/// <summary>
 		/// First thing called. Entry point of some sort. Calls other methods to get Tinder data
@@ -210,14 +186,18 @@ namespace Twinder.ViewModel
 		/// <param name="e"></param>
 		public async void StartInitialize(object sender, EventArgs e)
 		{
-			ConnectionStatus = Properties.Resources.tinder_auth_connecting;
+			ConnectionStatus = Resources.tinder_auth_connecting;
 
 			// Only do full authorization if it's the first time or data is not saved yet
-			if (Properties.Settings.Default.FirstStart || !Properties.Settings.Default.SerializationComplete)
+			if (string.IsNullOrEmpty(UserName))
 			{
-				if (await FullConnect())
-				{ 
+				if (await FullConnect(FbId, FbToken))
+				{
 					int time = MatchList.Count * 3 / 60;
+
+					UserName = User.ToString();
+					SerializationHelper.CreateUser(FbId, FbToken, UserName, User.LatestUpdateDate,
+						User.Pos.Latitude.Replace('.', ','), User.Pos.Longtitude.Replace('.', ','));
 
 					// Dont ask just save nobody cares what user wants
 					MessageBox.Show($"All your matches will be saved. It may take up to {time} minutes "
@@ -227,8 +207,8 @@ namespace Twinder.ViewModel
 					Messenger.Default.Send(new SerializationPacket(MatchList, RecList, User),
 							MessengerToken.ShowSerializationDialog);
 
-					Properties.Settings.Default["FirstStart"] = false;
-					Properties.Settings.Default.Save();
+					Settings.Default["FirstStart"] = false;
+					Settings.Default.Save();
 
 					StartUpdatingMatches();
 					StartUpdatingRecs();
@@ -238,14 +218,16 @@ namespace Twinder.ViewModel
 			// It's not the first time launching application
 			else
 			{
+				SerializationHelper.CurrentUser = UserName;
+
+
 				// FIXME hangs application for a second
 				// Deserializes matches and recs first
 				MatchList = SerializationHelper.DeserializeMatchList();
 				MatchListSetup();
 				RecList = SerializationHelper.DeserializeRecList();
 
-
-				if (await Authenticate())
+				if (await Authenticate(FbId, FbToken))
 				{
 					// Updates last five matches
 					Parallel.ForEach(MatchList.OrderByDescending(x => x.LastActivityDate).Take(5), async x =>
@@ -267,36 +249,62 @@ namespace Twinder.ViewModel
 					UpdateMatches(this, null);
 					UpdateRecs(this, null);
 
-					ConnectionStatus = Properties.Resources.tinder_auth_okay;
+					ConnectionStatus = Resources.tinder_auth_okay;
 
 					// Starts automatic updates
 					StartUpdatingMatches();
 					StartUpdatingRecs();
 				}
 				else
-					ConnectionStatus = Properties.Resources.tinder_auth_error;
+					ConnectionStatus = Resources.tinder_auth_error;
 
 			}
 		}
+
+
+
+		public async Task<bool> FullConnect(string fbId, string fbToken)
+		{
+			ConnectionStatus = Resources.tinder_auth_connecting;
+
+			// Starts authentication
+			if (await Authenticate(fbId, fbToken))
+			{
+				// Gets matches
+				ConnectionStatus = Resources.tinder_update_getting_matches;
+				await GetMatches();
+
+				// Gets recs
+				await GetRecs();
+
+				// Eveyrything done
+				ConnectionStatus = Resources.tinder_auth_okay;
+				return true;
+			}
+			else
+			{
+				ConnectionStatus = Resources.tinder_auth_error;
+				return false;
+			}
+		}
+
+
 
 		/// <summary>
 		/// Tries authenticating with Tinder servers and getting User Data
 		/// </summary>
 		/// <returns></returns>
-		public async Task<bool> Authenticate()
+		public async Task<bool> Authenticate(string fbId, string fbToken)
 		{
 			try
 			{
 				// We get tinder token everytime
-				Auth = await TinderHelper.GetAuthData(Properties.Settings.Default.FbId, Properties.Settings.Default.FbToken);
-				Properties.Settings.Default["TinderToken"] = Auth.Token;
-
+				Auth = await TinderHelper.GetAuthData(fbId, fbToken);
 				User = await TinderHelper.GetFullUserData();
 				
-				// Updates current location of user
-				Properties.Settings.Default["Latitude"] = User.Pos.Latitude.Replace('.', ',');
-				Properties.Settings.Default["Longtitude"] = User.Pos.Longtitude.Replace('.', ',');
-				Properties.Settings.Default.Save();
+				SerializationHelper.UpdateUserPosition(
+					User.Pos.Latitude.Replace('.', ','), User.Pos.Longtitude.Replace('.', ','));
+				SerializationHelper.UpdateTinderToken(Auth.Token);
 
 				return true;
 			}
@@ -322,8 +330,7 @@ namespace Twinder.ViewModel
 
 				MatchListSetup();
 
-				Properties.Settings.Default["LastUpdate"] = Updates.LastActivityDate;
-				Properties.Settings.Default.Save();
+				SerializationHelper.UpdateLastUpdate(Updates.LastActivityDate);
 				return true;
 			}
 			catch (TinderRequestException e)
@@ -398,9 +405,7 @@ namespace Twinder.ViewModel
 			// There are no matches from before, try to get more
 			if (RecList.Count == 0)
 			{
-				ConnectionStatus = Properties.Resources.tinder_recs_getting_recs;
 				await GetRecs();
-				ConnectionStatus = Properties.Resources.tinder_auth_okay;
 
 				// If there are new matches, show dialog
 				if (RecList.Count != 0)
@@ -413,12 +418,12 @@ namespace Twinder.ViewModel
 		{
 			try
 			{
-				var newUpdates = await TinderHelper.GetUpdates(Properties.Settings.Default.LastUpdate);
+				var newUpdates = await TinderHelper.GetUpdates(SerializationHelper.GetLastUpdate());
 
 				if (newUpdates.Matches.Count != 0)
 				{
-					Properties.Settings.Default["LastUpdate"] = newUpdates.LastActivityDate;
-					Properties.Settings.Default.Save();
+					SerializationHelper.UpdateLastUpdate(newUpdates.LastActivityDate);
+
 					foreach (var newMatch in newUpdates.Matches)
 					{
 						var matchToUpdate = MatchList.Where(item => item.Id == newMatch.Id).FirstOrDefault();
@@ -639,10 +644,10 @@ namespace Twinder.ViewModel
 			UpdateRecs(this, null);
 		}
 
-		private void Login()
+		private void SwitchAccount()
 		{
-			Messenger.Default.Send("", MessengerToken.ShowLoginDialog);
-
+			// Loads another instance of this application with command args
+			Process.Start(Application.ResourceAssembly.Location, App.ARG_SHOW_ACCOUNT_SWITCHER);
 		}
 
 		private void About()
@@ -692,31 +697,7 @@ namespace Twinder.ViewModel
 		GettingRecs,
 		Error
 	}
-
-	public enum AuthStatus
-	{
-		Connecting,
-		Okay,
-		Error
-	}
-
-	public enum MatchesStatus
-	{
-		Waiting,
-		Getting,
-		Okay,
-		Error
-	}
-
-	public enum RecsStatus
-	{
-		Waiting,
-		Getting,
-		Okay,
-		Exhausted,
-		Error
-	}
-
+	
 	public enum DescriptionFilter
 	{
 		Both = 0,
