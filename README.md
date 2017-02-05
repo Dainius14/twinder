@@ -10,11 +10,8 @@ A sophisticated (not so much actually) Tinder client made using Windows Presenta
 Building requires [Bing Maps SDK](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=27165) to be installed.
 
 ### Features:
-
-* Like and pass available recommendations
-* Chat with matched people
-* View their profile
-* Edit your profile
+* Main Tinder functionalities without the bells and whistles
+* Multi-user support
 * Set your location
 * Filtering of matches
 * Every match and recommendation is saved on your computer (%appdata% folder)
