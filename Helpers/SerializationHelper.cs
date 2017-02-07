@@ -424,19 +424,31 @@ namespace Twinder.Helpers
 			var itemName = folderName.Substring(folderName.LastIndexOf("\\") + 1);
 			itemName = itemName.Remove(itemName.LastIndexOf('.'));
 			itemName = itemName.Unidecode();
-			
+
+			var fullPath = folderName + "\\" + itemName + EXT;
 			// TODO remove sometime
 			RemoveSmallPhotos(folderName);
 
-			var item = JsonConvert.DeserializeObject<T>(File.ReadAllText(folderName + "\\" + itemName + EXT));
+			if (File.Exists(fullPath))
+			{
+				var item = JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
 
-			// If it is a match, don't forget messages
-			if (typeof(T) == typeof(MatchModel))
-				(item as MatchModel).Messages = JsonConvert.DeserializeObject<ObservableCollection<MessageModel>>(
-					File.ReadAllText(folderName + "\\" + itemName + MSGS + EXT))
-					?? new ObservableCollection<MessageModel>();
+				// If it is a match, don't forget messages
+				if (typeof(T) == typeof(MatchModel))
+					(item as MatchModel).Messages = JsonConvert.DeserializeObject<ObservableCollection<MessageModel>>(
+						File.ReadAllText(folderName + "\\" + itemName + MSGS + EXT))
+						?? new ObservableCollection<MessageModel>();
 
-			return item;
+				return item;
+			}
+			// We fucked up somewhere - rollback
+			else
+			{
+				fullPath = fullPath.Remove(itemName.Length + EXT.Length);
+				Directory.Delete(fullPath, true);
+				return default(T);
+			}
+
 		}
 
 		/// <summary>
@@ -450,7 +462,9 @@ namespace Twinder.Helpers
 
 			foreach (var item in dirs)
 			{
-				list.Add(DeserializeItem<T>(item));
+				var itemToAdd = DeserializeItem<T>(item);
+				if (!itemToAdd.Equals(default(T)))
+					list.Add(itemToAdd);
 			}
 			return list;
 		}
@@ -527,11 +541,18 @@ namespace Twinder.Helpers
 					if (!File.Exists(downloadPath))
 						// Get the 640px photo
 						foreach (var processedPic in photo.ProcessedFiles)
-						if (processedPic.Height == 640)
-						{
-							new WebClient().DownloadFile(new Uri(processedPic.Url), downloadPath);
-							break;
-						}
+							if (processedPic.Height == 640)
+							{
+								try
+								{
+									new WebClient().DownloadFile(new Uri(processedPic.Url), downloadPath);
+								}
+								catch
+								{
+									// sometimes 403 is returned
+								}
+								break;
+							}
 
 				});
 			}
@@ -603,7 +624,10 @@ namespace Twinder.Helpers
 					new XElement("TinderToken", fbToken),
 					new XElement("LastUpdate", lastUpdate),
 					new XElement("Latitude", string.Empty),
-					new XElement("Longtitude", string.Empty)));
+					new XElement("Longtitude", string.Empty),
+					new XElement("LikesLeft", 0),
+					new XElement("SuperLikeResetAt", default(DateTime)),
+					new XElement("SuperLikesLeft", 0)));
 
 			doc.Save(WorkingDir + "\\config.xml");
 		}
@@ -637,9 +661,102 @@ namespace Twinder.Helpers
 			if (File.Exists(file))
 			{
 				var doc = XDocument.Load(file);
-					doc.Element("LoginData").Element("LastUpdate").SetValue(lastUpdate);
-					doc.Save(file);
+				doc.Element("LoginData").Element("LastUpdate").SetValue(lastUpdate);
+				doc.Save(file);
 			}
+		}
+
+		public static void UpdateSuperLikes(DateTime resetAt, int likesLeft)
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+
+				var elReset = doc.Element("LoginData").Element("SuperLikeResetAt");
+				var elLeft = doc.Element("LoginData").Element("SuperLikesLeft");
+
+				if (elReset != null)
+					elReset.SetValue(resetAt);
+				else
+					doc.Element("LoginData").Add(new XElement("SuperLikeResetAt", resetAt));
+
+				if (elReset != null)
+					elReset.SetValue(resetAt);
+				else
+					doc.Element("LoginData").Add(new XElement("SuperLikeResetAt", likesLeft));
+
+				doc.Save(file);
+			}
+		}
+
+
+		public static void UpdateLikes(int likesLeft)
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+
+				var el = doc.Element("LoginData").Element("LikesLeft");
+
+				if (el != null)
+					el.SetValue(likesLeft);
+				else
+					doc.Element("LoginData").Add(new XElement("LikesLeft", likesLeft));
+
+				doc.Save(file);
+			}
+		}
+		
+
+		public static int GetLikesLeft()
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+
+				var el = doc.Element("LoginData").Element("LikesLeft");
+				if (el != null)
+					return int.Parse(el.Value);
+				doc.Element("LoginData").Add(new XElement("LikesLeft", default(int)));
+				doc.Save(file);
+			}
+			return default(int);
+		}
+
+
+		public static DateTime GetSuperLikeReset()
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+
+				var el = doc.Element("LoginData").Element("SuperLikeResetAt");
+				if (el != null)
+					return Convert.ToDateTime(el.Value);
+				doc.Element("LoginData").Add(new XElement("SuperLikeResetAt", default(DateTime)));
+				doc.Save(file);
+			}
+			return default(DateTime);
+		}
+
+		public static int GetSuperLikesLeft()
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+
+				var el = doc.Element("LoginData").Element("SuperLikesLeft");
+				if (el != null)
+					return int.Parse(el.Value);
+				doc.Element("LoginData").Add(new XElement("SuperLikesLeft", default(int)));
+				doc.Save(file);
+			}
+			return default(int);
 		}
 
 

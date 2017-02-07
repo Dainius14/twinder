@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -178,6 +178,7 @@
     <Compile Include="Model\Authentication\AuthModel.cs" />
     <Compile Include="Model\Authentication\GlobalsModel.cs" />
     <Compile Include="Model\ISerializableItem.cs" />
+    <Compile Include="Model\LikeSentModel.cs" />
     <Compile Include="Model\PositionModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Model\InterestModel.cs" />
@@ -192,7 +193,6 @@
     <Compile Include="Model\Photos\InstagramPhoto.cs" />
     <Compile Include="Model\Photos\PhotoModel.cs" />
     <Compile Include="Model\Photos\ProcessedFileModel.cs" />
-    <Compile Include="Model\RecMatchedModel.cs" />
     <Compile Include="Model\RecModel.cs" />
     <Compile Include="Model\RecsResultsModel.cs" />
     <Compile Include="Model\Spotify\SpotifyAlbumModel.cs" />

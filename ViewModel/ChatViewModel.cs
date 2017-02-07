@@ -84,7 +84,7 @@ namespace Twinder.ViewModel
 		private void SetChat()
 		{
 			Chat = string.Empty;
-			for (int i = 0; i < Match.Messages.Count; i++)
+			for (int i = 0; Match != null &&	 i < Match.Messages.Count; i++)
 			{
 				var msg = Match.Messages[i];
 				var sentDate = msg.SentDate.ToLocalTime().ToLongDateString();

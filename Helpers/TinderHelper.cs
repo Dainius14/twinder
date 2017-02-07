@@ -169,8 +169,8 @@ namespace Twinder.Helpers
 		/// <param name="recId">ID of the recommendation</param>
 		/// <param name="superLike">True for sending a super like</param>
 		/// <exception cref="TinderRequestException">Bad request data</exception>
-		/// <returns>Returns a MatchModel with match information</returns>
-		public static async Task<MatchModel> LikeRecommendation(string recId, bool superLike = false)
+		/// <returns>Returns a LikeSentModel with remaining likes and other info</returns>
+		public static async Task<LikeSentModel> LikeRecommendation(string recId, bool superLike = false)
 		{
 			var request = new RestRequest("like/" + recId);
 			if (superLike)
@@ -184,7 +184,7 @@ namespace Twinder.Helpers
 			var response = await _client.ExecuteTaskAsync<dynamic>(request);
 
 			if (response.StatusCode == HttpStatusCode.OK)
-				return await Task.Run(() => JsonConvert.DeserializeObject<RecMatchedModel>(response.Content).Match);
+				return await Task.Run(() => JsonConvert.DeserializeObject<LikeSentModel>(response.Content));
 			else
 				throw new TinderRequestException("Error liking person: " + response.StatusDescription, response);
 		}

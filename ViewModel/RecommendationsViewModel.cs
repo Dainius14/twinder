@@ -36,6 +36,34 @@ namespace Twinder.ViewModel
 			set { Set(ref _selectedIndex, value); }
 		}
 
+		private int _superLikesLeft;
+		public int SuperLikesLeft
+		{
+			get { return _superLikesLeft; }
+			set { Set(ref _superLikesLeft, value); }
+		}
+
+		private int _likesLeft;
+		public int LikesLeft
+		{
+			get { return _likesLeft; }
+			set { Set(ref _likesLeft, value); }
+		}
+		
+		private bool _canSuperLike;
+		public bool CanSuperLike
+		{
+			get { return _canSuperLike; }
+			set { Set(ref _canSuperLike, value); }
+		}
+
+		private bool _canLike;
+		public bool CanLike
+		{
+			get { return _canLike; }
+			set { Set(ref _canLike, value); }
+		}
+
 		public RelayCommand SelectPreviousCommand { get; private set; }
 		public RelayCommand SelectNextCommand { get; private set; }
 		public RelayCommand PassCommand { get; private set; }
@@ -54,13 +82,16 @@ namespace Twinder.ViewModel
 
 		public RecommendationsViewModel()
 		{
+			CanSuperLike = SerializationHelper.GetSuperLikeReset() < DateTime.Now;
+			LikesLeft = SerializationHelper.GetLikesLeft();
+			SuperLikesLeft = SerializationHelper.GetSuperLikesLeft();
+
 			SelectPreviousCommand = new RelayCommand(SelectPrevious);
 			SelectNextCommand = new RelayCommand(SelectNext);
 			PassCommand = new RelayCommand(Pass);
 			LikeCommand = new RelayCommand<bool>(async param => await Like(false));
-			SuperLikeCommand = new RelayCommand<bool>(async param => await Like(true));
+			SuperLikeCommand = new RelayCommand<bool>(async param => await Like(true), param => CanSuperLike);
 			LikeAllCommand = new RelayCommand(async () => await LikeAll());
-
 
 		}
 
@@ -91,7 +122,7 @@ namespace Twinder.ViewModel
 		{
 			if (RecList.Count > 0)
 			{
-				if (SelectedIndex == 0)
+				if (SelectedIndex <= 0)
 					SelectedIndex = RecList.Count - 1;
 				else
 					SelectedIndex--;
@@ -155,19 +186,30 @@ namespace Twinder.ViewModel
 			{
 				try
 				{
-					var match = await TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
+					var likesent = await TinderHelper.LikeRecommendation(SelectedRec.Id, superLike);
+					
+					// It was a super like, update if neccesarry
+					if (superLike)
+					{
+						if (likesent.SuperLikes.Remaining == 0)
+						{
+							SerializationHelper.UpdateSuperLikes(likesent.SuperLikes.ResetsAt, likesent.SuperLikes.Remaining);
+							CanSuperLike = false;
+						}
+					}
+
 					var matchToMove = SelectedRec;
 					RemoveRecomendations(SelectedRec);
 					RecsView.UpdateLayout();
 
 					// If the method returns a non-null value, it means it's a match
-					if (match != null)
+					if (likesent.Match != null)
 					{
 						SerializationHelper.MoveRecToMatches(matchToMove);
 						Messenger.Default.Send("", MessengerToken.ForceUpdate);
 
 						if (showMessage)
-							MessageBox.Show("It's a match!");
+							MessageBox.Show($"It's a match! {likesent.LikesRemainig} likes left." );
 					}
 					else
 						SerializationHelper.MoveRecToPending(matchToMove);
@@ -180,7 +222,6 @@ namespace Twinder.ViewModel
 			}
 		}
 		#endregion
-
 
 		#region Like All command
 		/// <summary>

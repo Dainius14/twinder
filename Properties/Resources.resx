@@ -457,4 +457,10 @@
   <data name="set_as_default" xml:space="preserve">
     <value>Set as default</value>
   </data>
+  <data name="recs_likes_left" xml:space="preserve">
+    <value>Likes left</value>
+  </data>
+  <data name="recs_superlikes_left" xml:space="preserve">
+    <value>Super Likes left</value>
+  </data>
 </root>

@@ -351,10 +351,16 @@ namespace Twinder.ViewModel
 				var recs = await TinderHelper.GetRecommendations();
 				if (recs.Recommendations != null)
 				{
+					// Out of recs
+					if (recs.Recommendations.Any(x => x.Id.Contains("tinder_rate_limited")))
+					{
+						RecList.Clear();
+						SerializationHelper.EmptyRecommendations();
+						return false;
+					}
 					// If it's the first time getting recs
 					if (RecList == null)
 						RecList = new ObservableCollection<RecModel>(recs.Recommendations);
-					
 					// Only useful if we force to download new recs in which case old
 					// recs would be no use anyway
 					RecList.Clear();

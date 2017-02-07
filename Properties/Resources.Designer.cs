@@ -718,6 +718,24 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Likes left.
+        /// </summary>
+        public static string recs_likes_left {
+            get {
+                return ResourceManager.GetString("recs_likes_left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Super Likes left.
+        /// </summary>
+        public static string recs_superlikes_left {
+            get {
+                return ResourceManager.GetString("recs_superlikes_left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set as default.
         /// </summary>
         public static string set_as_default {

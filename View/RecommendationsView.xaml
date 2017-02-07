@@ -227,6 +227,37 @@
 						</TextBlock.Text>
 					</TextBlock>
 				</StatusBarItem>
+
+				<!-- Likes left  -->
+				<StatusBarItem HorizontalAlignment="Right">
+				</StatusBarItem>
+				
+				<!-- Likes left  -->
+				<StatusBarItem>
+					<StackPanel Orientation="Horizontal">
+
+						<TextBlock>
+							<TextBlock.Text>
+								<MultiBinding StringFormat="{}{0}: {1}">
+									<Binding Source="{x:Static p:Resources.recs_likes_left}"/>
+									<Binding Path="LikesLeft"/>
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+
+						<Separator Style="{StaticResource StatusBarSeperator}"/>
+
+						<TextBlock>
+							<TextBlock.Text>
+								<MultiBinding StringFormat="{}{0}: {1}">
+									<Binding Source="{x:Static p:Resources.recs_superlikes_left}"/>
+									<Binding Path="SuperLikesLeft"/>
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+					</StackPanel>
+				</StatusBarItem>
+
 			</StatusBar>
 
 		</Grid>
