@@ -224,27 +224,29 @@ namespace Twinder.Helpers
 		/// <param name="rec"></param>
 		private static bool MoveRec(RecModel rec, string dir)
 		{
-			var fromDir = WorkingDir + DIR_RECS + rec;
-			var toDir = WorkingDir + dir + rec;
+			if (IsDirInAppData(WorkingDir))
+			{
+				var fromDir = WorkingDir + DIR_RECS + rec;
+				var toDir = WorkingDir + dir + rec;
 
-			try
-			{
-				if (Directory.Exists(toDir))
-					Directory.Delete(fromDir, true);
-				else
-					Directory.Move(fromDir, toDir);
-				return true;
+				try
+				{
+					if (Directory.Exists(toDir))
+						Directory.Delete(fromDir, true);
+					else
+						Directory.Move(fromDir, toDir);
+					return true;
+				}
+				catch (UnauthorizedAccessException e)
+				{
+					MessageBox.Show("Error: " + e.ToString());
+				}
+				catch (IOException e)
+				{
+					MessageBox.Show("Error: " + e.ToString());
+				}
 			}
-			catch (UnauthorizedAccessException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
-			catch (IOException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
+			return false;
 		}
 
 		public static bool MoveRecToPassed(RecModel rec)
@@ -278,37 +280,39 @@ namespace Twinder.Helpers
 		/// <returns></returns>
 		private static bool MoveRecPhotosToMatches(string recName, string dir)
 		{
-			var fromRecDir = WorkingDir + dir + recName + "\\";
-			var fromDirPhotos = fromRecDir + PHOTOS;
-			var fromDirIG = fromRecDir + IG_PHOTOS;
-
-			var toRecDir = WorkingDir + DIR_MATCHES + recName + "\\";
-			var toDirPhotos = toRecDir + PHOTOS;
-			var toDirIG = toRecDir + IG_PHOTOS;
-
-			Directory.CreateDirectory(toRecDir);
-
-			try
+			if (IsDirInAppData(WorkingDir))
 			{
-				if (Directory.Exists(fromDirPhotos) && !Directory.Exists(toDirPhotos))
-					Directory.Move(fromDirPhotos, toDirPhotos);
+				var fromRecDir = WorkingDir + dir + recName + "\\";
+				var fromDirPhotos = fromRecDir + PHOTOS;
+				var fromDirIG = fromRecDir + IG_PHOTOS;
 
-				if (Directory.Exists(fromDirIG) && !Directory.Exists(toDirIG))
-					Directory.Move(fromDirIG, toDirIG);
+				var toRecDir = WorkingDir + DIR_MATCHES + recName + "\\";
+				var toDirPhotos = toRecDir + PHOTOS;
+				var toDirIG = toRecDir + IG_PHOTOS;
+			
+				Directory.CreateDirectory(toRecDir);
 
-				Directory.Delete(fromRecDir, true);
-				return true;
+				try
+				{
+					if (Directory.Exists(fromDirPhotos) && !Directory.Exists(toDirPhotos))
+						Directory.Move(fromDirPhotos, toDirPhotos);
+
+					if (Directory.Exists(fromDirIG) && !Directory.Exists(toDirIG))
+						Directory.Move(fromDirIG, toDirIG);
+
+					Directory.Delete(fromRecDir, true);
+					return true;
+				}
+				catch (UnauthorizedAccessException e)
+				{
+					MessageBox.Show("Error: " + e.ToString());
+				}
+				catch (IOException e)
+				{
+					MessageBox.Show("Error: " + e.ToString());
+				}
 			}
-			catch (UnauthorizedAccessException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
-			catch (IOException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
+			return false;
 		}
 
 		/// <summary>
@@ -339,81 +343,30 @@ namespace Twinder.Helpers
 		/// <returns></returns>
 		private static bool MoveToUnmatched(string matchName, string dir)
 		{
-			var fromDir = WorkingDir + DIR_MATCHES + matchName + "\\";
-			var toDir = WorkingDir + dir + matchName + "\\";
-			try
+			if (IsDirInAppData(WorkingDir))
 			{
-				if (Directory.Exists(toDir))
-					Directory.Delete(fromDir, true);
-				else
-					Directory.Move(fromDir, toDir);
-				return true;
+				var fromDir = WorkingDir + DIR_MATCHES + matchName + "\\";
+				var toDir = WorkingDir + dir + matchName + "\\";
+				try
+				{
+					if (Directory.Exists(toDir))
+						Directory.Delete(fromDir, true);
+					else
+						Directory.Move(fromDir, toDir);
+					return true;
+				}
+				catch (UnauthorizedAccessException e)
+				{
+					MessageBox.Show("Error: " + e.ToString());
+				}
+				catch (IOException e)
+				{
+					MessageBox.Show("Error: " + e.ToString());
+				}
 			}
-			catch (UnauthorizedAccessException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
-			catch (IOException e)
-			{
-				MessageBox.Show("Error: " + e.ToString());
-				return false;
-			}
-
+			return false;
 		}
-
-		/// <summary>
-		/// Due to update removes old folder entries. WILL BE REMOVED
-		/// </summary>
-		/// <param name="folderName"></param>
-		private static void RemoveSmallPhotos(string folderName)
-		{
-			// A lot of tries, because sometimes out of blue sky unauthorized exception is thrown
-
-			if (Directory.Exists(folderName + "\\" + IG_PHOTOS))
-			{
-				if (Directory.Exists(folderName + "\\" + IG_PHOTOS + "\\Thumbnails"))
-				{
-					try
-					{
-						Directory.Delete(folderName + "\\" + IG_PHOTOS + "\\Thumbnails", true);
-					}
-					catch
-					{
-					}
-				}
-			}
-
-			folderName += "\\" + PHOTOS;
-
-			if (Directory.Exists(folderName + "\\84px"))
-			{
-				try
-				{
-					Directory.Delete(folderName + "\\84px", true);
-				}
-				catch
-				{
-				}
-
-				try
-				{
-					Directory.Delete(folderName + "\\172px", true);
-				}
-				catch
-				{
-				}
-
-				try
-				{
-					Directory.Delete(folderName + "\\320px", true);
-				}
-				catch
-				{
-				}
-			}
-		}
-
+		
 		/// <summary>
 		/// Deserializes given item - <see cref="MatchModel"/>, <see cref="RecModel"/> or <see cref="UserModel"/>
 		/// </summary>
@@ -426,8 +379,6 @@ namespace Twinder.Helpers
 			itemName = itemName.Unidecode();
 
 			var fullPath = folderName + "\\" + itemName + EXT;
-			// TODO remove sometime
-			RemoveSmallPhotos(folderName);
 
 			if (File.Exists(fullPath))
 			{
@@ -445,7 +396,8 @@ namespace Twinder.Helpers
 			else
 			{
 				fullPath = fullPath.Remove(itemName.Length + EXT.Length);
-				Directory.Delete(fullPath, true);
+				if (IsDirInAppData(fullPath))
+					Directory.Delete(fullPath, true);
 				return default(T);
 			}
 
@@ -499,17 +451,17 @@ namespace Twinder.Helpers
 		{
 			return DeserializeListFolder<RecModel>(DIR_RECS_PENDING);
 		}
-		
+
 		/// <summary>
 		/// Deletes all recs from "Recommendations" folder
 		/// </summary>
 		public static void EmptyRecommendations()
 		{
-			var dirs = Directory.EnumerateDirectories(WorkingDir + DIR_RECS);
-
-			foreach (var dir in dirs)
+			if (IsDirInAppData(WorkingDir))
 			{
-				Directory.Delete(dir);
+				var dirs = Directory.EnumerateDirectories(WorkingDir + DIR_RECS);
+					foreach (var dir in dirs)
+						Directory.Delete(dir);
 			}
 		}
 
@@ -797,6 +749,11 @@ namespace Twinder.Helpers
 		{
 			Directory.CreateDirectory(root);
 			Directory.CreateDirectory(root + PHOTOS);
+		}
+
+		private static bool IsDirInAppData(string dir)
+		{
+			return dir.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Twinder");
 		}
 		
 	}

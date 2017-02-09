@@ -7,7 +7,7 @@ namespace Twinder.Model.Photos
 	public sealed class InstagramModel
 	{
 		[JsonProperty("last_fetch_time")]
-		public DateTime LastFetchTime { get; set; }
+		public DateTime? LastFetchTime { get; set; }
 
 		[JsonProperty("completed_initial_fetch")]
 		public bool CompletedInitialFetch { get; set; }
