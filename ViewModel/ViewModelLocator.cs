@@ -52,6 +52,7 @@ namespace Twinder.ViewModel
 			// Design time
 			SimpleIoc.Default.Register<SampleMainVM>();
 			SimpleIoc.Default.Register<SampleAccountSwitchVM>();
+			SimpleIoc.Default.Register<SampleChatVM>();
 		}
 
 		/// <summary>
@@ -164,11 +165,20 @@ namespace Twinder.ViewModel
 				return ServiceLocator.Current.GetInstance<SampleMainVM>();
 			}
 		}
+
 		public SampleAccountSwitchVM SampleAccountSwitch
 		{
 			get
 			{
 				return ServiceLocator.Current.GetInstance<SampleAccountSwitchVM>();
+			}
+		}
+
+		public SampleChatVM SampleChat
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<SampleChatVM>();
 			}
 		}
 

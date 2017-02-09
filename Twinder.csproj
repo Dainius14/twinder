@@ -157,6 +157,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\ChatBubbleTailConverter.cs" />
     <Compile Include="Converter\BoolToVisibleConverter.cs" />
     <Compile Include="Converter\DataBindingDebugger.cs" />
     <Compile Include="Converter\DateTimeToLocalConverter.cs" />
@@ -208,6 +209,8 @@
     <Compile Include="Model\PersonModel.cs" />
     <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="SampleData\SampleAccountSwitchVM.cs" />
+    <Compile Include="SampleData\SampleChat.cs" />
+    <Compile Include="SampleData\SampleChatBubble.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\AccountSwitchViewModel.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
@@ -224,6 +227,9 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\AccountSwitchView.xaml.cs">
       <DependentUpon>AccountSwitchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ChatBubbleView.xaml.cs">
+      <DependentUpon>ChatBubbleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
@@ -270,11 +276,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <DesignData Include="SampleData\SampleChatBubble.xaml">
+      <SubType>Designer</SubType>
+    </DesignData>
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\AccountSwitchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChatBubbleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

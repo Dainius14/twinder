@@ -1,0 +1,142 @@
+﻿<UserControl x:Class="Twinder.View.ChatBubbleView"
+			 x:Name="MyChatBubble"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Twinder.View"
+             mc:Ignorable="d"
+			 
+			 xmlns:v="clr-namespace:Twinder.View"
+			 
+             d:DesignHeight="150" d:DesignWidth="350">
+
+	<UserControl.Resources>
+		
+		<Style TargetType="TextBlock" x:Key="MessageText">
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="5,3"/>
+			<Setter Property="TextWrapping" Value="Wrap"/>
+		</Style>
+
+		<Style TargetType="TextBlock" x:Key="DateText">
+			<Setter Property="FontSize" Value="10"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="FontWeight" Value="Thin"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Opacity" Value="0.6"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="5,2"/>
+		</Style>
+
+
+
+		<Style TargetType="Border" x:Key="Border">
+			<Setter Property="CornerRadius" Value="1"/>
+		</Style>
+
+		<Style TargetType="Border" x:Key="MatchColor" BasedOn="{StaticResource Border}">
+			<Setter Property="Background" Value="#4080ff"/>
+		</Style>
+		
+		<Style TargetType="Border" x:Key="UserColor" BasedOn="{StaticResource Border}">
+			<Setter Property="Background" Value="#1765ff"/>
+		</Style>
+
+		<Style TargetType="Path" x:Key="BubbleTail">
+			<Setter Property="Width" Value="10"/>
+			<Setter Property="Height" Value="10"/>
+		</Style>
+
+		<Style TargetType="Path" x:Key="BubbleTailStroke" BasedOn="{StaticResource BubbleTail}">
+			<Setter Property="Stroke" Value="Black"/>
+			<Setter Property="StrokeThickness" Value="1"/>
+		</Style>
+		
+		<Style TargetType="Path" x:Key="BubbleTailStrokeFix" BasedOn="{StaticResource BubbleTailStroke}">
+			<Setter Property="StrokeThickness" Value="3"/>
+		</Style>
+
+	</UserControl.Resources>
+
+	<Grid MinWidth="200"
+		  MaxWidth="300"
+		  VerticalAlignment="Top">
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<Border x:Name="BubbleBorder"
+				Padding="3,2,3,2"
+				Style="{StaticResource MatchColor}"
+				Grid.Row="1">
+
+			<Grid x:Name="BubbleBody">
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="auto"/>
+				</Grid.RowDefinitions>
+
+				<TextBlock Text="{Binding Message.Message, ElementName=MyChatBubble}"
+						   Style="{StaticResource MessageText}"
+						   Grid.Row="0"/>
+
+				<TextBlock Text="{Binding Message.SentDate, StringFormat='yyyy-MM-dd hh:mm:ss', ElementName=MyChatBubble}"
+						   Style="{StaticResource DateText}"
+						   Grid.Row="1"/>
+				
+			</Grid>
+		</Border>
+
+
+		<!-- Upper tail -->
+		<Grid Grid.Row="0"
+			  x:Name="UpperTail">
+			<Path x:Name="BubbleTailAbove" Data="M0,10 L0,0 L10,10"
+			  Style="{StaticResource BubbleTail}"
+			  Fill="{Binding ElementName=BubbleBorder, Path=Background}"
+			  HorizontalAlignment="Left" Margin="10,0,0,-2"/>
+
+			<!--<Path x:Name="BubbleTailAboveStroke" Data="M0,0 L10,10"
+			  Style="{StaticResource BubbleTailStroke}"
+			  Margin="10,0,0,-1"
+			  HorizontalAlignment="{Binding ElementName=BubbleTailAbove, Path=HorizontalAlignment}"/>
+
+			<Path x:Name="BubbleTailAboveBugFix"  Data="M10,0 L10,10"
+			  Style="{StaticResource BubbleTailStrokeFix}"
+			  Margin="{Binding ElementName=BubbleTailStroke, Path=Margin}"
+			  HorizontalAlignment="{Binding ElementName=BubbleTailAbove, Path=HorizontalAlignment}"/>-->
+
+		</Grid>
+
+
+		<!-- Lower tail -->
+		<Grid Grid.Row="2"
+			  x:Name="LowerTail">
+			<Path x:Name="BubbleTailBelow" Data="M0,0 L10,10 L10,0"
+			  Style="{StaticResource BubbleTail}"
+			  Fill="{Binding ElementName=BubbleBorder, Path=Background}"
+			  HorizontalAlignment="Right" Margin="0,-2,10,0"/>
+
+			<!--<Path x:Name="BubbleTailBelowStroke" Data="M0,0 L10,10"
+			  Style="{StaticResource BubbleTailStroke}"
+			  HorizontalAlignment="{Binding ElementName=BubbleTailBelow, Path=HorizontalAlignment}"
+			  Margin="0,-1,10,0"/>
+
+			<Path x:Name="BubbleTailBelowBugFix"  Data="M10,0 L10,10"
+			  Style="{StaticResource BubbleTailStrokeFix}"
+			  HorizontalAlignment="{Binding ElementName=BubbleTailBelow, Path=HorizontalAlignment}"
+			  Margin="{Binding ElementName=BubbleTailBelowStroke, Path=Margin}"/>-->
+
+		</Grid>
+
+	</Grid>
+
+</UserControl>

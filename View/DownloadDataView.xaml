@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:Twinder.View"
         mc:Ignorable="d"
 		
+		xmlns:p="clr-namespace:Twinder.Properties"
+		
         DataContext="{Binding DownloadData, Source={StaticResource Locator}}"
-        xmlns:p="clr-namespace:Twinder.Properties"
+		
         Height="110" Width="350" ResizeMode="NoResize"
 		WindowStartupLocation="CenterOwner"
 		

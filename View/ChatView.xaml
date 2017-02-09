@@ -6,15 +6,63 @@
 		xmlns:local="clr-namespace:Twinder.View"
 		mc:Ignorable="d" 
         
-		xmlns:p="clr-namespace:Twinder.Properties"    
+		xmlns:p="clr-namespace:Twinder.Properties"
+		xmlns:view="clr-namespace:Twinder.View"
+		xmlns:vm="clr-namespace:Twinder.ViewModel"
 		
 		Activated="Window_Activated"
         
-		MinWidth="500" MinHeight="400"
-		Width="500" Height="400"
+		MinWidth="350" MinHeight="250"
+		Width="400" Height="500"
 		Background="WhiteSmoke"
 		DataContext="{Binding Chat, Source={StaticResource Locator}}"
-		d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}">
+		d:DataContext="{Binding SampleChat, Source={StaticResource Locator}}">
+
+	<Window.Resources>
+		
+		<Style TargetType="TextBlock" x:Key="MatchName">
+			<Setter Property="FontSize" Value="32"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="FontWeight" Value="Thin"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+			<Setter Property="Margin" Value="5,0"/>
+		</Style>
+
+		<Style TargetType="TextBox" x:Key="MessageToSend">
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="TextWrapping" Value="Wrap"/>
+			<Setter Property="Background" Value="WhiteSmoke"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Padding" Value="4,4,0,4"/>
+		</Style>
+
+		<Style TargetType="TextBlock" x:Key="SendButton">
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+
+			<Setter Property="Foreground" Value="#1765ff"/>
+
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="10"/>
+
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Cursor" Value="Hand"/>
+					<Setter Property="Effect">
+						<Setter.Value>
+							<DropShadowEffect Color="#1765ff" Opacity="0.2" ShadowDepth="0"/>
+						</Setter.Value>
+					</Setter>
+
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		
+	</Window.Resources>
 	
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} {1} - {2}">
@@ -24,55 +72,23 @@
 		</MultiBinding>
 	</Window.Title>
 	
-	<Window.Resources>
-		<Style TargetType="TextBox" x:Key="ChatItem">
-			<Setter Property="FontFamily" Value="Consolas"/>
-			<Setter Property="IsReadOnly" Value="True"/>
-		</Style>
-	</Window.Resources>
-
 	<DockPanel LastChildFill="True">
+		
 		<!-- Info bar -->
-		<Grid DockPanel.Dock="Top">
+		<Grid DockPanel.Dock="Top" MouseDown="HeaderBar_MouseDown"
+			  Background="#1765ff">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="auto"/>
-				<ColumnDefinition Width="5"/>
+				<ColumnDefinition Width="48"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 
-			<Image Grid.Column="0"
-				   Source="{Binding Match.Person.Photos[0].ProcessedFiles[2].Url}"
-				   Height="50" Width="50"/>
-
 			
-			<Grid Grid.Column="2">
-
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="auto"/>
-					<ColumnDefinition Width="20"/>
-					<ColumnDefinition Width="auto"/>
-				</Grid.ColumnDefinitions>
-
-				<Grid.Resources>
-					<Style TargetType="TextBlock">
-						<Setter Property="VerticalAlignment" Value="Bottom"/>
-					</Style>
-				</Grid.Resources>
-				
-				<TextBlock Text="{Binding Match.Person.Name, FallbackValue='Name'}"
-						   Grid.Column="0"
-						   FontSize="18" FontWeight="DemiBold"/>
-
-				<!-- Last seen -->
-				<TextBlock Grid.Column="2">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="{}{0}: {1:MM-dd HH:mm}">
-							<Binding Source="{x:Static p:Resources.match_info_last_seen}"/>
-							<Binding Path="Match.Person.PingTime" Converter="{StaticResource DateTimeToLocalConverter}"/>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
-			</Grid>
+			<Image Loaded="Image_Loaded" RenderOptions.BitmapScalingMode="HighQuality"
+				   Grid.Column="0"/>
+			
+			<TextBlock Text="{Binding Match.Person.Name, FallbackValue='Name'}"
+					   Style="{StaticResource MatchName}"
+					   Grid.Column="1"/>
 		</Grid>
 
 		<!-- Send message -->
@@ -82,31 +98,37 @@
 				<ColumnDefinition Width="auto"/>
 			</Grid.ColumnDefinitions>
 
-			<TextBox Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
-					 Name="message_TextBox"
-					 Grid.Column="0"
-					 Padding="3"
-					 FontFamily="Consolas">
+			<TextBox x:Name="SendMessage_TextBox"
+					 Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
+					 Style="{StaticResource MessageToSend}"
+					 Grid.Column="0">
 				
 				<TextBox.InputBindings>
 					<KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
 				</TextBox.InputBindings>
 			</TextBox>
 
-			<Button Content="{x:Static p:Resources.chat_btn_send_message}"
-					Command="{Binding SendMessageCommand}"
-					Padding="3"
-					Grid.Column="1"/>
+			<TextBlock Text="{x:Static p:Resources.chat_btn_send_message}"
+					   Style="{StaticResource SendButton}"
+					   Grid.Column="1">
+				<TextBlock.InputBindings>
+					<MouseBinding Command="{Binding SendMessageCommand}" MouseAction="LeftClick" />
+				</TextBlock.InputBindings>
+			</TextBlock>
+			
 		</Grid>
 
 		<!-- Chat -->
-		<ScrollViewer Name="chatScrollViewer" VerticalScrollBarVisibility="Visible">
-			<TextBox Name="chatBox" Text="{Binding Chat}"
-					 Padding="3"
-					 FontFamily="Consolas"
-					 IsReadOnly="True"
-					 TextWrapping="Wrap"
-					 TextChanged="chatBox_TextChanged"/>
-		</ScrollViewer>
+		<ListView x:Name="Chat_ListView" ItemsSource="{Binding Match.Messages}"
+				  HorizontalContentAlignment="Stretch"
+				  VirtualizingPanel.ScrollUnit="Pixel"
+				  Background="WhiteSmoke">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<view:ChatBubbleView Message="{Binding}"
+										 Match="{Binding ElementName=Chat_ListView, Path=DataContext.Match}"/>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
 	</DockPanel>
 </Window>

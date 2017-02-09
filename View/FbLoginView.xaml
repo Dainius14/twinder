@@ -8,11 +8,14 @@
         xmlns:p="clr-namespace:Twinder.Properties"
         mc:Ignorable="d" 
 		Background="WhiteSmoke"
+		
+		xmlns:vm="clr-namespace:Twinder.ViewModel"
 			 
 		Height="155" Width="360" ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen"
 		
-		DataContext="{Binding SetUser, Source={StaticResource Locator}}">
+		DataContext="{Binding SetUser, Source={StaticResource Locator}}"
+		d:DataContext="{d:DesignInstance vm:FbLoginViewModel}">
 	
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} - {1}">

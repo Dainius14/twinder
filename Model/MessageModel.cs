@@ -36,7 +36,9 @@ namespace Twinder.Model
 
 		public override int GetHashCode()
 		{
-			return Id.GetHashCode();
+			if (Id != null)
+				return Id.GetHashCode();
+			return base.GetHashCode();
 		}
 	}
 }

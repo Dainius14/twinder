@@ -55,8 +55,7 @@ namespace Twinder.Model.Photos
 		{
 			if (Id != null)
 				return Id.GetHashCode();
-			else
-				return base.GetHashCode();
+			return base.GetHashCode();
 		}
 	}
 }

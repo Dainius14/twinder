@@ -37,26 +37,20 @@ namespace Twinder.View
 		{
 			BitmapImage b = new BitmapImage();
 			Image img = sender as Image;
-			try
+
+			var match = img.DataContext as MatchModel;
+			var src = SerializationHelper.WorkingDir + SerializationHelper.DIR_MATCHES
+				+ match + "\\" + SerializationHelper.PHOTOS + match.Person.Photos[0].FileName;
+
+			if (File.Exists(src))
 			{
-
-				var match = img.DataContext as MatchModel;
-				var src = SerializationHelper.WorkingDir + SerializationHelper.DIR_MATCHES
-					+ match + "\\" + SerializationHelper.PHOTOS + match.Person.Photos[0].FileName;
-
-				if (File.Exists(src))
-				{
-					b.BeginInit();
-					b.CacheOption = BitmapCacheOption.OnLoad;
-					b.UriSource = new Uri(src);
-					b.EndInit();
-				}
-
-				img.Source = b;
+				b.BeginInit();
+				b.CacheOption = BitmapCacheOption.OnLoad;
+				b.UriSource = new Uri(src);
+				b.EndInit();
 			}
-			catch (Exception)
-			{
-			}
+
+			img.Source = b;
 		}
 	}
 }
