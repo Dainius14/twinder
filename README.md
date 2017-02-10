@@ -17,9 +17,11 @@ Building requires [Bing Maps SDK](https://www.microsoft.com/en-us/download/detai
 * Every match and recommendation is saved on your computer (%appdata% folder)
 
 
-### Many more things are yet to come as this is a very early release
+### Many more things are yet to come as this is an early release
 
 ![Main window](http://i.imgur.com/SCjgzcj.png)
+
+![Chat window](http://i.imgur.com/t2zX8Dz.png)
 
 #### What is the purpose of this application if there's already a pretty nice mobile app available?
 First and foremost, this is a *desktop* application, so you don't need to reach your phone to Tinder, which is the main advantage of this program.
