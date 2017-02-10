@@ -68,24 +68,29 @@ namespace Twinder.View
 			}
 			e.Handled = true;
 		}
-		
+
 		private void Image_Loaded(object sender, RoutedEventArgs e)
 		{
 			BitmapImage b = new BitmapImage();
 			Image img = sender as Image;
-
+			
 			var src = SerializationHelper.WorkingDir + DirPath
 				+ SerializbleItem + "\\" + SerializationHelper.PHOTOS + (img.DataContext as PhotoModel).Id + ".jpg";
 
 			if (File.Exists(src))
 			{
-				b.BeginInit();
-				b.CacheOption = BitmapCacheOption.OnLoad;
-				b.UriSource = new Uri(src);
-				b.EndInit();
+				try
+				{
+					b.BeginInit();
+					b.CacheOption = BitmapCacheOption.OnLoad;
+					b.UriSource = new Uri(src);
+					b.EndInit();
+					img.Source = b;
+				}
+				catch
+				{
+				}
 			}
-				
-			img.Source = b;
 		}
 	}
 }

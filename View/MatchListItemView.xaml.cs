@@ -39,18 +39,26 @@ namespace Twinder.View
 			Image img = sender as Image;
 
 			var match = img.DataContext as MatchModel;
+			if (match.Person.Photos.Count == 0)
+				return;
 			var src = SerializationHelper.WorkingDir + SerializationHelper.DIR_MATCHES
 				+ match + "\\" + SerializationHelper.PHOTOS + match.Person.Photos[0].FileName;
 
 			if (File.Exists(src))
 			{
-				b.BeginInit();
-				b.CacheOption = BitmapCacheOption.OnLoad;
-				b.UriSource = new Uri(src);
-				b.EndInit();
+				try
+				{
+					b.BeginInit();
+					b.CacheOption = BitmapCacheOption.OnLoad;
+					b.UriSource = new Uri(src);
+					b.EndInit();
+					img.Source = b;
+				}
+				catch
+				{
+				}
 			}
 
-			img.Source = b;
 		}
 	}
 }

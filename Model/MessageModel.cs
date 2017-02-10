@@ -31,7 +31,10 @@ namespace Twinder.Model
 
 		public override bool Equals(object obj)
 		{
-			return Id == (obj as MessageModel).Id;
+			var otherObj = (obj as MessageModel);
+			if (otherObj == null)
+				return false;
+			return Id == otherObj.Id;
 		}
 
 		public override int GetHashCode()

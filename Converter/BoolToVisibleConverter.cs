@@ -11,11 +11,19 @@ namespace Twinder.Converter
 		{
 			if (value != null && value.GetType() == typeof(bool) && targetType == typeof(Visibility))
 			{
+				// Inverse
+				if (parameter != null)
+				{
+					if ((bool) value)
+						return Visibility.Collapsed;
+					else
+						return Visibility.Visible;
+				}
+
 				if ((bool) value)
 					return Visibility.Visible;
 				else
-					return
-						Visibility.Collapsed;
+					return Visibility.Collapsed;
 			}
 			throw new ArgumentException();
 		}

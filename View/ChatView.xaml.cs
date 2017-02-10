@@ -2,12 +2,11 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Twinder.Helpers;
 using Twinder.Model;
-using Twinder.Model.Photos;
 using Twinder.ViewModel;
 
 namespace Twinder.View
@@ -15,6 +14,8 @@ namespace Twinder.View
 	public partial class ChatView : Window
 	{
 		private MatchModel _match;
+		private CollectionViewSource _chatCvs;
+
 		public ChatView()
 		{
 			InitializeComponent();
@@ -23,9 +24,10 @@ namespace Twinder.View
 		public ChatView(MatchModel match)
 		{
 			InitializeComponent();
-			var viewModel = DataContext as ChatViewModel;
 			_match = match;
+			var viewModel = DataContext as ChatViewModel;
 			viewModel.Match = match;
+			viewModel.MyChatView = this;
 
 			int scrollTo = Chat_ListView.Items.Count - 1;
 			if (scrollTo > 0)
@@ -34,20 +36,32 @@ namespace Twinder.View
 
 			viewModel.NewChatMessageReceived += FlashWindow;
 			Loaded += (sender, e) => SendMessage_TextBox.Focus();
-			
+		}
+		
+		/// <summary>
+		/// Scrolls to bottom and updates items
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public void Update()
+		{
+			Chat_ListView.Items.Refresh();
+
+			int scrollTo = Chat_ListView.Items.Count - 1;
+			if (scrollTo > 0)
+				Chat_ListView.ScrollIntoView(Chat_ListView.Items[scrollTo]);
 
 		}
 
 		/// <summary>
-		/// Scrolls to bottom when a new message is sent
+		/// Opens profile on header click
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void chatBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+		private void HeaderBar_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			int scrollTo = Chat_ListView.Items.Count - 1;
-			if (scrollTo > 0)
-				Chat_ListView.ScrollIntoView(Chat_ListView.Items[scrollTo]);
+			var matchProfileWindow = new MatchProfileView(_match);
+			matchProfileWindow.Show();
 		}
 
 		/// <summary>
@@ -73,36 +87,32 @@ namespace Twinder.View
 		{
 			WindowFlasher.Stop(this);
 		}
-		
 
 		private void Image_Loaded(object sender, RoutedEventArgs e)
 		{
 			BitmapImage b = new BitmapImage();
 			Image img = sender as Image;
 
+			if (_match.Person.Photos.Count == 0)
+				return;
 			var src = SerializationHelper.WorkingDir + SerializationHelper.DIR_MATCHES
 				+ _match + "\\" + SerializationHelper.PHOTOS + _match.Person.Photos[0].Id + ".jpg";
 
 			if (File.Exists(src))
 			{
-				b.BeginInit();
-				b.CacheOption = BitmapCacheOption.OnLoad;
-				b.UriSource = new Uri(src);
-				b.EndInit();
+				try
+				{
+					b.BeginInit();
+					b.CacheOption = BitmapCacheOption.OnLoad;
+					b.UriSource = new Uri(src);
+					b.EndInit();
+					img.Source = b;
+				}
+				catch
+				{
+				}
 			}
-
-			img.Source = b;
-		}
-
-		/// <summary>
-		/// Opens profile on header click
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void HeaderBar_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			var matchProfileWindow = new MatchProfileView(_match);
-			matchProfileWindow.Show();
+			
 		}
 	}
 }

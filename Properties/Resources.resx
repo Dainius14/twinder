@@ -463,4 +463,10 @@
   <data name="recs_superlikes_left" xml:space="preserve">
     <value>Super Likes left</value>
   </data>
+  <data name="copy" xml:space="preserve">
+    <value>_Copy</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Copy _All</value>
+  </data>
 </root>

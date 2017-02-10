@@ -7,27 +7,38 @@
              xmlns:local="clr-namespace:Twinder.View"
              mc:Ignorable="d"
 			 
+             xmlns:p="clr-namespace:Twinder.Properties"
 			 xmlns:v="clr-namespace:Twinder.View"
+			 xmlns:System="clr-namespace:System;assembly=mscorlib"
 			 
-             d:DesignHeight="150" d:DesignWidth="350">
+             d:DesignHeight="150" d:DesignWidth="400">
 
 	<UserControl.Resources>
-		
-		<Style TargetType="TextBlock" x:Key="MessageText">
+
+		<Style TargetType="TextBox" x:Key="MessageText">
+			<Setter Property="Background" Value="{x:Null}"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="IsReadOnly" Value="True"/>
+			<Setter Property="IsReadOnlyCaretVisible" Value="False"/>
 			<Setter Property="FontSize" Value="13"/>
 			<Setter Property="FontFamily" Value="Segoe UI"/>
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="5,3"/>
+			<Setter Property="Margin" Value="5"/>
 			<Setter Property="TextWrapping" Value="Wrap"/>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Cursor" Value="Arrow"/>
+				</Trigger>
+			</Style.Triggers>
 		</Style>
 
 		<Style TargetType="TextBlock" x:Key="DateText">
 			<Setter Property="FontSize" Value="10"/>
 			<Setter Property="FontFamily" Value="Segoe UI"/>
 			<Setter Property="FontWeight" Value="Thin"/>
-			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="Opacity" Value="0.6"/>
+			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="Opacity" Value="0.8"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
 			<Setter Property="Margin" Value="5,2"/>
 		</Style>
@@ -36,6 +47,10 @@
 
 		<Style TargetType="Border" x:Key="Border">
 			<Setter Property="CornerRadius" Value="1"/>
+			<Setter Property="Margin" Value="2"/>
+			<Setter Property="MinWidth" Value="200"/>
+			<Setter Property="MaxWidth" Value="350"/>
+						
 		</Style>
 
 		<Style TargetType="Border" x:Key="MatchColor" BasedOn="{StaticResource Border}">
@@ -49,94 +64,77 @@
 		<Style TargetType="Path" x:Key="BubbleTail">
 			<Setter Property="Width" Value="10"/>
 			<Setter Property="Height" Value="10"/>
-		</Style>
-
-		<Style TargetType="Path" x:Key="BubbleTailStroke" BasedOn="{StaticResource BubbleTail}">
-			<Setter Property="Stroke" Value="Black"/>
-			<Setter Property="StrokeThickness" Value="1"/>
-		</Style>
-		
-		<Style TargetType="Path" x:Key="BubbleTailStrokeFix" BasedOn="{StaticResource BubbleTailStroke}">
-			<Setter Property="StrokeThickness" Value="3"/>
+			<Setter Property="Fill" Value="{Binding ElementName=BubbleBorder, Path=Background}"/>
 		</Style>
 
 	</UserControl.Resources>
 
-	<Grid MinWidth="200"
-		  MaxWidth="300"
-		  VerticalAlignment="Top">
+	<UserControl.ContextMenu>
+		<ContextMenu>
+			<MenuItem Header="{x:Static p:Resources.copy}"
+					  Click="ContextMenu_Copy_Click"
+					  IsEnabled="{Binding IsCopyEnabled}"/>
+			<MenuItem Header="{x:Static p:Resources.copy_all}"
+					  Click="ContextMenu_CopyAll_Click"/>
+		</ContextMenu>
 
+	</UserControl.ContextMenu>
+
+	<Grid x:Name="Bubble"
+			VerticalAlignment="Top"
+			MouseEnter="Bubble_MouseEnter"
+			MouseLeave="Bubble_MouseLeave">
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+		</Grid.ColumnDefinitions>
+			
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
 
+
+		<TextBlock x:Name="Date_TextBlock"
+				   DataContext="{Binding Message.SentDate, ElementName=MyChatBubble}"
+				   Visibility="Collapsed"
+				   Style="{StaticResource DateText}"
+				   Grid.Column="0" Grid.Row="1">
+			<Run Text="{Binding Mode=OneWay, StringFormat=HH:mm}"/>
+			<LineBreak/>
+			<Run Text="{Binding Mode=OneWay, StringFormat=yyyy-MM-dd}"/>
+		</TextBlock>
+
 		<Border x:Name="BubbleBorder"
 				Padding="3,2,3,2"
 				Style="{StaticResource MatchColor}"
-				Grid.Row="1">
+				Grid.Row="1" Grid.Column="1">
 
-			<Grid x:Name="BubbleBody">
-
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="auto"/>
-				</Grid.RowDefinitions>
-
-				<TextBlock Text="{Binding Message.Message, ElementName=MyChatBubble}"
-						   Style="{StaticResource MessageText}"
-						   Grid.Row="0"/>
-
-				<TextBlock Text="{Binding Message.SentDate, StringFormat='yyyy-MM-dd hh:mm:ss', ElementName=MyChatBubble}"
-						   Style="{StaticResource DateText}"
-						   Grid.Row="1"/>
-				
-			</Grid>
+			<TextBox x:Name="Message_TextBox"
+					 Text="{Binding Message.Message, ElementName=MyChatBubble}"
+					 Style="{StaticResource MessageText}"
+					 ContextMenu="{x:Null}"/>
+			
 		</Border>
 
 
 		<!-- Upper tail -->
-		<Grid Grid.Row="0"
-			  x:Name="UpperTail">
-			<Path x:Name="BubbleTailAbove" Data="M0,10 L0,0 L10,10"
+		<Path x:Name="UpperTail" Data="M0,10 L0,0 L10,10"
 			  Style="{StaticResource BubbleTail}"
-			  Fill="{Binding ElementName=BubbleBorder, Path=Background}"
-			  HorizontalAlignment="Left" Margin="10,0,0,-2"/>
-
-			<!--<Path x:Name="BubbleTailAboveStroke" Data="M0,0 L10,10"
-			  Style="{StaticResource BubbleTailStroke}"
-			  Margin="10,0,0,-1"
-			  HorizontalAlignment="{Binding ElementName=BubbleTailAbove, Path=HorizontalAlignment}"/>
-
-			<Path x:Name="BubbleTailAboveBugFix"  Data="M10,0 L10,10"
-			  Style="{StaticResource BubbleTailStrokeFix}"
-			  Margin="{Binding ElementName=BubbleTailStroke, Path=Margin}"
-			  HorizontalAlignment="{Binding ElementName=BubbleTailAbove, Path=HorizontalAlignment}"/>-->
-
-		</Grid>
+			  HorizontalAlignment="Left" Margin="10,0,0,-2"
+			  Grid.Row="0" Grid.Column="1"/>
 
 
 		<!-- Lower tail -->
-		<Grid Grid.Row="2"
-			  x:Name="LowerTail">
-			<Path x:Name="BubbleTailBelow" Data="M0,0 L10,10 L10,0"
+		<Path x:Name="LowerTail" Data="M0,0 L10,10 L10,0"
 			  Style="{StaticResource BubbleTail}"
-			  Fill="{Binding ElementName=BubbleBorder, Path=Background}"
-			  HorizontalAlignment="Right" Margin="0,-2,10,0"/>
+			  HorizontalAlignment="Right" Margin="0,-2,10,0"
+			  Grid.Row="2" Grid.Column="1"/>
 
-			<!--<Path x:Name="BubbleTailBelowStroke" Data="M0,0 L10,10"
-			  Style="{StaticResource BubbleTailStroke}"
-			  HorizontalAlignment="{Binding ElementName=BubbleTailBelow, Path=HorizontalAlignment}"
-			  Margin="0,-1,10,0"/>
-
-			<Path x:Name="BubbleTailBelowBugFix"  Data="M10,0 L10,10"
-			  Style="{StaticResource BubbleTailStrokeFix}"
-			  HorizontalAlignment="{Binding ElementName=BubbleTailBelow, Path=HorizontalAlignment}"
-			  Margin="{Binding ElementName=BubbleTailBelowStroke, Path=Margin}"/>-->
-
-		</Grid>
 
 	</Grid>
+
 
 </UserControl>

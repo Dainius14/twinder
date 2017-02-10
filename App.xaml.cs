@@ -47,8 +47,7 @@ namespace Twinder
 			string userName = string.Empty;
 
 			// Logs in default user, otherwise shows account switcher
-			//if (!string.IsNullOrEmpty(Settings.Default.DefaultUser) && !e.Args.Contains(ARG_SHOW_ACCOUNT_SWITCHER))
-			if (false)
+			if (!string.IsNullOrEmpty(Settings.Default.DefaultUser) && !e.Args.Contains(ARG_SHOW_ACCOUNT_SWITCHER))
 			{
 				userName = Settings.Default.DefaultUser;
 

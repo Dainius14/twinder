@@ -43,13 +43,6 @@ namespace Twinder.ViewModel
 			set { Set(ref _superLikesLeft, value); }
 		}
 
-		private int _likesLeft;
-		public int LikesLeft
-		{
-			get { return _likesLeft; }
-			set { Set(ref _likesLeft, value); }
-		}
-		
 		private bool _canSuperLike;
 		public bool CanSuperLike
 		{
@@ -83,8 +76,12 @@ namespace Twinder.ViewModel
 		public RecommendationsViewModel()
 		{
 			CanSuperLike = SerializationHelper.GetSuperLikeReset() < DateTime.Now;
-			LikesLeft = SerializationHelper.GetLikesLeft();
-			SuperLikesLeft = SerializationHelper.GetSuperLikesLeft();
+			if (CanSuperLike)
+			{
+				int maxSuperLikes = SerializationHelper.GetMaxSuperLikes();
+				SuperLikesLeft = maxSuperLikes;
+				SerializationHelper.UpdateSuperLikes(max: SuperLikesLeft);
+			}
 
 			SelectPreviousCommand = new RelayCommand(SelectPrevious);
 			SelectNextCommand = new RelayCommand(SelectNext);
@@ -191,9 +188,12 @@ namespace Twinder.ViewModel
 					// It was a super like, update if neccesarry
 					if (superLike)
 					{
+						SuperLikesLeft = likesent.SuperLikes.Remaining;
 						if (likesent.SuperLikes.Remaining == 0)
 						{
-							SerializationHelper.UpdateSuperLikes(likesent.SuperLikes.ResetsAt, likesent.SuperLikes.Remaining);
+							SerializationHelper.UpdateSuperLikes(resetAt: likesent.SuperLikes.ResetsAt,
+								likesLeft: likesent.SuperLikes.Remaining,
+								max: likesent.SuperLikes.Allotment);
 							CanSuperLike = false;
 						}
 					}
@@ -209,7 +209,7 @@ namespace Twinder.ViewModel
 						Messenger.Default.Send("", MessengerToken.ForceUpdate);
 
 						if (showMessage)
-							MessageBox.Show($"It's a match! {likesent.LikesRemainig} likes left." );
+							MessageBox.Show("It's a match!" );
 					}
 					else
 						SerializationHelper.MoveRecToPending(matchToMove);

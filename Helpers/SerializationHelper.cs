@@ -577,9 +577,9 @@ namespace Twinder.Helpers
 					new XElement("LastUpdate", lastUpdate),
 					new XElement("Latitude", string.Empty),
 					new XElement("Longtitude", string.Empty),
-					new XElement("LikesLeft", 0),
 					new XElement("SuperLikeResetAt", default(DateTime)),
-					new XElement("SuperLikesLeft", 0)));
+					new XElement("SuperLikesLeft", 0),
+					new XElement("MaxSuperLikes", 1)));
 
 			doc.Save(WorkingDir + "\\config.xml");
 		}
@@ -618,7 +618,7 @@ namespace Twinder.Helpers
 			}
 		}
 
-		public static void UpdateSuperLikes(DateTime resetAt, int likesLeft)
+		public static void UpdateSuperLikes(DateTime resetAt = default(DateTime), int likesLeft = -1, int max = -1)
 		{
 			var file = WorkingDir + "config.xml";
 			if (File.Exists(file))
@@ -627,57 +627,35 @@ namespace Twinder.Helpers
 
 				var elReset = doc.Element("LoginData").Element("SuperLikeResetAt");
 				var elLeft = doc.Element("LoginData").Element("SuperLikesLeft");
+				var elMax = doc.Element("LoginData").Element("MaxSuperLikes");
 
-				if (elReset != null)
-					elReset.SetValue(resetAt);
-				else
-					doc.Element("LoginData").Add(new XElement("SuperLikeResetAt", resetAt));
+				if (resetAt != default(DateTime))
+				{
+					if (elReset != null)
+						elReset.SetValue(resetAt);
+					else
+						doc.Element("LoginData").Add(new XElement("SuperLikeResetAt", resetAt));
+				}
 
-				if (elReset != null)
-					elReset.SetValue(resetAt);
-				else
-					doc.Element("LoginData").Add(new XElement("SuperLikeResetAt", likesLeft));
+				if (likesLeft != -1)
+				{
+					if (elLeft != null)
+						elLeft.SetValue(likesLeft);
+					else
+						doc.Element("LoginData").Add(new XElement("SuperLikesLeft", likesLeft));
+				}
 
-				doc.Save(file);
-			}
-		}
-
-
-		public static void UpdateLikes(int likesLeft)
-		{
-			var file = WorkingDir + "config.xml";
-			if (File.Exists(file))
-			{
-				var doc = XDocument.Load(file);
-
-				var el = doc.Element("LoginData").Element("LikesLeft");
-
-				if (el != null)
-					el.SetValue(likesLeft);
-				else
-					doc.Element("LoginData").Add(new XElement("LikesLeft", likesLeft));
+				if (max != -1)
+				{
+					if (elMax != null)
+						elMax.SetValue(1);
+					else
+						doc.Element("LoginData").Add(new XElement("MaxSuperLikes", max));
+				}
 
 				doc.Save(file);
 			}
 		}
-		
-
-		public static int GetLikesLeft()
-		{
-			var file = WorkingDir + "config.xml";
-			if (File.Exists(file))
-			{
-				var doc = XDocument.Load(file);
-
-				var el = doc.Element("LoginData").Element("LikesLeft");
-				if (el != null)
-					return int.Parse(el.Value);
-				doc.Element("LoginData").Add(new XElement("LikesLeft", default(int)));
-				doc.Save(file);
-			}
-			return default(int);
-		}
-
 
 		public static DateTime GetSuperLikeReset()
 		{
@@ -706,6 +684,22 @@ namespace Twinder.Helpers
 				if (el != null)
 					return int.Parse(el.Value);
 				doc.Element("LoginData").Add(new XElement("SuperLikesLeft", default(int)));
+				doc.Save(file);
+			}
+			return default(int);
+		}
+
+		public static int GetMaxSuperLikes()
+		{
+			var file = WorkingDir + "config.xml";
+			if (File.Exists(file))
+			{
+				var doc = XDocument.Load(file);
+
+				var el = doc.Element("LoginData").Element("MaxSuperLikes");
+				if (el != null)
+					return int.Parse(el.Value);
+				doc.Element("LoginData").Add(new XElement("MaxSuperLikes", 1));
 				doc.Save(file);
 			}
 			return default(int);
