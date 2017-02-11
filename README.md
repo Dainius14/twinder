@@ -32,4 +32,8 @@ Most of the other advantages are derivatives of the main advantage e.g. you can 
 #### Is everything working?
 Yes, except for that group thing and you can't upload your photos yet and you can't see Instagram pictures (well in data folder pics are all there) and you can't use any Spotify features and chat doesn't show GIFs and no colorful emoji support.
 
-Icons taken from https://icons8.com
+---
+
+* Icons taken from https://icons8.com
+* Emoji provided free by [EmojiOne](http://emojione.com/)
+* Emojies in chat thanks to [EmojiBox](https://github.com/shine-calendar/EmojiBox)
