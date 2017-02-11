@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Twinder.View"
+             xmlns:emoji="clr-namespace:Twinder.Views.EmojiBox"
              mc:Ignorable="d"
 			 
              xmlns:p="clr-namespace:Twinder.Properties"
@@ -32,6 +33,27 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
+		<Style TargetType="emoji:EmojiRichTextBox" x:Key="MessageTextEmoji">
+			<Setter Property="Background" Value="{x:Null}"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="IsReadOnly" Value="True"/>
+			<Setter Property="IsReadOnlyCaretVisible" Value="False"/>
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="5"/>
+			<Setter Property="MinWidth" Value="100"/>
+			<Setter Property="MaxWidth" Value="350"/>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Cursor" Value="Arrow"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
 
 		<Style TargetType="TextBlock" x:Key="DateText">
 			<Setter Property="FontSize" Value="10"/>
@@ -43,12 +65,10 @@
 			<Setter Property="Margin" Value="5,2"/>
 		</Style>
 
-
-
 		<Style TargetType="Border" x:Key="Border">
 			<Setter Property="CornerRadius" Value="1"/>
 			<Setter Property="Margin" Value="2"/>
-			<Setter Property="MinWidth" Value="200"/>
+			<Setter Property="MinWidth" Value="100"/>
 			<Setter Property="MaxWidth" Value="350"/>
 						
 		</Style>
@@ -69,7 +89,7 @@
 
 	</UserControl.Resources>
 
-	<UserControl.ContextMenu>
+	<!--<UserControl.ContextMenu>
 		<ContextMenu>
 			<MenuItem Header="{x:Static p:Resources.copy}"
 					  Click="ContextMenu_Copy_Click"
@@ -78,7 +98,7 @@
 					  Click="ContextMenu_CopyAll_Click"/>
 		</ContextMenu>
 
-	</UserControl.ContextMenu>
+	</UserControl.ContextMenu>-->
 
 	<Grid x:Name="Bubble"
 			VerticalAlignment="Top"
@@ -112,11 +132,18 @@
 				Style="{StaticResource MatchColor}"
 				Grid.Row="1" Grid.Column="1">
 
-			<TextBox x:Name="Message_TextBox"
-					 Text="{Binding Message.Message, ElementName=MyChatBubble}"
-					 Style="{StaticResource MessageText}"
-					 ContextMenu="{x:Null}"/>
-			
+			<Grid>
+				<emoji:EmojiRichTextBox x:Name="Message_TextBox"
+										Style="{StaticResource MessageTextEmoji}">
+					<FlowDocument>
+						<Paragraph>
+							<Run />
+						</Paragraph>
+					</FlowDocument>
+				</emoji:EmojiRichTextBox>
+				
+			</Grid>
+
 		</Border>
 
 

@@ -175,6 +175,7 @@
 		<ListView x:Name="Chat_ListView" ItemsSource="{Binding Match.Messages}"
 				  HorizontalContentAlignment="Stretch"
 				  VirtualizingPanel.ScrollUnit="Pixel"
+				  BorderThickness="0,0,0,1"
 				  Background="WhiteSmoke">
 			<ListView.ItemTemplate>
 				<DataTemplate>

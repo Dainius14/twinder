@@ -17,7 +17,6 @@ namespace Twinder.ViewModel
 		private DateTime _lastActivity;
 		private DispatcherTimer _timer; 
 		private int _lastMessageIndex;
-		private ChatView _myView;
 
 		public event NewChatMessageHandler NewChatMessageReceived;
 		public delegate void NewChatMessageHandler(object sender, EventArgs e);
@@ -114,7 +113,7 @@ namespace Twinder.ViewModel
 				var timeSpan = DateTime.Now.Subtract(Match.Messages[_lastMessageIndex].SentDate.ToLocalTime());
 
 				if (timeSpan <= TimeSpan.FromSeconds(60))
-					_timer.Interval = TimeSpan.FromSeconds(1);
+					_timer.Interval = TimeSpan.FromSeconds(10);
 
 				else if (timeSpan <= TimeSpan.FromMinutes(60))
 					_timer.Interval = TimeSpan.FromMinutes(1);

@@ -283,7 +283,16 @@ namespace Twinder.ViewModel
 				else
 					regex = DescriptionWordFilter.Replace(' ', '|');
 
-				isDescriptionWordsAccepted = Regex.Match(match.Person.Bio, regex, RegexOptions.IgnoreCase).Success;
+				
+				try
+				{
+					isDescriptionWordsAccepted = Regex.Match(match.Person.Bio, regex, RegexOptions.IgnoreCase).Success;
+				}
+				catch (ArgumentException)
+				{
+					// TODO escape special symbols
+				}
+
 
 			}
 			else
@@ -346,9 +355,15 @@ namespace Twinder.ViewModel
 				else
 					regex = MessagesWordFilter.Replace(' ', '|');
 
-				isMessagesWordAccepted = match.Messages.Any
-					(x => Regex.Match(x.Message, regex, RegexOptions.IgnoreCase).Success);
-
+				try
+				{
+					isMessagesWordAccepted = match.Messages.Any
+						(x => Regex.Match(x.Message, regex, RegexOptions.IgnoreCase).Success);
+				}
+				catch (ArgumentException)
+				{
+					// TODO escape special symbols
+				}
 			}
 			else
 				isMessagesWordAccepted = true;

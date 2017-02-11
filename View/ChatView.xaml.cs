@@ -14,7 +14,6 @@ namespace Twinder.View
 	public partial class ChatView : Window
 	{
 		private MatchModel _match;
-		private CollectionViewSource _chatCvs;
 
 		public ChatView()
 		{
@@ -90,11 +89,13 @@ namespace Twinder.View
 
 		private void Image_Loaded(object sender, RoutedEventArgs e)
 		{
+			if (_match == null || _match.Person == null || _match.Person.Photos == null
+				|| _match.Person.Photos.Count == 0)
+				return;
+
 			BitmapImage b = new BitmapImage();
 			Image img = sender as Image;
-
-			if (_match.Person.Photos.Count == 0)
-				return;
+				
 			var src = SerializationHelper.WorkingDir + SerializationHelper.DIR_MATCHES
 				+ _match + "\\" + SerializationHelper.PHOTOS + _match.Person.Photos[0].Id + ".jpg";
 

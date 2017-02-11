@@ -20,12 +20,12 @@ namespace Twinder.Helpers
 
 			if (timeSpan <= TimeSpan.FromSeconds(10))
 			{
-				result = string.Format("moments ago", timeSpan.Seconds);
+				result = "moments ago";
 			}
 
 			else if (timeSpan <= TimeSpan.FromSeconds(60))
 			{
-				result = string.Format("{0} seconds ago", timeSpan.Seconds);
+				result = "less than a minute ago";
 			}
 			else if (timeSpan <= TimeSpan.FromMinutes(60))
 			{

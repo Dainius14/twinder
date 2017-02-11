@@ -133,16 +133,16 @@ namespace Twinder.View
 			Date_TextBlock.Visibility = Visibility.Collapsed;
 		}
 
-		private void ContextMenu_Copy_Click(object sender, RoutedEventArgs e)
-		{
-			Message_TextBox.Copy();
-		}
+		//private void ContextMenu_Copy_Click(object sender, RoutedEventArgs e)
+		//{
+		//	Message_TextBox.Copy();
+		//}
 
-		private void ContextMenu_CopyAll_Click(object sender, RoutedEventArgs e)
-		{
-			Message_TextBox.SelectAll();
-			Message_TextBox.Copy();
-			Message_TextBox.Select(0, 0);
-		}
+		//private void ContextMenu_CopyAll_Click(object sender, RoutedEventArgs e)
+		//{
+		//	Message_TextBox.SelectAll();
+		//	Message_TextBox.Copy();
+		//	Message_TextBox.Select(0, 0);
+		//}
 	}
 }

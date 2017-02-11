@@ -24,7 +24,7 @@ namespace Twinder.Converter
 					else
 						result += "Me";
 
-					result += string.Format($": {lastMessage.Message}");
+					result += ": " + lastMessage.Message;
 
 					return result;
 				}
