@@ -19,6 +19,7 @@ namespace Twinder.Views.EmojiBox
 		private int _trueLength;
 		private bool _emojisExist;
 		private string _msg;
+		private string _msgWithoutEmojies = string.Empty;
 
 		public EmojiRichTextBox()
 		{
@@ -53,14 +54,12 @@ namespace Twinder.Views.EmojiBox
 
 			Document.PageWidth = Width;
 
-			//DataObject.AddCopyingHandler(this, OnCopy);
+			DataObject.AddCopyingHandler(this, OnCopy);
 		}
 
 		private void ParseText(string text)
 		{
 			var inlines = (Document.Blocks.FirstBlock as Paragraph).Inlines;
-
-			//string text = (DataContext as MessageModel).Message;
 
 			string textPart = string.Empty;
 
@@ -74,7 +73,9 @@ namespace Twinder.Views.EmojiBox
 					try
 					{
 						BitmapImage emoji = ep.GetEmojiWithUnicodeDec(codepoint);
+
 						_emojisExist = true;
+						_msgWithoutEmojies += " ";
 
 						// Adding preceeding text
 						inlines.Add(new Run(textPart));
@@ -91,7 +92,10 @@ namespace Twinder.Views.EmojiBox
 					}
 				}
 				else
+				{
 					textPart += text[i];
+					_msgWithoutEmojies += text[i];
+				}
 			}
 
 			if (textPart != string.Empty)
@@ -110,7 +114,11 @@ namespace Twinder.Views.EmojiBox
 			return img;
 		}
 
-		// Doesn't copy emojies
+		/// <summary>
+		/// Handles Copy event, because text contains images and we need to substitute that
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void OnCopy(object sender, DataObjectCopyingEventArgs e)
 		{
 			if (!_emojisExist)
@@ -118,17 +126,70 @@ namespace Twinder.Views.EmojiBox
 
 			string copied = e.DataObject.GetData(DataFormats.UnicodeText) as string;
 
-			// Full message. yay
+			// Full message
 			if (copied.Length == _trueLength)
 			{
-				TextBox txt = new TextBox();
-				txt.Text = _msg;
-				txt.SelectAll();
-				txt.Copy();
-				//Clipboard.SetText(_msg, TextDataFormat.UnicodeText);
-				e.Handled = true;
+				Clipboard.SetText(_msg, TextDataFormat.UnicodeText);
+			}
+			else
+			{
+				int start = GetSelectionStart();
+				int length = GetSelectionLength();
+				
+				string toCopy = _msg.Substring(start, length);
+
+				Clipboard.SetText(toCopy, TextDataFormat.UnicodeText);
 			}
 
+			e.Handled = true;
+			e.CancelCommand();
+		}
+		public int GetSelectionStart()
+		{
+			var navigator = Document.ContentStart;
+			var navigatorEnd = Selection.Start;
+			int cnt = 0;
+			while (navigator.CompareTo(navigatorEnd) < 0)
+			{
+				switch (navigator.GetPointerContext(LogicalDirection.Forward))
+				{
+					case TextPointerContext.EmbeddedElement:
+						cnt += 2;
+						break;
+					case TextPointerContext.Text:
+						cnt++;
+						break;
+				}
+				navigator = navigator.GetPositionAtOffset(1, LogicalDirection.Forward);
+
+			} // End while.
+
+			return cnt;
+		}
+
+		public int GetSelectionLength()
+		{
+			var navigator = Selection.Start;
+			var navigatorEnd = Selection.End;
+			int cnt = 0;
+
+			while (navigator.CompareTo(navigatorEnd) < 0)
+			{
+				switch (navigator.GetPointerContext(LogicalDirection.Forward))
+				{
+					case TextPointerContext.EmbeddedElement:
+						cnt += 2;
+						break;
+					case TextPointerContext.Text:
+						cnt++;
+						break;
+				}
+
+				navigator = navigator.GetPositionAtOffset(1, LogicalDirection.Forward);
+
+			} // End while.
+
+			return cnt;
 		}
 	}
 }

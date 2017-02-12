@@ -133,16 +133,23 @@ namespace Twinder.View
 			Date_TextBlock.Visibility = Visibility.Collapsed;
 		}
 
-		//private void ContextMenu_Copy_Click(object sender, RoutedEventArgs e)
-		//{
-		//	Message_TextBox.Copy();
-		//}
+		private void ContextMenu_Copy_Click(object sender, RoutedEventArgs e)
+		{
+			Message_TextBox.Copy();
+		}
+		
+		private void ContextMenu_CopyMessage_Click(object sender, RoutedEventArgs e)
+		{
+			Clipboard.SetText(Message.Message, TextDataFormat.UnicodeText);
+		}
 
-		//private void ContextMenu_CopyAll_Click(object sender, RoutedEventArgs e)
-		//{
-		//	Message_TextBox.SelectAll();
-		//	Message_TextBox.Copy();
-		//	Message_TextBox.Select(0, 0);
-		//}
+		private void ContextMenu_CopyMessageTimestamp_Click(object sender, RoutedEventArgs e)
+		{
+			var message = Message_TextBox.DataContext as MessageModel;
+			string fullMsg = string.Format("[{0}] {1}",
+				Message.SentDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"), Message.Message);
+			Clipboard.SetText(fullMsg, TextDataFormat.UnicodeText);
+
+		}
 	}
 }

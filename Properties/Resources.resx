@@ -466,7 +466,10 @@
   <data name="copy" xml:space="preserve">
     <value>_Copy</value>
   </data>
-  <data name="copy_all" xml:space="preserve">
-    <value>Copy _All</value>
+  <data name="copy_message" xml:space="preserve">
+    <value>Copy _Message</value>
+  </data>
+  <data name="copy_message_timestamp" xml:space="preserve">
+    <value>Copy Message With _Time</value>
   </data>
 </root>

@@ -89,16 +89,17 @@
 
 	</UserControl.Resources>
 
-	<!--<UserControl.ContextMenu>
-		<ContextMenu>
+	<UserControl.ContextMenu>
+		<ContextMenu >
 			<MenuItem Header="{x:Static p:Resources.copy}"
-					  Click="ContextMenu_Copy_Click"
-					  IsEnabled="{Binding IsCopyEnabled}"/>
-			<MenuItem Header="{x:Static p:Resources.copy_all}"
-					  Click="ContextMenu_CopyAll_Click"/>
+					  Click="ContextMenu_Copy_Click"/>
+			<MenuItem Header="{x:Static p:Resources.copy_message}"
+					  Click="ContextMenu_CopyMessage_Click"/>
+			<MenuItem Header="{x:Static p:Resources.copy_message_timestamp}"
+					  Click="ContextMenu_CopyMessageTimestamp_Click"/>
 		</ContextMenu>
 
-	</UserControl.ContextMenu>-->
+	</UserControl.ContextMenu>
 
 	<Grid x:Name="Bubble"
 			VerticalAlignment="Top"
@@ -134,7 +135,8 @@
 
 			<Grid>
 				<emoji:EmojiRichTextBox x:Name="Message_TextBox"
-										Style="{StaticResource MessageTextEmoji}">
+										Style="{StaticResource MessageTextEmoji}"
+										ContextMenu="{x:Null}">
 					<FlowDocument>
 						<Paragraph>
 							<Run />

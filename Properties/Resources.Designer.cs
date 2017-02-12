@@ -178,11 +178,20 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy _All.
+        ///   Looks up a localized string similar to Copy _Message.
         /// </summary>
-        public static string copy_all {
+        public static string copy_message {
             get {
-                return ResourceManager.GetString("copy_all", resourceCulture);
+                return ResourceManager.GetString("copy_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Message With _Time.
+        /// </summary>
+        public static string copy_message_timestamp {
+            get {
+                return ResourceManager.GetString("copy_message_timestamp", resourceCulture);
             }
         }
         
