@@ -12,9 +12,10 @@ Building requires [Bing Maps SDK](https://www.microsoft.com/en-us/download/detai
 ### Features:
 * Main Tinder functionalities without the bells and whistles
 * Multi-user support
-* Set your location
-* Filtering of matches
-* Every match and recommendation is saved on your computer (%appdata% folder)
+* Location spoofing
+* Match filtering
+* All match and recommendation data is stored in your %appdata% folder
+* Beautiful chat with Emoji support
 
 
 ### Many more things are yet to come as this is an early release
@@ -30,7 +31,7 @@ You can filter your match list to find the match you desire - no more boring scr
 Most of the other advantages are derivatives of the main advantage e.g. you can chat with multiple people at one time and view photos more comfortably.
 
 #### Is everything working?
-Yes, except for that group thing and you can't upload your photos yet and you can't see Instagram pictures (well in data folder pics are all there) and you can't use any Spotify features and chat doesn't show GIFs and no colorful emoji support.
+Yes, except for that group thing and you can't upload your photos yet and you can't see Instagram pictures (well in data folder pics are all there) and you can't use any Spotify features and chat doesn't show GIFs.
 
 ---
 
