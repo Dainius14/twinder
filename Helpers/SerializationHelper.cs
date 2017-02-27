@@ -383,23 +383,24 @@ namespace Twinder.Helpers
 			if (File.Exists(fullPath))
 			{
 				var item = JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
-
 				// If it is a match, don't forget messages
-				if (typeof(T) == typeof(MatchModel))
-					(item as MatchModel).Messages = JsonConvert.DeserializeObject<ObservableCollection<MessageModel>>(
-						File.ReadAllText(folderName + "\\" + itemName + MSGS + EXT))
-						?? new ObservableCollection<MessageModel>();
-
-				return item;
+				
+				if (item != null)
+				{
+					if (typeof(T) == typeof(MatchModel))
+						(item as MatchModel).Messages = 
+							JsonConvert.DeserializeObject<ObservableCollection<MessageModel>>(
+							File.ReadAllText(folderName + "\\" + itemName + MSGS + EXT))
+							?? new ObservableCollection<MessageModel>();
+					return item;
+				}
+				
 			}
 			// We fucked up somewhere - rollback
-			else
-			{
-				fullPath = fullPath.Remove(itemName.Length + EXT.Length);
-				if (IsDirInAppData(fullPath))
-					Directory.Delete(fullPath, true);
-				return default(T);
-			}
+			fullPath = fullPath.Remove(fullPath.LastIndexOf(itemName));
+			if (IsDirInAppData(fullPath))
+				Directory.Delete(fullPath, true);
+			return default(T);
 
 		}
 
@@ -415,7 +416,7 @@ namespace Twinder.Helpers
 			foreach (var item in dirs)
 			{
 				var itemToAdd = DeserializeItem<T>(item);
-				if (!itemToAdd.Equals(default(T)))
+				if (itemToAdd != null && !itemToAdd.Equals(default(T)))
 					list.Add(itemToAdd);
 			}
 			return list;
@@ -455,14 +456,16 @@ namespace Twinder.Helpers
 		/// <summary>
 		/// Deletes all recs from "Recommendations" folder
 		/// </summary>
-		public static void EmptyRecommendations()
+		public static bool EmptyRecommendations()
 		{
 			if (IsDirInAppData(WorkingDir))
 			{
 				var dirs = Directory.EnumerateDirectories(WorkingDir + DIR_RECS);
 					foreach (var dir in dirs)
-						Directory.Delete(dir);
+						Directory.Delete(dir, true);
+				return true;
 			}
+			return false;
 		}
 
 		/// <summary>

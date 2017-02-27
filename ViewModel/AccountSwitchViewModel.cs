@@ -105,14 +105,13 @@ namespace Twinder.ViewModel
 
 		private void AddNewAccount(Window param)
 		{
-			var loginWindow = new FbLoginView();
+			var browserWindow = new BrowserView();
 
-			// Waits for user to press OK
-			if (loginWindow.ShowDialog() == true)
+			// Waits for user to fully login
+			if (browserWindow.ShowDialog() == true)
 			{
-				var loginVM = loginWindow.DataContext as FbLoginViewModel;
-				FbId = loginVM.FbId;
-				FbToken = loginVM.FbToken;
+				FbToken = browserWindow.AccessToken;
+				FbId = browserWindow.FbId;
 				param.DialogResult = true;
 			}
 		}

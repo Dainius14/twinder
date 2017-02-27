@@ -270,6 +270,7 @@
 
 			<!--Match list-->
 			<ListView Name="matchList" Grid.Row="1" HorizontalAlignment="Stretch"
+					  BorderThickness="0,1"
 					  ItemsSource="{Binding MatchListCvs.View}" VirtualizingPanel.ScrollUnit="Pixel"
 					  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ListView.Resources>

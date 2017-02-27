@@ -645,9 +645,11 @@ namespace Twinder.ViewModel
 		/// </summary>
 		private void ForceDownloadRecs()
 		{
-			SerializationHelper.EmptyRecommendations();
-
-			UpdateRecs(this, null);
+			if (SerializationHelper.EmptyRecommendations())
+			{
+				RecList.Clear();
+				UpdateRecs(this, null);
+			}
 		}
 
 		private void SwitchAccount()

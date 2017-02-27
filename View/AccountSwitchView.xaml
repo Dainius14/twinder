@@ -23,8 +23,13 @@
 
 	<Window.Resources>
 
+		<Style TargetType="ListView" x:Key="AccountList">
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="BorderThickness" Value="0,0,0,1"/>
+		</Style>
+		
 		<Style TargetType="TextBlock" x:Key="Name">
-			<Setter Property="FontSize" Value="18"/>
+			<Setter Property="FontSize" Value="22"/>
 			<Setter Property="FontWeight" Value="SemiBold"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
@@ -81,11 +86,12 @@
 		</StackPanel>
 
 		<!-- Account list -->
-		<ListView HorizontalAlignment="Stretch"
-				  ItemsSource="{Binding AccountList}"
+		<ListView ItemsSource="{Binding AccountList}"
 				  SelectedItem="{Binding Selected}"
+				  Style="{StaticResource AccountList}"
+				  
 				  VirtualizingPanel.ScrollUnit="Pixel"
-					  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+				  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
 			<ListView.Resources>
 				<Style TargetType="ListViewItem">

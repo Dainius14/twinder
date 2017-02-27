@@ -41,7 +41,7 @@ namespace Twinder
 					Directory.CreateDirectory(Settings.Default.AppDataFolder);
 
 			}
-			
+
 			string fbId = string.Empty;
 			string fbToken = string.Empty;
 			string userName = string.Empty;

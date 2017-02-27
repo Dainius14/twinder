@@ -17,6 +17,14 @@
 		Background="WhiteSmoke"
 		DataContext="{Binding Chat, Source={StaticResource Locator}}"
 		d:DataContext="{Binding SampleChat, Source={StaticResource Locator}}">
+	
+	<Window.Title>
+		<MultiBinding StringFormat="{}{0} {1} - {2}">
+			<Binding Path="Match.Person.Name" />
+			<Binding Source="{x:Static p:Resources.window_title_chat}"/>
+			<Binding Source="{x:Static p:Resources.app_title}"/>
+		</MultiBinding>
+	</Window.Title>
 
 	<Window.Resources>
 
@@ -83,13 +91,6 @@
 		
 	</Window.Resources>
 	
-	<Window.Title>
-		<MultiBinding StringFormat="{}{0} {1} - {2}">
-			<Binding Path="Match.Person.Name" />
-			<Binding Source="{x:Static p:Resources.window_title_chat}"/>
-			<Binding Source="{x:Static p:Resources.app_title}"/>
-		</MultiBinding>
-	</Window.Title>
 	
 	<DockPanel LastChildFill="True">
 		
