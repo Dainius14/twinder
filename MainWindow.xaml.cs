@@ -30,9 +30,17 @@ namespace Twinder
 			Messenger.Default.Register<UserModel>(this, MessengerToken.OpenMyProfile, CreateMyProfileWindow);
 			Messenger.Default.Register<ObservableCollection<RecModel>>(this, MessengerToken.OpenRecommendations, OpenRecsWindow);
 			Messenger.Default.Register<string>(this, MessengerToken.ShowSetLocationWindow, CreateSetLocationWindow);
+			Messenger.Default.Register<string>(this, MessengerToken.ShowUpdateAvailableDialog, ShowUpdateAvailableDialog);
 			Messenger.Default.Register<SerializationPacket>(this, MessengerToken.ShowSerializationDialog, ShowDownloadDialog);
 
 
+		}
+
+		private void ShowUpdateAvailableDialog(string obj)
+		{
+			var updateDialog = new NewVersionView(obj);
+			updateDialog.Owner = this;
+			updateDialog.ShowDialog();
 		}
 
 		private void ShowDownloadDialog(SerializationPacket packet)

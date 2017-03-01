@@ -472,4 +472,16 @@
   <data name="copy_message_timestamp" xml:space="preserve">
     <value>Copy Message With _Time</value>
   </data>
+  <data name="window_update_available" xml:space="preserve">
+    <value>Update Available</value>
+  </data>
+  <data name="btn_close" xml:space="preserve">
+    <value>_Close</value>
+  </data>
+  <data name="update_available1" xml:space="preserve">
+    <value>There is a new version available!</value>
+  </data>
+  <data name="update_available2" xml:space="preserve">
+    <value>Would you like to go to the download page?</value>
+  </data>
 </root>

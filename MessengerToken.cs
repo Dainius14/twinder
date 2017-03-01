@@ -12,6 +12,7 @@
 		SortMatchList,
 		OpenMyProfile,
 		ShowSerializationDialog,
-		GetMoreRecs
+		GetMoreRecs,
+		ShowUpdateAvailableDialog
 	}
 }

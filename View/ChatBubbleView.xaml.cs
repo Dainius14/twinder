@@ -1,7 +1,4 @@
-﻿using GalaSoft.MvvmLight;
-using System;
-using System.Linq;
-using System.ComponentModel;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using Twinder.Model;
@@ -21,7 +18,6 @@ namespace Twinder.View
 			DependencyProperty.Register("Match", typeof(MatchModel), typeof(ChatBubbleView));
 
 
-		
 		public MessageModel Message
 		{
 			get { return (MessageModel) GetValue(MessageProperty); }
@@ -32,7 +28,6 @@ namespace Twinder.View
 			DependencyProperty.Register("Message", typeof(MessageModel), typeof(ChatBubbleView));
 
 
-
 		public bool IsCopyEnabled
 		{
 			get { return (bool) GetValue(IsCopyEnabledProperty); }
@@ -41,7 +36,6 @@ namespace Twinder.View
 
 		public static readonly DependencyProperty IsCopyEnabledProperty =
 			DependencyProperty.Register("IsCopyEnabled", typeof(bool), typeof(ChatBubbleView));
-
 
 
 		public ChatBubbleView()
@@ -66,6 +60,7 @@ namespace Twinder.View
 					{
 						LowerTail.Visibility = Visibility.Collapsed;
 						UpperTail.Visibility = Visibility.Visible;
+						
 					}
 					HorizontalAlignment = HorizontalAlignment.Left;
 					BubbleBorder.Style = (Style) FindResource("MatchColor");
@@ -87,6 +82,10 @@ namespace Twinder.View
 					{
 						LowerTail.Visibility = Visibility.Visible;
 						UpperTail.Visibility = Visibility.Collapsed;
+
+						var newThickness = Margin;
+						newThickness.Bottom -= 20; // Account for both bubbles' margins
+						Margin = newThickness;
 					}
 					HorizontalAlignment = HorizontalAlignment.Right;
 					BubbleBorder.Style = (Style) FindResource("UserColor");

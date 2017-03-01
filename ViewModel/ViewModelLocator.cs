@@ -47,6 +47,8 @@ namespace Twinder.ViewModel
 			SimpleIoc.Default.Register<DownloadDataViewModel>();
 			SimpleIoc.Default.Register<MatchListFilterViewModel>();
 			SimpleIoc.Default.Register<AccountSwitchViewModel>();
+			SimpleIoc.Default.Register<NewVersionViewModel>();
+			
 
 			// Design time
 			SimpleIoc.Default.Register<SampleMainVM>();
@@ -147,6 +149,16 @@ namespace Twinder.ViewModel
 
 
 
+		public NewVersionViewModel NewVersionVM
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<NewVersionViewModel>();
+			}
+		}
+
+
+		
 
 		// Design time
 		public SampleMainVM SampleMain

@@ -88,6 +88,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Close.
+        /// </summary>
+        public static string btn_close {
+            get {
+                return ResourceManager.GetString("btn_close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Error.
         /// </summary>
         public static string btn_copy_error {
@@ -979,6 +988,24 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is a new version available!.
+        /// </summary>
+        public static string update_available1 {
+            get {
+                return ResourceManager.GetString("update_available1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to go to the download page?.
+        /// </summary>
+        public static string update_available2 {
+            get {
+                return ResourceManager.GetString("update_available2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum age.
         /// </summary>
         public static string user_age_filter_max {
@@ -1119,6 +1146,15 @@ namespace Twinder.Properties {
         public static string window_title_switch_account {
             get {
                 return ResourceManager.GetString("window_title_switch_account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Available.
+        /// </summary>
+        public static string window_update_available {
+            get {
+                return ResourceManager.GetString("window_update_available", resourceCulture);
             }
         }
     }

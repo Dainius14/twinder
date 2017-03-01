@@ -20,6 +20,8 @@ using System.Diagnostics;
 using System.Xml.Linq;
 using Twinder.Properties;
 using System.Xml;
+using RestSharp;
+using Newtonsoft.Json;
 
 namespace Twinder.ViewModel
 {
@@ -259,6 +261,21 @@ namespace Twinder.ViewModel
 					ConnectionStatus = Resources.tinder_auth_error;
 
 			}
+
+			// Now we check if there's a new version available
+			var restClient = new RestClient("https://api.github.com/");
+			var request = new RestRequest("repos/dainius14/twinder/releases/latest", Method.GET);
+			var response = await restClient.ExecuteTaskAsync(request);
+			if (response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
+				if (("v" + Assembly.GetExecutingAssembly().GetName().Version.ToString()).StartsWith((string) json.tag_name))
+				{
+					Messenger.Default.Send((string) json.html_url, MessengerToken.ShowUpdateAvailableDialog);
+				}
+			}
+
+
 		}
 
 
