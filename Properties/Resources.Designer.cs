@@ -385,6 +385,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All matches.
+        /// </summary>
+        public static string filter_messages_all {
+            get {
+                return ResourceManager.GetString("filter_messages_all", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string filter_messages_apply {
@@ -421,11 +430,38 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not messaged.
+        /// </summary>
+        public static string filter_messages_not {
+            get {
+                return ResourceManager.GetString("filter_messages_not", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Messaged.
+        /// </summary>
+        public static string filter_messages_yes {
+            get {
+                return ResourceManager.GetString("filter_messages_yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search....
         /// </summary>
         public static string filter_name_hint {
             get {
                 return ResourceManager.GetString("filter_name_hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only new.
+        /// </summary>
+        public static string filter_only_new {
+            get {
+                return ResourceManager.GetString("filter_only_new", resourceCulture);
             }
         }
         

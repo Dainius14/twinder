@@ -159,6 +159,28 @@ namespace Twinder.ViewModel
 		}
 
 
+		private MessagedFilter _messagedFilter = MessagedFilter.All;
+		public MessagedFilter MessagedFilter
+		{
+			get { return _messagedFilter; }
+			set
+			{
+				Set(ref _messagedFilter, value);
+				MainVM.MatchListCvs.View.Refresh();
+			}
+		}
+
+		private bool _onlyNewMatches = false;
+		public bool OnlyNewMatches
+		{
+			get { return _onlyNewMatches; }
+			set
+			{
+				Set(ref _onlyNewMatches, value);
+				MainVM.MatchListCvs.View.Refresh();
+			}
+		}
+
 		// Sorting
 		public IEnumerable<SortingOptionsEnum> SortingOptions
 		{
@@ -375,10 +397,26 @@ namespace Twinder.ViewModel
 			else
 				isGenderAccepted = (Gender) Enum.Parse(typeof(Gender), match.Person.Gender.ToString()) == GenderFilter;
 
+			// Messaged or not
+			bool isMessagedAccepted;
+			if (MessagedFilter == MessagedFilter.All)
+				isMessagedAccepted = true;
+			else if (MessagedFilter == MessagedFilter.Messaged)
+				isMessagedAccepted = match.Messages.Count > 0;
+			else
+				isMessagedAccepted = match.Messages.Count == 0;
+
+			// Only new matches
+			bool isNewMatch;
+			if (OnlyNewMatches)
+				isNewMatch = MainVM.NewMatchList.Contains(match);
+			else
+				isNewMatch = true;
+
 			e.Accepted = isNameAccepted && isDescriptionAccepted && isDescriptionWordsAccepted
 				&& isMinAgeAccepted && isMaxAgeAccepted
 				&& isMinMessagesAccepted && isMaxMessagesAccepted && isMessagesWordAccepted
-				&& isGenderAccepted;
+				&& isGenderAccepted && isMessagedAccepted && isNewMatch;
 		}
 
 	}

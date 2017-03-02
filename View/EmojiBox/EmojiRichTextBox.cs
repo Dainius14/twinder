@@ -37,10 +37,10 @@ namespace Twinder.Views.EmojiBox
 			FormattedText txt = new FormattedText(_msg,
 				CultureInfo.CurrentCulture, Document.FlowDirection,
 				new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
-				FontSize + 2, Foreground);
+				FontSize + 1.6, Foreground);
 
 
-			txt.MaxTextWidth = MaxWidth - 10;
+			txt.MaxTextWidth = MaxWidth - 5;
 
 
 			ParseText(_msg);

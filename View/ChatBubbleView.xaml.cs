@@ -83,9 +83,12 @@ namespace Twinder.View
 						LowerTail.Visibility = Visibility.Visible;
 						UpperTail.Visibility = Visibility.Collapsed;
 
-						var newThickness = Margin;
-						newThickness.Bottom -= 20; // Account for both bubbles' margins
-						Margin = newThickness;
+						if (Match.Messages.IndexOf(Message) != Match.Messages.Count - 1)
+						{
+							var newThickness = Margin;
+							newThickness.Bottom -= 16; // Account for both bubbles' margins
+							Margin = newThickness;
+						}
 					}
 					HorizontalAlignment = HorizontalAlignment.Right;
 					BubbleBorder.Style = (Style) FindResource("UserColor");

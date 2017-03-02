@@ -142,6 +142,7 @@
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
 				</Grid.RowDefinitions>
 				
 				<!-- Toolbar -->
@@ -176,7 +177,7 @@
 						</StackPanel>
 					</Button>
 				</StackPanel>
-				
+
 				<!-- Search box -->
 				<Grid Grid.Row="1" Margin="5">
 					<Grid.ColumnDefinitions>
@@ -188,7 +189,7 @@
 					<!-- Search box -->
 					<Grid Grid.Row="0"
 						  Background="White">
-						
+
 						<TextBox Text="{Binding FilterVM.NameFilter, UpdateSourceTrigger=PropertyChanged}"
 								 Padding="3">
 							<TextBox.Style>
@@ -218,9 +219,18 @@
 								</Style>
 							</TextBox.Style>
 						</TextBox>
-						
+
+						<Label HorizontalAlignment="Right" VerticalAlignment="Center">
+							<Image Source="{StaticResource icon_x}"
+								   Width="12" Height="12"
+								   Opacity="0.4"/>
+
+							<Label.InputBindings>
+								<MouseBinding Command="{Binding ClearSearchCommand}" MouseAction="LeftClick" />
+							</Label.InputBindings>
+						</Label>
 					</Grid>
-					
+
 					<!-- Sorting -->
 					<ComboBox Grid.Column="1"
 							  Margin="5,0"
@@ -240,7 +250,7 @@
 						<Label.InputBindings>
 							<MouseBinding MouseAction="LeftClick" Command="{Binding FilterVM.ShowMoreFilteringCommand}"/>
 						</Label.InputBindings>
-						
+
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="{x:Static p:Resources.filter_show_filters}"
 									   Margin="5,0"/>
@@ -260,12 +270,48 @@
 							</Image>
 
 						</StackPanel>
-						
+
 					</Label>
+				</Grid>
+
+
+				<!-- Quick filters  -->
+				<Grid Grid.Row="2" Margin="5" DataContext="{Binding FilterVM}">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<RadioButton Content="{x:Static p:Resources.filter_messages_all}"
+								 IsChecked="{Binding MessagedFilter, Mode=TwoWay,
+									Converter={StaticResource FilterMessagedConverter},
+									ConverterParameter='All'}"
+								 Grid.Column="0"/>
+					
+					<RadioButton Content="{x:Static p:Resources.filter_messages_yes}"
+								 IsChecked="{Binding MessagedFilter, Mode=TwoWay,
+									Converter={StaticResource FilterMessagedConverter},
+									ConverterParameter='Messaged'}"
+								 Grid.Column="1"/>
+					
+					<RadioButton Content="{x:Static p:Resources.filter_messages_not}"
+								 IsChecked="{Binding MessagedFilter, Mode=TwoWay,
+									Converter={StaticResource FilterMessagedConverter},
+									ConverterParameter='NotMessaged'}"
+								 Grid.Column="2"/>
+					
+					<CheckBox Content="{x:Static p:Resources.filter_only_new}"
+							  HorizontalAlignment="Right"
+							  IsChecked="{Binding OnlyNewMatches}"
+							  Grid.Column="4"/>
+
 				</Grid>
 				
 				<!-- Filter menu -->
-				<view:MatchListFilterView Grid.Row="2" DataContext="{Binding FilterVM}"/>
+				<view:MatchListFilterView Grid.Row="3" DataContext="{Binding FilterVM}"/>
 			</Grid>
 
 			<!--Match list-->

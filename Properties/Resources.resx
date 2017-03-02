@@ -484,4 +484,16 @@
   <data name="update_available2" xml:space="preserve">
     <value>Would you like to go to the download page?</value>
   </data>
+  <data name="filter_messages_all" xml:space="preserve">
+    <value>All matches</value>
+  </data>
+  <data name="filter_messages_not" xml:space="preserve">
+    <value>Not messaged</value>
+  </data>
+  <data name="filter_messages_yes" xml:space="preserve">
+    <value>Messaged</value>
+  </data>
+  <data name="filter_only_new" xml:space="preserve">
+    <value>Only new</value>
+  </data>
 </root>

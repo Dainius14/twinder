@@ -29,6 +29,7 @@
 		<converter:MiToKmConverter x:Key="MiToKmConverter"/>
 		<converter:DateTimeToLocalConverter x:Key="DateTimeToLocalConverter"/>
 		<converter:FilterDescriptionConverter x:Key="FilterDescriptionConverter"/>
+		<converter:FilterMessagedConverter x:Key="FilterMessagedConverter"/>
 		<converter:FilterGenderConverter x:Key="FilterGenderConverter"/>
 		<converter:MatchSortingConverter x:Key="MatchSortingConverter"/>
 		<converter:InvertBoolConverter x:Key="InvertBoolConverter"/>
@@ -71,6 +72,7 @@
 		<BitmapImage x:Key="icon_location" UriSource="Icons/Location-50.png"/>
 		<BitmapImage x:Key="icon_user" UriSource="Icons/User-50.png"/>
 		<BitmapImage x:Key="icon_recs" UriSource="Icons/Novel-50.png"/>
+		<BitmapImage x:Key="icon_x" UriSource="Icons/x-32.png"/>
 		
 		<BitmapImage x:Key="icon_expand_down" UriSource="Icons/expand-down.png"/>
 		<BitmapImage x:Key="icon_expand_up" UriSource="Icons/expand-up.png"/>

@@ -8,8 +8,6 @@
              d:DesignHeight="300" d:DesignWidth="600"
 			 xmlns:p="clr-namespace:Twinder.Properties"
 			 DataContext="{Binding}">
-	<!--DataContext="{Binding MatchListFilter, Source={StaticResource Locator}}"-->
-			
 
 	<d:DesignerProperties.DesignStyle>
 		<Style TargetType="UserControl">

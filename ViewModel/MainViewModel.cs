@@ -12,16 +12,12 @@ using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.Windows.Threading;
 using Twinder.Model.Authentication;
-using System.Threading;
-using System.IO;
 using System.Windows.Data;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
-using System.Xml.Linq;
 using Twinder.Properties;
-using System.Xml;
 using RestSharp;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Twinder.ViewModel
 {
@@ -48,6 +44,13 @@ namespace Twinder.ViewModel
 				MatchListCvs.View.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
 					FilterVM.FilteredMatchListCount = MatchListCvs.View.Cast<object>().Count();
 			}
+		}
+
+		private List<MatchModel> _newMatchList;
+		public List<MatchModel> NewMatchList
+		{
+			get { return _newMatchList; }
+			set { Set(ref _newMatchList, value); }
 		}
 
 
@@ -135,7 +138,8 @@ namespace Twinder.ViewModel
 		public RelayCommand ForceDownloadMatchesCommand { get; private set; }
 		public RelayCommand ForceDownloadMatchesFullCommand { get; private set; }
 		public RelayCommand ForceDownloadRecsCommand { get; private set; }
-
+		public RelayCommand ClearSearchCommand { get; private set; }
+		
 		public MatchListFilterViewModel FilterVM { get; set; }
 		public string FbId { get; internal set; }
 		public string FbToken { get; internal set; }
@@ -150,6 +154,7 @@ namespace Twinder.ViewModel
 		{
 			FilterVM = new MatchListFilterViewModel(this);
 
+			NewMatchList = new List<MatchModel>();
 			UpdatedMatches = new ObservableCollection<MatchModel>();
 
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
@@ -157,6 +162,7 @@ namespace Twinder.ViewModel
 			DownloadMatchDataCommand = new RelayCommand<MatchModel>(param => DownloadFullMatchData(param));
 			OpenFolderCommand = new RelayCommand<MatchModel>(param => OpenFolder(param));
 			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
+			ClearSearchCommand = new RelayCommand(() => FilterVM.NameFilter = string.Empty);
 
 			OpenRecsCommand = new RelayCommand(OpenRecs, () =>
 			{
@@ -269,7 +275,7 @@ namespace Twinder.ViewModel
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				var json = JsonConvert.DeserializeObject<dynamic>(response.Content);
-				if (("v" + Assembly.GetExecutingAssembly().GetName().Version.ToString()).StartsWith((string) json.tag_name))
+				if (!("v" + Assembly.GetExecutingAssembly().GetName().Version.ToString()).StartsWith((string) json.tag_name))
 				{
 					Messenger.Default.Send((string) json.html_url, MessengerToken.ShowUpdateAvailableDialog);
 				}
@@ -475,6 +481,7 @@ namespace Twinder.ViewModel
 						{
 							new Task(() => SerializationHelper.SerializeMatch(newMatch)).Start();
 							MatchList.Insert(0, newMatch);
+							NewMatchList.Add(newMatch);
 						}
 					}
 				}
@@ -722,11 +729,18 @@ namespace Twinder.ViewModel
 		GettingRecs,
 		Error
 	}
-	
+
 	public enum DescriptionFilter
 	{
 		Both = 0,
 		WithDescription,
 		WithoutDescription
+	}
+
+	public enum MessagedFilter
+	{
+		All = 0,
+		Messaged,
+		NotMessaged
 	}
 }
