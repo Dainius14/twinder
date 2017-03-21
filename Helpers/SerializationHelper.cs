@@ -460,24 +460,17 @@ namespace Twinder.Helpers
 		{
 			if (IsDirInAppData(WorkingDir))
 			{
-				var dirs = Directory.EnumerateDirectories(WorkingDir + DIR_RECS);
+				var dirs = Directory.EnumerateDirectories(WorkingDir + DIR_RECS).ToList();
+				if (dirs.Count != 0)
+				{
 					foreach (var dir in dirs)
 						Directory.Delete(dir, true);
-				return true;
+					return true;
+				}
 			}
 			return false;
 		}
-
-		/// <summary>
-		/// Returns directory in which match data is kept
-		/// </summary>
-		/// <param name="match"></param>
-		/// <returns></returns>
-		public static string GetMatchFolder(MatchModel match)
-		{
-			return WorkingDir + DIR_MATCHES + match.ToString();
-		}
-
+		
 		/// <summary>
 		/// Saves person's photos to specified directory
 		/// </summary>
