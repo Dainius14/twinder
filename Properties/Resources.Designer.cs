@@ -565,6 +565,51 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Matches.
+        /// </summary>
+        public static string main_tab_matches {
+            get {
+                return ResourceManager.GetString("main_tab_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passed Recommendations.
+        /// </summary>
+        public static string main_tab_recs_passed {
+            get {
+                return ResourceManager.GetString("main_tab_recs_passed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Liked Recommendations.
+        /// </summary>
+        public static string main_tab_recs_pending {
+            get {
+                return ResourceManager.GetString("main_tab_recs_pending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unmatched By Me.
+        /// </summary>
+        public static string main_tab_unmatched_by_me {
+            get {
+                return ResourceManager.GetString("main_tab_unmatched_by_me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unmatched Me.
+        /// </summary>
+        public static string main_tab_unmatched_me {
+            get {
+                return ResourceManager.GetString("main_tab_unmatched_me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download _Full Data.
         /// </summary>
         public static string match_context_menu_download_full {
@@ -898,7 +943,7 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filtered matches.
+        ///   Looks up a localized string similar to Filtered.
         /// </summary>
         public static string statusbar_filtered_count {
             get {

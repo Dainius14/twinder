@@ -6,17 +6,38 @@
              xmlns:local="clr-namespace:Twinder.View"
              mc:Ignorable="d" 
 			 
+			xmlns:p="clr-namespace:Twinder.Properties"
+			 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+	<Grid>
 
 		<ListView Name="photoList" ItemsSource="{Binding}"
 				  VirtualizingPanel.ScrollUnit="Pixel"
 				  ScrollViewer.CanContentScroll="False"
 				  ScrollViewer.HorizontalScrollBarVisibility="Visible">
+
+			<ListView.ContextMenu>
+
+
+				<ContextMenu>
+
+					<MenuItem Header="{x:Static p:Resources.copy}"
+							  Click="MenuItem_Copy"/>
+					
+					<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
+							  Click="MenuItem_OpenFolder"/>
+
+				</ContextMenu>
+
+			</ListView.ContextMenu>
+			
 			<ListView.Resources>
 				<Style TargetType="ListViewItem">
 					<EventSetter Event="PreviewMouseWheel" Handler="OnPreviewMouseWheel"/>
 				</Style>
+
+
+
 			</ListView.Resources>
 
 			<ListView.ItemsPanel>

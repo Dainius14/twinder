@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
+using Twinder.Helpers;
 using Twinder.Model;
 
 namespace Twinder.ViewModel
@@ -19,11 +19,66 @@ namespace Twinder.ViewModel
 		/// </summary>
 		public MainViewModel MainVM { get; private set; }
 
+
+		private TabItem _selectedTab;
+		public TabItem SelectedTab
+		{
+			get { return _selectedTab; }
+			set
+			{
+				Set(ref _selectedTab, value);
+				UpdateStatusBar();
+			}
+		}
+
+		private int _selectedCount;
+		public int SelectedCount
+		{
+			get { return _selectedCount; }
+			set { Set(ref _selectedCount, value); }
+		}
+
+		private int _filteredCount;
+		public int FilteredCount
+		{
+			get { return _filteredCount; }
+			set { Set(ref _filteredCount, value); }
+		}
+
+
 		private int _filteredMatchListCount;
 		public int FilteredMatchListCount
 		{
 			get { return _filteredMatchListCount; }
 			set { Set(ref _filteredMatchListCount, value); }
+		}
+
+		private int _filteredUnmatchMeListCount;
+		public int FilteredUnmatchedMeListCount
+		{
+			get { return _filteredUnmatchMeListCount; }
+			set { Set(ref _filteredUnmatchMeListCount, value); }
+		}
+
+		private int _filteredUnmatchByMeListCount;
+		public int FilteredUnmatchedByMeListCount
+		{
+			get { return _filteredUnmatchByMeListCount; }
+			set { Set(ref _filteredUnmatchByMeListCount, value); }
+		}
+
+		private int _filteredRecommendationsPendingCount;
+		public int FilteredRecommendationsPendingListCount
+		{
+			get { return _filteredRecommendationsPendingCount; }
+			set { Set(ref _filteredRecommendationsPendingCount, value); }
+		}
+
+		private int _filteredRecommendationsPassedCount;
+		public int FilteredRecommendationsPassedListCount
+		{
+			get { return _filteredRecommendationsPassedCount; }
+			set { Set(ref _filteredRecommendationsPassedCount, value); }
 		}
 
 
@@ -41,7 +96,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _nameFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -52,7 +107,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _minAgeFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -63,7 +118,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _maxAgeFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -75,7 +130,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _descriptionFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -86,7 +141,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _descriptionWordFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -97,7 +152,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _descriptionWholeWordsFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -109,7 +164,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _messagesWordFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -120,7 +175,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _messagesWholeWordsFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -132,7 +187,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _minMessagesFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -143,7 +198,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _maxMessagesFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -154,7 +209,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _genderFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -166,7 +221,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _messagedFilter, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -177,7 +232,7 @@ namespace Twinder.ViewModel
 			set
 			{
 				Set(ref _onlyNewMatches, value);
-				MainVM.MatchListCvs.View.Refresh();
+				RefreshCvs();
 			}
 		}
 
@@ -226,6 +281,21 @@ namespace Twinder.ViewModel
 			});
 		}
 
+		private void RefreshCvs()
+		{
+			MainVM.MatchListCvs.View.Refresh();
+			if (MainVM.UnmatchedMeListCvs != null)
+				MainVM.UnmatchedMeListCvs.View.Refresh();
+			if (MainVM.UnmatchedByMeListCvs != null)
+				MainVM.UnmatchedByMeListCvs.View.Refresh();
+			if (MainVM.RecommendationsPendingCvs != null)
+				MainVM.RecommendationsPendingCvs.View.Refresh();
+			if (MainVM.RecommendationsPassedCvs != null)
+				MainVM.RecommendationsPassedCvs.View.Refresh();
+
+			UpdateStatusBar();
+		}
+
 		/// <summary>
 		/// Sort match list collection with given sorting option
 		/// </summary>
@@ -260,44 +330,85 @@ namespace Twinder.ViewModel
 					break;
 			}
 
-			if (MainVM.MatchListCvs != null)
-				using (MainVM.MatchListCvs.DeferRefresh())
+			using (MainVM.MatchListCvs.DeferRefresh())
+			{
+				MainVM.MatchListCvs.SortDescriptions.Clear();
+				MainVM.MatchListCvs.SortDescriptions.Add(sortDescription);
+			}
+
+			if (MainVM.UnmatchedMeList != null)
+				using (MainVM.UnmatchedMeListCvs.DeferRefresh())
 				{
-					MainVM.MatchListCvs.SortDescriptions.Clear();
-					MainVM.MatchListCvs.SortDescriptions.Add(sortDescription);
+					MainVM.UnmatchedMeListCvs.SortDescriptions.Clear();
+					MainVM.UnmatchedMeListCvs.SortDescriptions.Add(sortDescription);
+				}
+
+			if (MainVM.UnmatchedByMeList != null)
+				using (MainVM.UnmatchedMeListCvs.DeferRefresh())
+				{
+					MainVM.UnmatchedByMeListCvs.SortDescriptions.Clear();
+					MainVM.UnmatchedByMeListCvs.SortDescriptions.Add(sortDescription);
+				}
+
+			if (MainVM.RecommendationsPendingList != null)
+				using (MainVM.RecommendationsPendingCvs.DeferRefresh())
+				{
+					MainVM.RecommendationsPendingCvs.SortDescriptions.Clear();
+					MainVM.RecommendationsPendingCvs.SortDescriptions.Add(sortDescription);
+				}
+
+			if (MainVM.RecommendationsPassedList != null)
+				using (MainVM.RecommendationsPassedCvs.DeferRefresh())
+				{
+					MainVM.RecommendationsPassedCvs.SortDescriptions.Clear();
+					MainVM.RecommendationsPassedCvs.SortDescriptions.Add(sortDescription);
 				}
 		}
 
-		/// <summary>
-		/// Applies filtering on given options
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		public void MatchList_ApplyFilter(object sender, FilterEventArgs e)
+		internal void ApplyFilter(object sender, FilterEventArgs e)
 		{
-			var match = (MatchModel) e.Item;
+			string name, bio;
+			int age;
+			Gender gender;
+			if (e.Item is MatchModel)
+			{
+				var match = (MatchModel) e.Item;
+				name = match.Person.Name;
+				bio = match.Person.Bio;
+				age = match.Person.Age;
+				gender = (Gender) Enum.Parse(typeof(Gender), match.Person.Gender.ToString());
+			}
+			else if (e.Item is RecModel)
+			{
+				var rec = (RecModel) e.Item;
+				name = rec.Name;
+				bio = rec.Bio;
+				age = rec.Age;
+				gender = (Gender) Enum.Parse(typeof(Gender), rec.Gender.ToString());
+			}
+			else
+				throw new ArgumentException("Woah wtf happened");
 
 			// Name
-			bool isNameAccepted;
-			if (string.IsNullOrWhiteSpace(NameFilter))
-				isNameAccepted = true;
-			else
-				isNameAccepted = match.Person.Name.ToLower().StartsWith(NameFilter.ToLower());
+			bool isNameAccepted = true;
+			if (!string.IsNullOrWhiteSpace(NameFilter))
+			{
+				isNameAccepted = name.ToLower().StartsWith(NameFilter.ToLower());
+			}
 
 			// Description is null or not
-			bool isDescriptionAccepted;
-			if (DescriptionFilter == DescriptionFilter.Both)
-				isDescriptionAccepted = true;
-			else if (DescriptionFilter == DescriptionFilter.WithDescription)
-				isDescriptionAccepted = !string.IsNullOrWhiteSpace(match.Person.Bio);
-			else
-				isDescriptionAccepted = string.IsNullOrWhiteSpace(match.Person.Bio);
+			bool isDescriptionAccepted = true;
+			if (DescriptionFilter == DescriptionFilter.WithDescription)
+			{
+				isDescriptionAccepted = !string.IsNullOrWhiteSpace(bio);
+			}
+			else if (DescriptionFilter == DescriptionFilter.WithoutDescription)
+				isDescriptionAccepted = string.IsNullOrWhiteSpace(bio);
 
 			// Description words
-			bool isDescriptionWordsAccepted;
+			bool isDescriptionWordsAccepted = true;
 			if (!string.IsNullOrWhiteSpace(DescriptionWordFilter))
 			{
-
 				isDescriptionWordsAccepted = false;
 				string regex;
 				if (DescriptionWholeWordsFilter)
@@ -305,70 +416,57 @@ namespace Twinder.ViewModel
 				else
 					regex = DescriptionWordFilter.Replace(' ', '|');
 
-				
 				try
 				{
-					isDescriptionWordsAccepted = Regex.Match(match.Person.Bio, regex, RegexOptions.IgnoreCase).Success;
+					isDescriptionWordsAccepted = Regex.Match(bio, regex, RegexOptions.IgnoreCase).Success;
 				}
 				catch (ArgumentException)
 				{
 					// TODO escape special symbols
 				}
-
-
 			}
-			else
-				isDescriptionWordsAccepted = true;
 
 			// Age
-			bool isMinAgeAccepted;
+			bool isMinAgeAccepted = true;
 			if (MinAgeFilter != null)
 			{
-				if (match.Person.Age >= MinAgeFilter)
+				if (age >= MinAgeFilter)
 					isMinAgeAccepted = true;
 				else
 					isMinAgeAccepted = false;
 			}
-			else
-				isMinAgeAccepted = true;
 
-			bool isMaxAgeAccepted;
+			bool isMaxAgeAccepted = true;
 			if (MaxAgeFilter != null)
 			{
-				if (match.Person.Age <= MaxAgeFilter)
+				if (age <= MaxAgeFilter)
 					isMaxAgeAccepted = true;
 				else
 					isMaxAgeAccepted = false;
 			}
-			else
-				isMaxAgeAccepted = true;
 
 			// Message count
-			bool isMinMessagesAccepted;
-			if (MinMessagesFilter != null)
+			bool isMinMessagesAccepted = true;
+			if (MinMessagesFilter != null && e.Item is MatchModel)
 			{
-				if (match.Messages.Count >= MinMessagesFilter)
+				if (((MatchModel) e.Item).Messages.Count >= MinMessagesFilter)
 					isMinMessagesAccepted = true;
 				else
 					isMinMessagesAccepted = false;
 			}
-			else
-				isMinMessagesAccepted = true;
 
-			bool isMaxMessagesAccepted;
-			if (MaxMessagesFilter != null)
+			bool isMaxMessagesAccepted = true;
+			if (MaxMessagesFilter != null && e.Item is MatchModel)
 			{
-				if (match.Messages.Count <= MaxMessagesFilter)
+				if (((MatchModel) e.Item).Messages.Count <= MaxMessagesFilter)
 					isMaxMessagesAccepted = true;
 				else
 					isMaxMessagesAccepted = false;
 			}
-			else
-				isMaxMessagesAccepted = true;
 
 			// Messages include
-			bool isMessagesWordAccepted;
-			if (!string.IsNullOrWhiteSpace(MessagesWordFilter))
+			bool isMessagesWordAccepted = true;
+			if (!string.IsNullOrWhiteSpace(MessagesWordFilter) && e.Item is MatchModel)
 			{
 				isMessagesWordAccepted = false;
 				string regex;
@@ -379,7 +477,7 @@ namespace Twinder.ViewModel
 
 				try
 				{
-					isMessagesWordAccepted = match.Messages.Any
+					isMessagesWordAccepted = ((MatchModel) e.Item).Messages.Any
 						(x => Regex.Match(x.Message, regex, RegexOptions.IgnoreCase).Success);
 				}
 				catch (ArgumentException)
@@ -387,38 +485,74 @@ namespace Twinder.ViewModel
 					// TODO escape special symbols
 				}
 			}
-			else
-				isMessagesWordAccepted = true;
 
 			// Gender
-			bool isGenderAccepted;
-			if (GenderFilter == Gender.Both)
-				isGenderAccepted = true;
-			else
-				isGenderAccepted = (Gender) Enum.Parse(typeof(Gender), match.Person.Gender.ToString()) == GenderFilter;
+			bool isGenderAccepted = true;
+			if (GenderFilter != Gender.Both)
+				isGenderAccepted = gender == GenderFilter;
 
 			// Messaged or not
-			bool isMessagedAccepted;
-			if (MessagedFilter == MessagedFilter.All)
-				isMessagedAccepted = true;
-			else if (MessagedFilter == MessagedFilter.Messaged)
-				isMessagedAccepted = match.Messages.Count > 0;
-			else
-				isMessagedAccepted = match.Messages.Count == 0;
+			bool isMessagedAccepted = true;
+			if (e.Item is MatchModel)
+			{
+				if (MessagedFilter == MessagedFilter.Messaged)
+					isMessagedAccepted = ((MatchModel) e.Item).Messages.Count > 0;
+				else if (MessagedFilter == MessagedFilter.NotMessaged)
+					isMessagedAccepted = ((MatchModel) e.Item).Messages.Count == 0;
+			}
 
 			// Only new matches
-			bool isNewMatch;
-			if (OnlyNewMatches)
-				isNewMatch = MainVM.NewMatchList.Contains(match);
-			else
-				isNewMatch = true;
+			bool isNewMatch = true;
+			if (OnlyNewMatches && e.Item is MatchModel)
+				isNewMatch = MainVM.NewMatchList.Contains((MatchModel) e.Item);
+
 
 			e.Accepted = isNameAccepted && isDescriptionAccepted && isDescriptionWordsAccepted
 				&& isMinAgeAccepted && isMaxAgeAccepted
 				&& isMinMessagesAccepted && isMaxMessagesAccepted && isMessagesWordAccepted
 				&& isGenderAccepted && isMessagedAccepted && isNewMatch;
+
 		}
 
+		internal void UpdateStatusBar()
+		{
+			// Based on witch tab is selected, shows appropiate filtered count
+			if ((string) SelectedTab.Header == Properties.Resources.main_tab_matches)
+			{
+				SelectedCount = MainVM.MatchList.Count;
+				FilteredCount = FilteredMatchListCount;
+			}
+			else if ((string) SelectedTab.Header == Properties.Resources.main_tab_unmatched_me)
+			{
+				if (MainVM.UnmatchedMeList == null)
+					MainVM.UnmatchedMeList = SerializationHelper.DeserializeUnmatchedList();
+				SelectedCount = MainVM.UnmatchedMeList.Count;
+				FilteredCount = FilteredUnmatchedMeListCount;
+			}
+			else if ((string) SelectedTab.Header == Properties.Resources.main_tab_unmatched_by_me)
+			{
+				if (MainVM.UnmatchedByMeList == null)
+					MainVM.UnmatchedByMeList = SerializationHelper.DeserializeUnmatchedByMeList();
+				SelectedCount = MainVM.UnmatchedByMeList.Count;
+				FilteredCount = FilteredUnmatchedByMeListCount;
+			}
+			else if ((string) SelectedTab.Header == Properties.Resources.main_tab_recs_pending)
+			{
+				if (MainVM.RecommendationsPendingList == null)
+					MainVM.RecommendationsPendingList = SerializationHelper.DeserializeRecPendingList();
+				SelectedCount = MainVM.RecommendationsPendingList.Count;
+				FilteredCount = FilteredRecommendationsPendingListCount;
+			}
+			else if ((string) SelectedTab.Header == Properties.Resources.main_tab_recs_passed)
+			{
+				if (MainVM.RecommendationsPassedList == null)
+					MainVM.RecommendationsPassedList = SerializationHelper.DeserializeRecPassedList();
+				SelectedCount = MainVM.RecommendationsPassedList.Count;
+				FilteredCount = FilteredRecommendationsPassedListCount;
+			}
+		}
+
+		
 	}
 
 	public enum SortingOptionsEnum

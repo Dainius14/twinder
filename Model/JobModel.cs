@@ -13,6 +13,11 @@ namespace Twinder.Model
 		[JsonProperty("title")]
 		[JsonConverter(typeof(JobConverter<JobTitleModel>))]
 		public JobTitleModel Title { get; set; }
+
+		public override string ToString()
+		{
+			return Title.Title + " at " + Company.Name;
+		}
 	}
 
 	public sealed class JobTitleModel

@@ -30,6 +30,9 @@ namespace Twinder.ViewModel
 			set { Set(ref _updates, value); }
 		}
 
+		// This clusterfuck could use some refactoring but meh who cares
+		// I just want to finish and move on faster
+
 		private ObservableCollection<MatchModel> _matchList;
 		public ObservableCollection<MatchModel> MatchList
 		{
@@ -40,9 +43,72 @@ namespace Twinder.ViewModel
 
 				MatchListCvs = new CollectionViewSource();
 				MatchListCvs.Source = MatchList;
-				MatchListCvs.Filter += FilterVM.MatchList_ApplyFilter;
+				MatchListCvs.Filter += FilterVM.ApplyFilter;
 				MatchListCvs.View.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
 					FilterVM.FilteredMatchListCount = MatchListCvs.View.Cast<object>().Count();
+			}
+		}
+
+
+		private ObservableCollection<MatchModel> _unmatchedMeList;
+		public ObservableCollection<MatchModel> UnmatchedMeList
+		{
+			get { return _unmatchedMeList; }
+			set
+			{
+				Set(ref _unmatchedMeList, value);
+
+				UnmatchedMeListCvs = new CollectionViewSource();
+				UnmatchedMeListCvs.Source = UnmatchedMeList;
+				UnmatchedMeListCvs.Filter += FilterVM.ApplyFilter;
+				UnmatchedMeListCvs.View.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+					FilterVM.FilteredUnmatchedMeListCount = UnmatchedMeListCvs.View.Cast<object>().Count();
+			}
+		}
+
+		private ObservableCollection<MatchModel> _unmatchedByMeList;
+		public ObservableCollection<MatchModel> UnmatchedByMeList
+		{
+			get { return _unmatchedByMeList; }
+			set
+			{
+				Set(ref _unmatchedByMeList, value);
+
+				UnmatchedByMeListCvs = new CollectionViewSource();
+				UnmatchedByMeListCvs.Source = UnmatchedByMeList;
+				UnmatchedByMeListCvs.Filter += FilterVM.ApplyFilter;
+				UnmatchedByMeListCvs.View.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+					FilterVM.FilteredUnmatchedByMeListCount = UnmatchedByMeListCvs.View.Cast<object>().Count();
+			}
+		}
+		private ObservableCollection<RecModel> _recommendationsPendingList;
+		public ObservableCollection<RecModel> RecommendationsPendingList
+		{
+			get { return _recommendationsPendingList; }
+			set
+			{
+				Set(ref _recommendationsPendingList, value);
+
+				RecommendationsPendingCvs = new CollectionViewSource();
+				RecommendationsPendingCvs.Source = RecommendationsPendingList;
+				RecommendationsPendingCvs.Filter += FilterVM.ApplyFilter;
+				RecommendationsPendingCvs.View.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+					FilterVM.FilteredRecommendationsPendingListCount = RecommendationsPendingCvs.View.Cast<object>().Count();
+			}
+		}
+		private ObservableCollection<RecModel> _recommendationsPassedList;
+		public ObservableCollection<RecModel> RecommendationsPassedList
+		{
+			get { return _recommendationsPassedList; }
+			set
+			{
+				Set(ref _recommendationsPassedList, value);
+
+				RecommendationsPassedCvs = new CollectionViewSource();
+				RecommendationsPassedCvs.Source = RecommendationsPassedList;
+				RecommendationsPassedCvs.Filter += FilterVM.ApplyFilter;
+				RecommendationsPassedCvs.View.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+					FilterVM.FilteredRecommendationsPassedListCount = RecommendationsPassedCvs.View.Cast<object>().Count();
 			}
 		}
 
@@ -59,6 +125,34 @@ namespace Twinder.ViewModel
 		{
 			get { return _matchListCvs; }
 			set { Set(ref _matchListCvs, value); }
+		}
+
+
+		private CollectionViewSource _unmatchedMeListCvs;
+		public CollectionViewSource UnmatchedMeListCvs
+		{
+			get { return _unmatchedMeListCvs; }
+			set { Set(ref _unmatchedMeListCvs, value); }
+		}
+
+		private CollectionViewSource _unmatchedByMeListCvs;
+		public CollectionViewSource UnmatchedByMeListCvs
+		{
+			get { return _unmatchedByMeListCvs; }
+			set { Set(ref _unmatchedByMeListCvs, value); }
+		}
+		private CollectionViewSource _recommendationsPendingCvs;
+		public CollectionViewSource RecommendationsPendingCvs
+		{
+			get { return _recommendationsPendingCvs; }
+			set { Set(ref _recommendationsPendingCvs, value); }
+		}
+
+		private CollectionViewSource _recommendationsPassedCvs;
+		public CollectionViewSource RecommendationsPassedCvs
+		{
+			get { return _recommendationsPassedCvs; }
+			set { Set(ref _recommendationsPassedCvs, value); }
 		}
 
 
@@ -126,8 +220,8 @@ namespace Twinder.ViewModel
 		public RelayCommand<MatchModel> OpenChatCommand { get; private set; }
 		public RelayCommand<MatchModel> UnmatchCommand { get; private set; }
 		public RelayCommand<MatchModel> DownloadMatchDataCommand { get; private set; }
-		public RelayCommand<MatchModel> OpenFolderCommand { get; private set; }
-		public RelayCommand<MatchModel> OpenMatchProfileCommand { get; private set; }
+		public RelayCommand<ISerializableItem> OpenFolderCommand { get; private set; }
+		public RelayCommand<ISerializableItem> OpenMatchProfileCommand { get; private set; }
 
 		public RelayCommand OpenRecsCommand { get; private set; }
 		public RelayCommand OpenUserProfileCommand { get; private set; }
@@ -158,9 +252,9 @@ namespace Twinder.ViewModel
 			UpdatedMatches = new ObservableCollection<MatchModel>();
 
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
-			OpenMatchProfileCommand = new RelayCommand<MatchModel>(param => OpenMatchProfile(param));
+			OpenMatchProfileCommand = new RelayCommand<ISerializableItem>(param => OpenMatchProfile(param));
 			DownloadMatchDataCommand = new RelayCommand<MatchModel>(param => DownloadFullMatchData(param));
-			OpenFolderCommand = new RelayCommand<MatchModel>(param => OpenFolder(param));
+			OpenFolderCommand = new RelayCommand<ISerializableItem>(param => OpenFolder(param));
 			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
 			ClearSearchCommand = new RelayCommand(() => FilterVM.NameFilter = string.Empty);
 
@@ -597,7 +691,23 @@ namespace Twinder.ViewModel
 
 		private void OpenChat(MatchModel match)
 		{
-			Messenger.Default.Send(match, MessengerToken.NewChatWindow);
+			string src = string.Empty;
+			var obj = new PassAroundItem();
+
+			if (MatchList.Contains(match))
+				obj.DirPath += SerializationHelper.DIR_MATCHES;
+			else if (UnmatchedMeList.Contains(match))
+				obj.DirPath += SerializationHelper.DIR_UNMATCHED;
+			else if (UnmatchedByMeList.Contains(match))
+				obj.DirPath += SerializationHelper.DIR_UNMATCHED_BY_ME;
+			else if (RecommendationsPassedList.Any(x => x.Id == match.Id))
+				obj.DirPath += SerializationHelper.DIR_RECS_PASSED;
+			else if (RecommendationsPendingList.Any(x => x.Id == match.Id))
+				obj.DirPath += SerializationHelper.DIR_RECS_PENDING;
+
+			obj.Item = match;
+			
+			Messenger.Default.Send(obj, MessengerToken.NewChatWindow);
 
 			// Adding match to UpdateMatches list is the least complex way to force serialization
 			// when user sends messages
@@ -608,17 +718,48 @@ namespace Twinder.ViewModel
 		/// <summary>
 		/// Opens match profile and forces to download additional data
 		/// </summary>
-		/// <param name="match"></param>
-		private void OpenMatchProfile(MatchModel match)
+		/// <param name="item"></param>
+		private void OpenMatchProfile(ISerializableItem item)
 		{
-			Messenger.Default.Send(match, MessengerToken.ShowMatchProfile);
 
-			//DownloadFullMatchData(match);
+			string src = string.Empty;
+			var obj = new PassAroundItem();
+
+			if (MatchList.Contains(item))
+				obj.DirPath += SerializationHelper.DIR_MATCHES;
+			else if (UnmatchedMeList != null && UnmatchedMeList.Contains(item))
+				obj.DirPath += SerializationHelper.DIR_UNMATCHED;
+			else if (UnmatchedByMeList != null && UnmatchedByMeList.Contains(item))
+				obj.DirPath += SerializationHelper.DIR_UNMATCHED_BY_ME;
+			else if (RecommendationsPassedList != null && RecommendationsPassedList.Any(x => x.Id == item.Id))
+				obj.DirPath += SerializationHelper.DIR_RECS_PASSED;
+			else if (RecommendationsPendingList != null && RecommendationsPendingList.Any(x => x.Id == item.Id))
+				obj.DirPath += SerializationHelper.DIR_RECS_PENDING;
+
+			obj.Item = item;
+
+			Messenger.Default.Send(obj, MessengerToken.ShowMatchProfile);
+
 		}
 
-		private void OpenFolder(MatchModel param)
+		private void OpenFolder(ISerializableItem param)
 		{
-			Process.Start(SerializationHelper.GetMatchFolder(param));
+			string src = SerializationHelper.WorkingDir;
+
+			if (MatchList.Contains(param))
+				src += SerializationHelper.DIR_MATCHES;
+			else if (UnmatchedMeList.Contains(param))
+				src += SerializationHelper.DIR_UNMATCHED;
+			else if (UnmatchedByMeList.Contains(param))
+				src += SerializationHelper.DIR_UNMATCHED_BY_ME;
+			else if (RecommendationsPassedList.Any(x => x.Id == param.Id))
+				src += SerializationHelper.DIR_RECS_PASSED;
+			else if (RecommendationsPendingList.Any(x => x.Id == param.Id))
+				src += SerializationHelper.DIR_RECS_PENDING;
+
+			src += param;
+
+			Process.Start(src);
 		}
 
 		/// <summary>

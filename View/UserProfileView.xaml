@@ -6,6 +6,7 @@
 		xmlns:local="clr-namespace:Twinder.View"
         mc:Ignorable="d" 
 		
+		xmlns:helps="clr-namespace:Twinder.Helpers"
 		xmlns:p="clr-namespace:Twinder.Properties"
 		xmlns:view="clr-namespace:Twinder.View"
 		
@@ -195,19 +196,22 @@
 						Margin="0, 5, 0, 0">
 
 				<Button Content="{x:Static p:Resources.btn_save}"
+						Style="{StaticResource StdButton}"
 						Command="{Binding SaveCommand}"
-						IsDefault="True"
-						Width="60" Margin="5, 0"/>
+						IsDefault="True"/>
+
+				<Separator Style="{StaticResource StdButtonSeperator}"/>
 
 				<Button Content="{x:Static p:Resources.btn_cancel}"
+						Style="{StaticResource StdButton}"
 						IsCancel="True"
-						Click="Button_Click"
-						Width="60"/>
+						Click="Button_Click"/>
 			</StackPanel>
 			
 		</Grid>
 		
-		<!-- Images -->
-		<view:PhotoScrollerView DataContext="{Binding User.Photos}"/>
+			<!-- Images -->
+		<view:PhotoScrollerView DataContext="{Binding User.Photos}"
+								MyDirPath="{x:Static helps:DirPath.DIR_USER}"/>
 	</DockPanel>
 </Window>

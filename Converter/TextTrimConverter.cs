@@ -17,7 +17,7 @@ namespace Twinder.Converter
 				text.Trim();
 				return text;
 			}
-			throw new ArgumentException();
+			return Binding.DoNothing;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

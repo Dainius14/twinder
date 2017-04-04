@@ -6,6 +6,7 @@ using Twinder.Helpers;
 using Twinder.Model.Photos;
 using Twinder.Model.Spotify;
 using System.Threading.Tasks;
+using Twinder.Model.UserRelated;
 
 namespace Twinder.Model
 {
@@ -79,7 +80,14 @@ namespace Twinder.Model
 		public PersonModel Person { get; set; }
 
 		[JsonProperty("distance_mi")]
+
 		public int DistanceMiles { get; set; }
+
+		[JsonProperty("jobs")]
+		public ObservableCollection<JobModel> Jobs { get; set; }
+
+		[JsonProperty("schools")]
+		public ObservableCollection<SchoolModel> Schools { get; set; }
 
 
 		public override string ToString()
@@ -89,6 +97,13 @@ namespace Twinder.Model
 
 		public bool ShouldSerializeMessages()
 		{
+			return false;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj != null && obj is MatchModel && (obj as MatchModel).Person != null && (obj as MatchModel).Person.Id == Person.Id)
+				return true;
 			return false;
 		}
 	}
@@ -115,5 +130,11 @@ namespace Twinder.Model
 
 		[JsonProperty("photos")]
 		public ObservableCollection<PhotoModel> Photos { get; set; }
+
+		[JsonProperty("jobs")]
+		public ObservableCollection<JobModel> Jobs { get; set; }
+
+		[JsonProperty("schools")]
+		public ObservableCollection<SchoolModel> Schools { get; set; }
 	}
 }

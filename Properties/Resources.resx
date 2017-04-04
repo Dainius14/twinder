@@ -419,7 +419,7 @@
     <value>Woman</value>
   </data>
   <data name="statusbar_filtered_count" xml:space="preserve">
-    <value>Filtered matches</value>
+    <value>Filtered</value>
   </data>
   <data name="match_context_menu_download_full" xml:space="preserve">
     <value>Download _Full Data</value>
@@ -495,5 +495,20 @@
   </data>
   <data name="filter_only_new" xml:space="preserve">
     <value>Only new</value>
+  </data>
+  <data name="main_tab_matches" xml:space="preserve">
+    <value>Matches</value>
+  </data>
+  <data name="main_tab_recs_passed" xml:space="preserve">
+    <value>Passed Recommendations</value>
+  </data>
+  <data name="main_tab_recs_pending" xml:space="preserve">
+    <value>Liked Recommendations</value>
+  </data>
+  <data name="main_tab_unmatched_by_me" xml:space="preserve">
+    <value>Unmatched By Me</value>
+  </data>
+  <data name="main_tab_unmatched_me" xml:space="preserve">
+    <value>Unmatched Me</value>
   </data>
 </root>

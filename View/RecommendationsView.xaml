@@ -12,7 +12,9 @@
 
 		Background="WhiteSmoke"
         Height="650" Width="700"
-		DataContext="{Binding Recommendations, Source={StaticResource Locator}}">
+		DataContext="{Binding Recommendations, Source={StaticResource Locator}}"
+		
+		Loaded="Window_Loaded">
 
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} - {1}">
@@ -91,31 +93,41 @@
 					</Grid.ColumnDefinitions>
 
 					<!-- Last seen date -->
-					<TextBlock Text="{x:Static p:Resources.match_info_last_seen}" Grid.Row="0" Grid.Column="0"/>
+					<!--RIP LAST SEEN 2017-03-29-->
+					<!--<TextBlock Text="{x:Static p:Resources.match_info_last_seen}" Grid.Row="0" Grid.Column="0"/>
 					<TextBlock Text="{Binding PingTime, StringFormat='yyyy-MM-dd dddd, HH:mm',
 									Converter={StaticResource DateTimeToLocalConverter}}"
-						   Grid.Row="0" Grid.Column="2"/>
+						   Grid.Row="0" Grid.Column="2"/>-->
 
-					<!-- Matched on date-->
-					<TextBlock Text="{x:Static p:Resources.distance}" Grid.Row="1" Grid.Column="0"/>
-					<TextBlock Text="{Binding DistanceKilometers, StringFormat='{}{0} km'}"
-						   Grid.Row="1" Grid.Column="2"/>
+					<!-- Distance -->
+					<TextBlock Text="{x:Static p:Resources.distance}" Grid.Row="0" Grid.Column="0"/>
+					<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+						<TextBlock Text="{Binding DistanceMiles, StringFormat='{}{0} km    ',
+							   Converter={StaticResource MiToKmConverter}}"/>
+						<TextBlock Text="{Binding DistanceMiles, StringFormat='{}{0} miles    '}"/>
+					</StackPanel>
+
 
 					<!-- Common like count-->
-					<TextBlock Text="{x:Static p:Resources.common_likes_count}" Grid.Row="2" Grid.Column="0"/>
+					<TextBlock Text="{x:Static p:Resources.common_likes_count}" Grid.Row="1" Grid.Column="0"/>
 					<TextBlock Text="{Binding CommonLikeCount}"
-						   Grid.Row="2" Grid.Column="2"/>
+						   Grid.Row="1" Grid.Column="2"/>
 
 					<!-- Common friend count -->
-					<TextBlock Text="{x:Static p:Resources.common_friends_count}" Grid.Row="3" Grid.Column="0"/>
+					<TextBlock Text="{x:Static p:Resources.common_friends_count}" Grid.Row="2" Grid.Column="0"/>
 					<TextBlock Text="{Binding CommonFriendCount}"
-						   Grid.Row="3" Grid.Column="2"/>
+						   Grid.Row="2" Grid.Column="2"/>
 					
 					<!-- School name -->
-					<TextBlock Text="{x:Static p:Resources.match_info_school}" Grid.Row="4" Grid.Column="0"/>
-					<TextBlock Text="{Binding Schools[0].Name}"
-						   Grid.Row="4" Grid.Column="2"/>
+					<TextBlock Text="{x:Static p:Resources.match_info_school}" Grid.Row="3" Grid.Column="0"/>
+					<TextBlock Text="{Binding Schools[0]}"
+						   Grid.Row="3" Grid.Column="2"/>
 					
+					<!-- Job -->
+					<TextBlock Text="{x:Static p:Resources.match_info_job}" Grid.Row="4" Grid.Column="0"/>
+					<TextBlock Text="{Binding Jobs[0]}"
+						   Grid.Row="4" Grid.Column="2"/>
+
 
 
 				</Grid>
@@ -247,7 +259,7 @@
 		<view:PhotoScrollerView DataContext="{Binding SelectedRec.Photos}"
 								SerializbleItem="{Binding DataContext.SelectedRec, RelativeSource={
 									RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
-								DirPath="{x:Static helps:DirPath.DIR_RECS}"/>
+								MyDirPath="{x:Static helps:DirPath.DIR_RECS}"/>
 
 	</DockPanel>
 </Window>

@@ -55,5 +55,15 @@ namespace Twinder.View
 			}
 			e.Handled = true;
 		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			var vm = DataContext as RecommendationsViewModel;
+			if (vm.SelectedRec == null && vm.RecList != null && vm.RecList.Count != 0)
+			{
+				vm.SelectedRec = vm.RecList[0];
+				vm.SelectedIndex = 0;
+			}
+		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +20,7 @@ namespace Twinder.View
 
 		public ISerializableItem SerializbleItem
 		{
-			get { return (ISerializableItem) GetValue(SerializbleItemProperty); }
+			get { return (ISerializableItem)GetValue(SerializbleItemProperty); }
 			set { SetValue(SerializbleItemProperty, value); }
 		}
 
@@ -27,19 +28,16 @@ namespace Twinder.View
 			DependencyProperty.Register("SerializbleItem", typeof(ISerializableItem),
 				typeof(PhotoScrollerView), new PropertyMetadata(null));
 
-
-
-		public string DirPath
+		public string MyDirPath
 		{
-			get { return (string) GetValue(DirPathProperty); }
+			get { return (string)GetValue(DirPathProperty); }
 			set { SetValue(DirPathProperty, value); }
 		}
 
 		public static readonly DependencyProperty DirPathProperty =
-			DependencyProperty.Register("DirPath", typeof(string),
-				typeof(PhotoScrollerView), new PropertyMetadata(string.Empty));
+			DependencyProperty.Register("MyDirPath", typeof(string),
+				typeof(PhotoScrollerView), new PropertyMetadata(null));
 
-		
 
 		public PhotoScrollerView()
 		{
@@ -73,9 +71,12 @@ namespace Twinder.View
 		{
 			BitmapImage b = new BitmapImage();
 			Image img = sender as Image;
-			
-			var src = SerializationHelper.WorkingDir + DirPath
-				+ SerializbleItem + "\\" + SerializationHelper.PHOTOS + (img.DataContext as PhotoModel).Id + ".jpg";
+
+			string src = SerializationHelper.WorkingDir + MyDirPath;
+
+			if (SerializbleItem != null)
+				src += SerializbleItem + "\\";
+			src += SerializationHelper.PHOTOS + (img.DataContext as PhotoModel).Id + ".jpg";
 
 			if (File.Exists(src))
 			{
@@ -91,6 +92,43 @@ namespace Twinder.View
 				{
 				}
 			}
+		}
+
+		private void MenuItem_Copy(object sender, RoutedEventArgs e)
+		{
+			BitmapImage b = new BitmapImage();
+
+			string src = SerializationHelper.WorkingDir + MyDirPath;
+
+			if (SerializbleItem != null)
+				src += SerializbleItem + "\\";
+			src += SerializationHelper.PHOTOS + (photoList.SelectedItem as PhotoModel).Id + ".jpg";
+
+			if (File.Exists(src))
+			{
+				try
+				{
+					b.BeginInit();
+					b.UriSource = new Uri(src);
+					b.EndInit();
+				}
+				catch
+				{ }
+			}
+
+			Clipboard.SetImage(b);
+		}
+
+		private void MenuItem_OpenFolder(object sender, RoutedEventArgs e)
+		{
+
+			string src = SerializationHelper.WorkingDir + MyDirPath;
+
+			if (SerializbleItem != null)
+				src += SerializbleItem + "\\";
+			src += SerializationHelper.PHOTOS;
+
+			Process.Start(src);
 		}
 	}
 }

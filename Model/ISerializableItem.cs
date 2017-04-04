@@ -8,4 +8,10 @@
 	{
 		string Id { get; set; }
 	}
+
+	public class PassAroundItem
+	{
+		public ISerializableItem Item { get; set; }
+		public string DirPath { get; set; }
+	}
 }

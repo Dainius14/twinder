@@ -13,23 +13,21 @@
         d:DesignHeight="650" d:DesignWidth="700"
 		Height="610" Width="700"
 		Background="WhiteSmoke"
-		DataContext="{Binding MatchProfile, Source={StaticResource Locator}}"
 		d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}">
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} {1} - {2}">
-			<Binding Path="Match.Person.Name"/>
+			<Binding Path="MatchName" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
 			<Binding Source="{x:Static p:Resources.window_title_profile}"/>
 			<Binding Source="{x:Static p:Resources.app_title}"/>
 		</MultiBinding>
 	</Window.Title>
 
 	<DockPanel Margin="10" 
-			   DataContext="{Binding Match}"
 			   d:DataContext="{Binding}"
 			   LastChildFill="True">
 
 		<!-- Information -->
-		<Grid DockPanel.Dock="Bottom" Height="110" Margin="0, 5, 0, 0">
+		<Grid DockPanel.Dock="Bottom" Height="125" Margin="0, 5, 0, 0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="*"/>
@@ -46,21 +44,28 @@
 				<TextBlock Grid.Row="0" FontSize="18">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="{}{0}, {1}">
-							<Binding Path="Person.Name"/>
-							<Binding Path="Person.Age"/>
+							<Binding Path="MatchName" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
+							<Binding Path="MatchAge" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>
 
 				<!-- Bio -->
-				<ScrollViewer Grid.Row="1">
-					<TextBlock Text="{Binding Person.Bio}"/>
-				</ScrollViewer>
+					<!--Bio-->
+					<ScrollViewer Grid.Row="1" Grid.Column="0"
+								  VerticalScrollBarVisibility="Visible">
+					<TextBox Text="{Binding Bio, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+								 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+								 TextWrapping="Wrap"
+								 IsReadOnly="True" />
+					</ScrollViewer>
 			</Grid>
 
 			<!-- Other info -->
 			<Grid Grid.Column="1" Margin="10, 5, 0, 0">
 				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
@@ -75,43 +80,82 @@
 				</Grid.ColumnDefinitions>
 
 				<!-- Last seen date -->
-				<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
+				<!--RIP LAST SEEN 2017-03-29-->
+				<!--<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
 						   Grid.Row="0" Grid.Column="0"/>
 				<TextBlock Text="{Binding Person.PingTime, StringFormat='yyyy-MM-dd dddd, HH:mm', Converter={StaticResource DateTimeToLocalConverter}}"
-						   Grid.Row="0" Grid.Column="2"/>
+						   Grid.Row="0" Grid.Column="2"/>-->
 
 				<!-- Matched on date-->
 				<TextBlock Text="{Binding Source={x:Static p:Resources.matched_on}, StringFormat='{}{0}:'}"
-						   Grid.Row="1" Grid.Column="0"/>
-				<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd dddd, HH:mm', Converter={StaticResource DateTimeToLocalConverter}}"
-						   Grid.Row="1" Grid.Column="2"/>
+						   Grid.Row="0" Grid.Column="0"
+						   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
+
+				<TextBlock Text="{Binding MatchedOn, StringFormat='yyyy-MM-dd dddd, HH:mm', Converter={StaticResource DateTimeToLocalConverter},
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+						   Grid.Row="0" Grid.Column="2"
+						   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
 
 				<!-- Common like count-->
 				<TextBlock Text="{Binding Source={x:Static p:Resources.common_likes_count}, StringFormat='{}{0}:'}"
-						   Grid.Row="2" Grid.Column="0"/>
-				<TextBlock Text="{Binding CommonLikeCount}"
-						   Grid.Row="2" Grid.Column="2"/>
+						   Grid.Row="1" Grid.Column="0"/>
+				<TextBlock Text="{Binding OurLikes,
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+						   Grid.Row="1" Grid.Column="2"/>
 
 				<!-- Common friend count -->
 				<TextBlock Text="{Binding Source={x:Static p:Resources.common_friends_count}, StringFormat='{}{0}:'}"
-						   Grid.Row="3" Grid.Column="0"/>
-				<TextBlock Text="{Binding CommonFriendCount}"
-						   Grid.Row="3" Grid.Column="2"/>
+						   Grid.Row="2" Grid.Column="0"/>
+				<TextBlock Text="{Binding OurFriends,
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+						   Grid.Row="2" Grid.Column="2"/>
 
 				<!-- Total messages -->
 				<TextBlock Text="{Binding Source={x:Static p:Resources.total_messages}, StringFormat='{}{0}:'}"
+						   Grid.Row="3" Grid.Column="0"
+						   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
+				<TextBlock Text="{Binding Messages.Count,
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+						   Grid.Row="3" Grid.Column="2"
+						   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
+
+				<!-- School -->
+				<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_school}, StringFormat='{}{0}:'}"
 						   Grid.Row="4" Grid.Column="0"/>
-				<TextBlock Text="{Binding Messages.Count}"
+				<TextBlock Text="{Binding Schools[0],
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
 						   Grid.Row="4" Grid.Column="2"/>
+
+				<!-- Job -->
+				<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_job}, StringFormat='{}{0}:'}"
+						   Grid.Row="5" Grid.Column="0"/>
+				<TextBlock Text="{Binding Jobs[0],
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+						   Grid.Row="5" Grid.Column="2"/>
+
+				<!-- Distance -->
+				<TextBlock Text="{Binding Source={x:Static p:Resources.distance}, StringFormat='{}{0}:'}"
+						   Grid.Row="6" Grid.Column="0"/>
+				<StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="2">
+					<TextBlock Text="{Binding TheDistance, StringFormat='{}{0} km    ',
+							   Converter={StaticResource MiToKmConverter},
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+					<TextBlock Text="{Binding TheDistance, StringFormat='{}{0} miles    ',
+						RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+				</StackPanel>
+				
 
 			</Grid>
 			
 		</Grid>
 		
 		<!-- Images -->
-		<view:PhotoScrollerView DataContext="{Binding Person.Photos}"
+		<view:PhotoScrollerView x:Name="PhotoScroller"
 								SerializbleItem="{Binding DataContext, RelativeSource={
-									RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
-								DirPath="{x:Static helps:DirPath.DIR_MATCHES}"/>
+									RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"/>
 	</DockPanel>
 </Window>

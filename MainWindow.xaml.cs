@@ -25,8 +25,8 @@ namespace Twinder
 			this.Loaded += myViewModel.StartInitialize;
 			this.Closing += (s, e) => ViewModelLocator.Cleanup();
 
-			Messenger.Default.Register<MatchModel>(this, MessengerToken.NewChatWindow, CreateChatWindow);
-			Messenger.Default.Register<MatchModel>(this, MessengerToken.ShowMatchProfile, CreateMatchProfileView);
+			Messenger.Default.Register<PassAroundItem>(this, MessengerToken.NewChatWindow, CreateChatWindow);
+			Messenger.Default.Register<PassAroundItem>(this, MessengerToken.ShowMatchProfile, CreateMatchProfileView);
 			Messenger.Default.Register<UserModel>(this, MessengerToken.OpenMyProfile, CreateMyProfileWindow);
 			Messenger.Default.Register<ObservableCollection<RecModel>>(this, MessengerToken.OpenRecommendations, OpenRecsWindow);
 			Messenger.Default.Register<string>(this, MessengerToken.ShowSetLocationWindow, CreateSetLocationWindow);
@@ -68,15 +68,15 @@ namespace Twinder
 			recsWindow.Show();
 		}
 
-		private void CreateChatWindow(MatchModel match)
+		private void CreateChatWindow(PassAroundItem obj)
 		{
-			var chatWindow = new ChatView(match);
+			var chatWindow = new ChatView((MatchModel)obj.Item, obj.DirPath);
 			chatWindow.Show();
 		}
 
-		private void CreateMatchProfileView(MatchModel match)
+		private void CreateMatchProfileView(PassAroundItem obj)
 		{
-			var matchProfileWindow = new MatchProfileView(match);
+			var matchProfileWindow = new MatchProfileView(obj.Item, obj.DirPath);
 			matchProfileWindow.Show();
 		}
 

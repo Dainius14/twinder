@@ -71,8 +71,8 @@
 				<TextBlock Name="matchCountOk_TextBlock">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="{}{0} {1}">
-							<Binding Path="MatchList.Count" FallbackValue="0"/>
-							<Binding Source="{x:Static p:Resources.statusbar_match_count}"/>
+							<Binding Path="FilterVM.SelectedCount" FallbackValue="0"/>
+							<Binding ElementName="MatchTabs" Path="SelectedItem.Header"/>
 						</MultiBinding>
 					</TextBlock.Text>
 				</TextBlock>
@@ -87,7 +87,7 @@
 				<TextBlock>
 					<TextBlock.Text>
 						<MultiBinding StringFormat="{}{0} {1}">
-							<Binding Path="FilterVM.FilteredMatchListCount" FallbackValue="0"/>
+							<Binding Path="FilterVM.FilteredCount" FallbackValue="0"/>
 							<Binding Source="{x:Static p:Resources.statusbar_filtered_count}"/>
 						</MultiBinding>
 					</TextBlock.Text>
@@ -130,7 +130,7 @@
 
 		</StatusBar>
 
-		<Grid Name="LayoutRoot">
+		<Grid Name="LayoutRoot" Background="#f0f0f0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="*"/>
@@ -276,7 +276,7 @@
 
 
 				<!-- Quick filters  -->
-				<Grid Grid.Row="2" Margin="5" DataContext="{Binding FilterVM}">
+				<Grid Grid.Row="2" Margin="5,2,5,5" DataContext="{Binding FilterVM}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="*"/>
@@ -314,59 +314,242 @@
 				<view:MatchListFilterView Grid.Row="3" DataContext="{Binding FilterVM}"/>
 			</Grid>
 
-			<!--Match list-->
-			<ListView Name="matchList" Grid.Row="1" HorizontalAlignment="Stretch"
-					  BorderThickness="0,1"
-					  ItemsSource="{Binding MatchListCvs.View}" VirtualizingPanel.ScrollUnit="Pixel"
-					  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-				<ListView.Resources>
-					<Style TargetType="ListViewItem">
-						<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+			<TabControl x:Name="MatchTabs" Grid.Row="1" Margin="1,0"
+						SelectedItem="{Binding FilterVM.SelectedTab}">
+				<TabControl.Resources>
+					<Style TargetType="ListView">
+						<Setter Property="BorderThickness" Value="0"/>
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						<Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
+						<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
 					</Style>
+				</TabControl.Resources>
 
-					 <!--TODO need to implement this into the control itself somehow god damn it-->
-					<ContextMenu x:Key="Context menu">
-						<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
+				<TabItem Header="{x:Static p:Resources.main_tab_matches}">
+					<ListView Name="matchList"
+							  ItemsSource="{Binding MatchListCvs.View}">
+						<ListView.Resources>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+							</Style>
+
+							<ContextMenu x:Key="Context menu">
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
 								  Command="{Binding DataContext.OpenChatCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
 								  CommandParameter="{Binding}"
 								  InputGestureText="Enter"/>
-						<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
 								  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
 								  CommandParameter="{Binding}"
 								  InputGestureText="Ctrl+Enter"/>
 
-						<MenuItem Header="{x:Static p:Resources.match_context_menu_download_full}"
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_download_full}"
 								  Command="{Binding DataContext.DownloadMatchDataCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
 								  CommandParameter="{Binding}"/>
-						
-						<Separator/>
 
-						<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
+								<Separator/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
 								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"/>
-						
-						<MenuItem Header="{x:Static p:Resources.match_context_menu_unmatch}"
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_unmatch}"
 								  Command="{Binding DataContext.UnmatchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"
 								  InputGestureText="Delete"/>
-					</ContextMenu>
+							</ContextMenu>
 
-				</ListView.Resources>
+						</ListView.Resources>
 
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<view:MatchListItemView
-							Width="{Binding ElementName=matchList, Path=ActualWidth}"/>
-					</DataTemplate>
-				</ListView.ItemTemplate>
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<view:MatchListItemView DirPath="Matches"
+														Width="{Binding ElementName=MatchTabs, Path=ActualWidth}"/>
+							</DataTemplate>
+						</ListView.ItemTemplate>
 
-				<ListView.ItemContainerStyle>
-					<Style TargetType="ListViewItem">
-						<Setter Property="ContextMenu" Value="{StaticResource Context menu}"/>
-						<EventSetter Event="MouseDoubleClick" Handler="matchList_OnMouseDoubleClick"/>
-					</Style>
-				</ListView.ItemContainerStyle>
-			</ListView>
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem">
+								<Setter Property="ContextMenu" Value="{StaticResource Context menu}"/>
+								<EventSetter Event="MouseDoubleClick" Handler="matchList_OnMouseDoubleClick"/>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+
+				</TabItem>
+
+				<TabItem Header="{x:Static p:Resources.main_tab_unmatched_me}">
+					<ListView Name="UnmatchedList"
+							  ItemsSource="{Binding UnmatchedMeListCvs.View}">
+						<ListView.Resources>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+							</Style>
+
+							<ContextMenu x:Key="Context menu">
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
+								  Command="{Binding DataContext.OpenChatCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+								  CommandParameter="{Binding}"
+								  InputGestureText="Enter"/>
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
+								  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+								  CommandParameter="{Binding}"
+								  InputGestureText="Ctrl+Enter"/>
+
+								<Separator/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
+								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+							</ContextMenu>
+
+						</ListView.Resources>
+
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<view:MatchListItemView DirPath="Matches-Unmatched"
+														Width="{Binding ElementName=MatchTabs, Path=ActualWidth}"/>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem">
+								<Setter Property="ContextMenu" Value="{StaticResource Context menu}"/>
+								<EventSetter Event="MouseDoubleClick" Handler="matchList_OnMouseDoubleClick"/>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+
+				</TabItem>
+
+				<TabItem Header="{x:Static p:Resources.main_tab_unmatched_by_me}">
+					<ListView Name="UnmatchedByMeList"
+							  ItemsSource="{Binding UnmatchedByMeListCvs.View}">
+						<ListView.Resources>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+							</Style>
+
+							<ContextMenu x:Key="Context menu">
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_chat}"
+								  Command="{Binding DataContext.OpenChatCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+								  CommandParameter="{Binding}"
+								  InputGestureText="Enter"/>
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
+								  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+								  CommandParameter="{Binding}"
+								  InputGestureText="Ctrl+Enter"/>
+
+								<Separator/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
+								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+							</ContextMenu>
+
+						</ListView.Resources>
+
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<view:MatchListItemView DirPath="Matches-Unmatched-By-Me"
+														Width="{Binding ElementName=MatchTabs, Path=ActualWidth}"/>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem">
+								<Setter Property="ContextMenu" Value="{StaticResource Context menu}"/>
+								<EventSetter Event="MouseDoubleClick" Handler="matchList_OnMouseDoubleClick"/>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+
+				</TabItem>
+				
+				<TabItem Header="{x:Static p:Resources.main_tab_recs_pending}">
+					<ListView Name="RecommendationsPending"
+							  ItemsSource="{Binding RecommendationsPendingCvs.View}">
+						<ListView.Resources>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+							</Style>
+
+							<ContextMenu x:Key="Context menu">
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
+								  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+								  CommandParameter="{Binding}"
+								  InputGestureText="Ctrl+Enter"/>
+
+								<Separator/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
+								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+							</ContextMenu>
+
+						</ListView.Resources>
+
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<view:MatchListItemView DirPath="Recommendations-Pending"
+														Width="{Binding ElementName=MatchTabs, Path=ActualWidth}"/>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem">
+								<Setter Property="ContextMenu" Value="{StaticResource Context menu}"/>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+
+				</TabItem>
+				
+				<TabItem Header="{x:Static p:Resources.main_tab_recs_passed}">
+					<ListView Name="RecommendationsPassed"
+							  ItemsSource="{Binding RecommendationsPassedCvs.View}">
+						<ListView.Resources>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+							</Style>
+
+							<ContextMenu x:Key="Context menu">
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_profile}"
+								  Command="{Binding DataContext.OpenMatchProfileCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+								  CommandParameter="{Binding}"
+								  InputGestureText="Ctrl+Enter"/>
+
+								<Separator/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder}"
+								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+							</ContextMenu>
+
+						</ListView.Resources>
+
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<view:MatchListItemView DirPath="Recommendations-Passed"
+														Width="{Binding ElementName=MatchTabs, Path=ActualWidth}"/>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem">
+								<Setter Property="ContextMenu" Value="{StaticResource Context menu}"/>
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+
+				</TabItem>
+			</TabControl>
 		</Grid>
 
 	</DockPanel>

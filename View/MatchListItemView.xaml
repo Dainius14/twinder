@@ -12,8 +12,7 @@
 			 
 			 d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}"
 			 
-			 Background="MintCream"
-			 Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+			 Background="MintCream">
 
 	<UserControl.Resources>
 		
@@ -97,44 +96,60 @@
 					   Style="{StaticResource Name}">
 				<TextBlock.Text>
 					<MultiBinding StringFormat="{}{0}, {1}">
-						<Binding Path="Person.Name"/>
-						<Binding Path="Person.Age"/>
+						<Binding Path="MatchName" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl}"/>
+						<Binding Path="MatchAge" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl}"/>
 					</MultiBinding>
 				</TextBlock.Text>
 			</TextBlock>
 
 			<!-- Bio -->
-			<TextBlock Text="{Binding Person.Bio, Converter={StaticResource TextTrimConverter}}"
+			<TextBlock Text="{Binding Bio, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource TextTrimConverter}}"
 					   Grid.Row="1" Grid.ColumnSpan="3"
 					   Style="{StaticResource BioText}"
 					   TextTrimming="CharacterEllipsis"
-					   ToolTip="{Binding Person.Bio}"/>
+					   ToolTip="{Binding Bio, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"/>
 			
 			<!-- Match date -->
 			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_matched_on}, StringFormat='{}{0}:'}"
-					   Grid.Row="2" Grid.Column="0"
-					   Style="{StaticResource SubTextHeader}"/>
-			<TextBlock Text="{Binding CreatedDate, StringFormat='yyyy-MM-dd', FallbackValue='yyyy-MM-dd',
-							Converter={StaticResource DateTimeToLocalConverter}}"
-					   Grid.Row="2" Grid.Column="2"
-					   Style="{StaticResource SubText}"/>
-
-			<!-- Last seen date -->
-			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
 					   Grid.Row="3" Grid.Column="0"
-					   Style="{StaticResource SubTextHeader}"/>
-			<TextBlock Text="{Binding Person.PingTime, StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm',
+					   Style="{StaticResource SubTextHeader}"
+					   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
+			<TextBlock Text="{Binding MatchedOn, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							StringFormat='yyyy-MM-dd', FallbackValue='yyyy-MM-dd',
 							Converter={StaticResource DateTimeToLocalConverter}}"
 					   Grid.Row="3" Grid.Column="2"
-					   Style="{StaticResource SubText}"/>
+					   Style="{StaticResource SubText}"
+					   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
+
+			<!-- Last seen date -->
+			<!--RIP LAST SEEN 2017-03-29-->
+			<!--<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_last_seen}, StringFormat='{}{0}:'}"
+					   Grid.Row="3" Grid.Column="0"
+					   Style="{StaticResource SubTextHeader}"
+					   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
+			<TextBlock Text="{Binding LastSeen, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							StringFormat='yyyy-MM-dd HH:mm', FallbackValue='yyyy-MM-dd HH:mm',
+							Converter={StaticResource DateTimeToLocalConverter}}"
+					   Grid.Row="3" Grid.Column="2"
+					   Style="{StaticResource SubText}"
+					   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource BoolToVisibleConverter}}"/>-->
 
 			<!-- Total messages -->
 			<TextBlock Text="{Binding Source={x:Static p:Resources.match_info_message_count}, StringFormat='{}{0}:'}"
 					   Grid.Row="4" Grid.Column="0"
-					   Style="{StaticResource SubTextHeader}"/>
-			<TextBlock Text="{Binding Messages.Count, FallbackValue='999'}"
+					   Style="{StaticResource SubTextHeader}"
+					   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
+			<TextBlock Text="{Binding Messages.Count, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
 					   Grid.Row="4" Grid.Column="2"
-					   Style="{StaticResource SubText}"/>
+					   Style="{StaticResource SubText}"
+					   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource BoolToVisibleConverter}}"/>
 			
 			<!-- Last message -->
 
@@ -142,7 +157,9 @@
 					   FontStyle="Italic"
 					   Grid.Row="5" Grid.ColumnSpan="3"
 					   Style="{StaticResource BioText}"
-					   TextTrimming="CharacterEllipsis">
+					   TextTrimming="CharacterEllipsis"
+					   Visibility="{Binding IsMatchModel, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl},
+							Converter={StaticResource BoolToVisibleConverter}}">
 			</TextBlock>
 
 		</Grid>

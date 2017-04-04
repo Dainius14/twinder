@@ -124,6 +124,9 @@ namespace Twinder.Helpers
 			match.CommonFriends = matchUpdate.CommonFriends;
 			match.CommonLikes = matchUpdate.CommonLikes;
 			match.ConnectionCount = matchUpdate.ConnectionCount;
+
+			match.Schools = matchUpdate.Schools;
+			match.Jobs = matchUpdate.Jobs;
 		}
 
 		/// <summary>
@@ -791,5 +794,6 @@ namespace Twinder.Helpers
 		public static string DIR_RECS { get { return "Recommendations\\"; } }
 		public static string DIR_RECS_PENDING { get { return "Recommendations-Pending\\"; } }
 		public static string DIR_RECS_PASSED { get { return "Recommendations-Passed\\"; } }
+		public static string DIR_USER { get { return "User\\"; } }
 	}
 }

@@ -64,7 +64,7 @@ namespace Twinder.ViewModel
 		public UserProfileViewModel()
 		{
 
-			SaveCommand = new RelayCommand(Save, CanSave);
+			SaveCommand = new RelayCommand(Save);
 
 		}
 		/// <summary>
@@ -106,16 +106,13 @@ namespace Twinder.ViewModel
 				else
 					User.InterestedIn.Add(InterestedIn);
 
+				MessageBox.Show("Updated");
+				
 			}
 			catch (TinderRequestException e)
 			{
 				MessageBox.Show(e.Message);
 			}
-		}
-
-		private bool CanSave()
-		{
-			return true;
 		}
 		#endregion 
 	}

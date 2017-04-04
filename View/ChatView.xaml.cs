@@ -15,15 +15,18 @@ namespace Twinder.View
 	{
 		private MatchModel _match;
 
+		private string _dir;
+
 		public ChatView()
 		{
 			InitializeComponent();
 		}
 
-		public ChatView(MatchModel match)
+		public ChatView(MatchModel match, string dir)
 		{
 			InitializeComponent();
 			_match = match;
+			_dir = dir;
 			var viewModel = DataContext as ChatViewModel;
 			viewModel.Match = match;
 			viewModel.MyChatView = this;
@@ -59,7 +62,7 @@ namespace Twinder.View
 		/// <param name="e"></param>
 		private void HeaderBar_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			var matchProfileWindow = new MatchProfileView(_match);
+			var matchProfileWindow = new MatchProfileView(_match, _dir);
 			matchProfileWindow.Show();
 		}
 
@@ -96,7 +99,7 @@ namespace Twinder.View
 			BitmapImage b = new BitmapImage();
 			Image img = sender as Image;
 				
-			var src = SerializationHelper.WorkingDir + SerializationHelper.DIR_MATCHES
+			var src = SerializationHelper.WorkingDir + _dir
 				+ _match + "\\" + SerializationHelper.PHOTOS + _match.Person.Photos[0].Id + ".jpg";
 
 			if (File.Exists(src))

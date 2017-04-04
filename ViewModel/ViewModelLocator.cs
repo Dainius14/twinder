@@ -39,7 +39,6 @@ namespace Twinder.ViewModel
 
 			SimpleIoc.Default.Register<MainViewModel>();
 			SimpleIoc.Default.Register<ChatViewModel>();
-			SimpleIoc.Default.Register<MatchProfileViewModel>();
 			SimpleIoc.Default.Register<RecommendationsViewModel>();
 			SimpleIoc.Default.Register<SetLocationViewModel>();
 			SimpleIoc.Default.Register<ErrorDialogViewModel>();
@@ -75,14 +74,6 @@ namespace Twinder.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<ChatViewModel>(Guid.NewGuid().ToString());
-			}
-		}
-
-		public MatchProfileViewModel MatchProfile
-		{
-			get
-			{
-				return ServiceLocator.Current.GetInstance<MatchProfileViewModel>(Guid.NewGuid().ToString());
 			}
 		}
 

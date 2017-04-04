@@ -31,7 +31,7 @@ namespace Twinder.Converter
 
 				return "No messages sent";
 			}
-			throw new ArgumentException();
+			return Binding.DoNothing;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -95,6 +95,13 @@ namespace Twinder.Model
 		{
 			return string.Format($"{Name.Unidecode()}.{Id}");
 		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj != null && obj is RecModel && (obj as RecModel).Id == Id)
+				return true;
+			return false;
+		}
 	}
 	
 }
