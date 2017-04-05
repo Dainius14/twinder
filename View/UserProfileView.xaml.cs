@@ -14,6 +14,13 @@ namespace Twinder.View
 			InitializeComponent();
 			UserProfileViewModel viewModel = DataContext as UserProfileViewModel;
 			viewModel.User = user;
+
+			// Close window with ESC
+			PreviewKeyDown += (object sender, KeyEventArgs e) =>
+			{
+				if (e.Key == Key.Escape)
+					Close();
+			};
 		}
 		
 		private void MinAge_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -38,6 +38,14 @@ namespace Twinder.View
 
 			viewModel.NewChatMessageReceived += FlashWindow;
 			Loaded += (sender, e) => SendMessage_TextBox.Focus();
+
+
+			// Close window with ESC
+			PreviewKeyDown += (object sender, KeyEventArgs e) =>
+			{
+				if (e.Key == Key.Escape)
+					Close();
+			};
 		}
 		
 		/// <summary>

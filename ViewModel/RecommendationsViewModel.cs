@@ -104,7 +104,6 @@ namespace Twinder.ViewModel
 				if (RecList == null)
 				{
 					RecList = recList;
-					RecList.CollectionChanged += RecList_CollectionChanged;
 					SelectedRec = RecList[0];
 					SelectedIndex = 0;
 				}
@@ -268,19 +267,8 @@ namespace Twinder.ViewModel
 			if (RecList.Count == 0)
 			{
 				Messenger.Default.Send("", MessengerToken.GetMoreRecs);
-				// Close the god damn window, less hassle
 				RecsView.Close();
 			}
-
-		}
-
-		/// <summary>
-		/// Is executed when reclist gets new recommendations added
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void RecList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
 
 		}
 	}

@@ -47,16 +47,20 @@
 
 				<Separator/>
 
+				<MenuItem Header="{x:Static p:Resources.open_twinder_folder}"
+						  Command="{Binding OpenFolderCommand}"/>
+				
+				<Separator/>
+
 				<MenuItem Header="{x:Static p:Resources.menu_app_exit}"
 						  Command="{Binding ExitCommand}"/>
 			</MenuItem>
 
-			<!-- Tools -->
-			<MenuItem Header="{x:Static p:Resources.menu_tools}">
-			</MenuItem>
-
 			<!-- Help -->
 			<MenuItem Header="{x:Static p:Resources.menu_help}">
+				<MenuItem Header="{x:Static p:Resources.menu_help_website}"
+						  Command="{Binding WebsiteCommand}"/>
+				
 				<MenuItem Header="{x:Static p:Resources.menu_help_about}"
 						  Command="{Binding AboutCommand}"/>
 			</MenuItem>
@@ -353,6 +357,14 @@
 								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"/>
 
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_photos}"
+								  Command="{Binding DataContext.OpenPhotosFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_instagram}"
+								  Command="{Binding DataContext.OpenInstagramFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+								
 								<MenuItem Header="{x:Static p:Resources.match_context_menu_unmatch}"
 								  Command="{Binding DataContext.UnmatchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"
@@ -402,6 +414,13 @@
 								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"/>
 
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_photos}"
+								  Command="{Binding DataContext.OpenPhotosFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_instagram}"
+								  Command="{Binding DataContext.OpenInstagramFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
 							</ContextMenu>
 
 						</ListView.Resources>
@@ -447,6 +466,13 @@
 								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"/>
 
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_photos}"
+								  Command="{Binding DataContext.OpenPhotosFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_instagram}"
+								  Command="{Binding DataContext.OpenInstagramFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
 							</ContextMenu>
 
 						</ListView.Resources>
@@ -489,6 +515,13 @@
 								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"/>
 
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_photos}"
+								  Command="{Binding DataContext.OpenPhotosFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_instagram}"
+								  Command="{Binding DataContext.OpenInstagramFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
 							</ContextMenu>
 
 						</ListView.Resources>
@@ -530,6 +563,13 @@
 								  Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
 								  CommandParameter="{Binding}"/>
 
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_photos}"
+								  Command="{Binding DataContext.OpenPhotosFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
+
+								<MenuItem Header="{x:Static p:Resources.match_context_menu_open_folder_instagram}"
+								  Command="{Binding DataContext.OpenInstagramFolderCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+								  CommandParameter="{Binding}"/>
 							</ContextMenu>
 
 						</ListView.Resources>

@@ -511,4 +511,16 @@
   <data name="main_tab_unmatched_me" xml:space="preserve">
     <value>Unmatched Me</value>
   </data>
+  <data name="menu_help_website" xml:space="preserve">
+    <value>_Website</value>
+  </data>
+  <data name="open_twinder_folder" xml:space="preserve">
+    <value>Open Twinder Folder</value>
+  </data>
+  <data name="match_context_menu_open_folder_instagram" xml:space="preserve">
+    <value>Open Instagram Folder</value>
+  </data>
+  <data name="match_context_menu_open_folder_photos" xml:space="preserve">
+    <value>Open Photos Folder</value>
+  </data>
 </root>

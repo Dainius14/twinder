@@ -637,6 +637,24 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Instagram Folder.
+        /// </summary>
+        public static string match_context_menu_open_folder_instagram {
+            get {
+                return ResourceManager.GetString("match_context_menu_open_folder_instagram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Photos Folder.
+        /// </summary>
+        public static string match_context_menu_open_folder_photos {
+            get {
+                return ResourceManager.GetString("match_context_menu_open_folder_photos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open _Profile.
         /// </summary>
         public static string match_context_menu_open_profile {
@@ -763,6 +781,15 @@ namespace Twinder.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Website.
+        /// </summary>
+        public static string menu_help_website {
+            get {
+                return ResourceManager.GetString("menu_help_website", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Tools.
         /// </summary>
         public static string menu_tools {
@@ -786,6 +813,15 @@ namespace Twinder.Properties {
         public static string menu_tools_switch_account {
             get {
                 return ResourceManager.GetString("menu_tools_switch_account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Twinder Folder.
+        /// </summary>
+        public static string open_twinder_folder {
+            get {
+                return ResourceManager.GetString("open_twinder_folder", resourceCulture);
             }
         }
         

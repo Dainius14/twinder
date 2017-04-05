@@ -9,7 +9,8 @@
 		xmlns:p="clr-namespace:Twinder.Properties"
         DataContext="{Binding NewVersionVM, Source={StaticResource Locator}}"
 		Background="WhiteSmoke"
-		Height="140" Width="300" ResizeMode="NoResize">
+		Height="140" Width="300" ResizeMode="NoResize"
+		WindowStartupLocation="CenterOwner">
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} - {1}">
 			<Binding Source="{x:Static p:Resources.window_update_available}"/>
@@ -37,8 +38,10 @@
 
 		<StackPanel Orientation="Vertical">
 			<TextBlock Text="{x:Static p:Resources.update_available1}"
-					   FontWeight="DemiBold"/>
-			<TextBlock Text="{x:Static p:Resources.update_available2}"/>
+					   FontWeight="DemiBold"
+					   FontSize="14"/>
+			<TextBlock Text="{x:Static p:Resources.update_available2}"
+					   FontSize="13"/>
 		</StackPanel>
 		
     </DockPanel>

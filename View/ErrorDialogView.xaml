@@ -26,19 +26,19 @@
 
 				<Button Content="{x:Static p:Resources.btn_copy_error}"
 						Command="{Binding CopyErrorCommand}"
-						Grid.Column="1"
-						Width="80" Height="22"
-						Margin="0,0,7,0"/>
+						Style="{StaticResource StdButton}"/>
 
-				<Button Content="{x:Static p:Resources.btn_ok}"
+				<Separator Style="{StaticResource StdButtonSeperator}"/>
+
+				<Button Content="{x:Static p:Resources.btn_close}"
 						Command="{Binding OkCommand}"
-						Grid.Column="2"
-						IsDefault="True"
-						Width="80" Height="22"/>
+						Style="{StaticResource StdButton}"
+						IsDefault="True"/>
 			</StackPanel>
 		</Grid>
 
 		<TextBlock DockPanel.Dock="Top"
+				   FontSize="13"
 				   Margin="0,0,0,10"
 				   TextWrapping="Wrap">
 			<TextBlock.Inlines>

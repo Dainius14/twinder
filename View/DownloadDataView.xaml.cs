@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Twinder.Helpers;
 using Twinder.ViewModel;
 
@@ -31,7 +21,12 @@ namespace Twinder.View
 			// Fuck MVVM pattern for simplicity
 			viewModel.MyView = this;
 			viewModel.Worker.Disposed += (object sender, EventArgs e) => Close();
-			viewModel.Worker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => Close();
+			viewModel.Worker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+			{
+				if (packet.RecList != null && packet.RecList.Count != 0)
+					Messenger.Default.Send(packet.RecList, MessengerToken.OpenRecommendations);
+				Close();
+			};
 			viewModel.StartDownload();
 		}
 	}

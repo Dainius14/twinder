@@ -221,6 +221,8 @@ namespace Twinder.ViewModel
 		public RelayCommand<MatchModel> UnmatchCommand { get; private set; }
 		public RelayCommand<MatchModel> DownloadMatchDataCommand { get; private set; }
 		public RelayCommand<ISerializableItem> OpenFolderCommand { get; private set; }
+		public RelayCommand<ISerializableItem> OpenPhotosFolderCommand { get; private set; }
+		public RelayCommand<ISerializableItem> OpenInstagramFolderCommand { get; private set; }
 		public RelayCommand<ISerializableItem> OpenMatchProfileCommand { get; private set; }
 
 		public RelayCommand OpenRecsCommand { get; private set; }
@@ -229,6 +231,8 @@ namespace Twinder.ViewModel
 		public RelayCommand ExitCommand { get; private set; }
 		public RelayCommand SwitchAccountCommand { get; private set; }
 		public RelayCommand AboutCommand { get; private set; }
+		public RelayCommand WebsiteCommand { get; private set; }
+		public RelayCommand OpenTwinderFolderCommand { get; private set; }
 		public RelayCommand ForceDownloadMatchesCommand { get; private set; }
 		public RelayCommand ForceDownloadMatchesFullCommand { get; private set; }
 		public RelayCommand ForceDownloadRecsCommand { get; private set; }
@@ -254,9 +258,25 @@ namespace Twinder.ViewModel
 			OpenChatCommand = new RelayCommand<MatchModel>((param) => OpenChat(param));
 			OpenMatchProfileCommand = new RelayCommand<ISerializableItem>(param => OpenMatchProfile(param));
 			DownloadMatchDataCommand = new RelayCommand<MatchModel>(param => DownloadFullMatchData(param));
-			OpenFolderCommand = new RelayCommand<ISerializableItem>(param => OpenFolder(param));
+
+			OpenFolderCommand = new RelayCommand<ISerializableItem>(param =>
+				Process.Start(SerializationHelper.WorkingDir + GetSourceFolder(param) + param));
+			OpenPhotosFolderCommand = new RelayCommand<ISerializableItem>(param =>
+				Process.Start(SerializationHelper.WorkingDir + GetSourceFolder(param) + param + "\\" + SerializationHelper.PHOTOS));
+			OpenInstagramFolderCommand = new RelayCommand<ISerializableItem>(param =>
+				Process.Start(SerializationHelper.WorkingDir + GetSourceFolder(param) + param + "\\" + SerializationHelper.IG_PHOTOS), 
+				param =>
+				{
+					if (param is MatchModel)
+						return (param as MatchModel).Instagram != null;
+					if (param is RecModel)
+						return (param as RecModel).Instagram != null;
+					return false;
+				});
+
 			UnmatchCommand = new RelayCommand<MatchModel>(param => Unmatch(param));
 			ClearSearchCommand = new RelayCommand(() => FilterVM.NameFilter = string.Empty);
+			OpenTwinderFolderCommand = new RelayCommand(() => Process.Start(SerializationHelper.WorkingDir));
 
 			OpenRecsCommand = new RelayCommand(OpenRecs, () =>
 			{
@@ -270,6 +290,7 @@ namespace Twinder.ViewModel
 
 			SwitchAccountCommand = new RelayCommand(SwitchAccount);
 			AboutCommand = new RelayCommand(About);
+			WebsiteCommand = new RelayCommand(() => Process.Start("https://github.com/Dainius14/twinder"));
 
 			ForceDownloadMatchesCommand = new RelayCommand(ForceDownloadMatches);
 			ForceDownloadMatchesFullCommand = new RelayCommand(ForceDownloadMatchesFull);
@@ -279,6 +300,8 @@ namespace Twinder.ViewModel
 			Messenger.Default.Register<string>(this, MessengerToken.GetMoreRecs, (input) => UpdateRecs(this, null));
 
 			Application.Current.Exit += Current_Exit;
+
+
 		}
 
 		/// <summary>
@@ -691,22 +714,11 @@ namespace Twinder.ViewModel
 
 		private void OpenChat(MatchModel item)
 		{
-			string src = string.Empty;
 			var obj = new PassAroundItem();
 
-			if (MatchList.Contains(item))
-				obj.DirPath += SerializationHelper.DIR_MATCHES;
-			else if (UnmatchedMeList != null && UnmatchedMeList.Contains(item))
-				obj.DirPath += SerializationHelper.DIR_UNMATCHED;
-			else if (UnmatchedByMeList != null && UnmatchedByMeList.Contains(item))
-				obj.DirPath += SerializationHelper.DIR_UNMATCHED_BY_ME;
-			else if (RecommendationsPassedList != null && RecommendationsPassedList.Any(x => x.Id == item.Id))
-				obj.DirPath += SerializationHelper.DIR_RECS_PASSED;
-			else if (RecommendationsPendingList != null && RecommendationsPendingList.Any(x => x.Id == item.Id))
-				obj.DirPath += SerializationHelper.DIR_RECS_PENDING;
-
 			obj.Item = item;
-			
+			obj.DirPath = GetSourceFolder(item);
+
 			Messenger.Default.Send(obj, MessengerToken.NewChatWindow);
 
 			// Adding match to UpdateMatches list is the least complex way to force serialization
@@ -721,45 +733,26 @@ namespace Twinder.ViewModel
 		/// <param name="item"></param>
 		private void OpenMatchProfile(ISerializableItem item)
 		{
-
-			string src = string.Empty;
 			var obj = new PassAroundItem();
-
-			if (MatchList.Contains(item))
-				obj.DirPath += SerializationHelper.DIR_MATCHES;
-			else if (UnmatchedMeList != null && UnmatchedMeList.Contains(item))
-				obj.DirPath += SerializationHelper.DIR_UNMATCHED;
-			else if (UnmatchedByMeList != null && UnmatchedByMeList.Contains(item))
-				obj.DirPath += SerializationHelper.DIR_UNMATCHED_BY_ME;
-			else if (RecommendationsPassedList != null && RecommendationsPassedList.Any(x => x.Id == item.Id))
-				obj.DirPath += SerializationHelper.DIR_RECS_PASSED;
-			else if (RecommendationsPendingList != null && RecommendationsPendingList.Any(x => x.Id == item.Id))
-				obj.DirPath += SerializationHelper.DIR_RECS_PENDING;
-
 			obj.Item = item;
+			obj.DirPath = GetSourceFolder(item);
 
 			Messenger.Default.Send(obj, MessengerToken.ShowMatchProfile);
-
 		}
 
-		private void OpenFolder(ISerializableItem item)
+		private string GetSourceFolder(ISerializableItem item)
 		{
-			string src = SerializationHelper.WorkingDir;
-
 			if (MatchList.Contains(item))
-				src += SerializationHelper.DIR_MATCHES;
+				return SerializationHelper.DIR_MATCHES;
 			else if (UnmatchedMeList != null && UnmatchedMeList.Contains(item))
-				src += SerializationHelper.DIR_UNMATCHED;
+				return SerializationHelper.DIR_UNMATCHED;
 			else if (UnmatchedByMeList != null && UnmatchedByMeList.Contains(item))
-				src += SerializationHelper.DIR_UNMATCHED_BY_ME;
+				return SerializationHelper.DIR_UNMATCHED_BY_ME;
 			else if (RecommendationsPassedList != null && RecommendationsPassedList.Any(x => x.Id == item.Id))
-				src += SerializationHelper.DIR_RECS_PASSED;
+				return SerializationHelper.DIR_RECS_PASSED;
 			else if (RecommendationsPendingList != null && RecommendationsPendingList.Any(x => x.Id == item.Id))
-				src += SerializationHelper.DIR_RECS_PENDING;
-
-			src += item;
-
-			Process.Start(src);
+				return SerializationHelper.DIR_RECS_PENDING;
+			return string.Empty;
 		}
 
 		/// <summary>

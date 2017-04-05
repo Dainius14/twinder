@@ -13,11 +13,6 @@ namespace Twinder.View
 {
 	public partial class RecommendationsView : Window
 	{
-		public RecommendationsView()
-		{
-			InitializeComponent();
-		}
-
 		public RecommendationsView(ObservableCollection<RecModel> recList)
 		{
 			InitializeComponent();
@@ -27,6 +22,12 @@ namespace Twinder.View
 
 			Messenger.Default.Register<SerializationPacket>(this, ShowDownloadDialog);
 
+			// Close window with ESC
+			PreviewKeyDown += (object sender, KeyEventArgs e) =>
+			{
+				if (e.Key == Key.Escape)
+					Close();
+			};
 		}
 
 		private void ShowDownloadDialog(SerializationPacket packet)

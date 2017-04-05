@@ -220,6 +220,12 @@ namespace Twinder.View
 			DataContextChanged += MatchProfileView_DataContextChanged;
 			DataContext = item;
 
+			// Close window with ESC
+			PreviewKeyDown += (object sender, KeyEventArgs e) =>
+			{
+				if (e.Key == Key.Escape)
+					Close();
+			};
 		}
 
 		/// <summary>

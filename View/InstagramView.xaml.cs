@@ -13,6 +13,13 @@ namespace Twinder.View
 		public InstagramView()
 		{
 			InitializeComponent();
+
+			// Close window with ESC
+			PreviewKeyDown += (object sender, KeyEventArgs e) =>
+			{
+				if (e.Key == Key.Escape)
+					Close();
+			};
 		}
 
 		private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
