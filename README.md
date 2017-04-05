@@ -13,7 +13,7 @@ Building requires [Bing Maps SDK](https://www.microsoft.com/en-us/download/detai
 
 ### Features:
 * Main Tinder functionalities without the bells and whistles
-* See people who unmatched you, who you unmatched, passed and pending recommendations
+* See people who unmatched you, people you unmatched, passed and pending recommendations
 * Multi-user support
 * Location spoofing
 * Match filtering
