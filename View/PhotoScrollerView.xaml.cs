@@ -37,8 +37,7 @@ namespace Twinder.View
 		public static readonly DependencyProperty DirPathProperty =
 			DependencyProperty.Register("MyDirPath", typeof(string),
 				typeof(PhotoScrollerView), new PropertyMetadata(null));
-
-
+		
 		public PhotoScrollerView()
 		{
 			InitializeComponent();
@@ -76,7 +75,18 @@ namespace Twinder.View
 
 			if (SerializbleItem != null)
 				src += SerializbleItem + "\\";
-			src += SerializationHelper.PHOTOS + (img.DataContext as PhotoModel).Id + ".jpg";
+
+			if (img.DataContext is InstagramPhoto)
+			{
+				string name = (img.DataContext as InstagramPhoto).Link;
+				name = name.Remove(name.Length - 2);
+				name = name.Substring(name.LastIndexOf("/") + 1) + ".jpg";
+				src += SerializationHelper.IG_PHOTOS + name;
+			}
+			else
+			{
+				src += SerializationHelper.PHOTOS + (img.DataContext as PhotoModel).Id + ".jpg";
+			}
 
 			if (File.Exists(src))
 			{
@@ -102,8 +112,19 @@ namespace Twinder.View
 
 			if (SerializbleItem != null)
 				src += SerializbleItem + "\\";
-			src += SerializationHelper.PHOTOS + (photoList.SelectedItem as PhotoModel).Id + ".jpg";
 
+			if (photoList.SelectedItem is InstagramPhoto)
+			{
+				string name = (photoList.SelectedItem as InstagramPhoto).Link;
+				name = name.Remove(name.Length - 2);
+				name = name.Substring(name.LastIndexOf("/") + 1) + ".jpg";
+				src += SerializationHelper.IG_PHOTOS + name;
+			}
+			else
+			{
+				src += SerializationHelper.PHOTOS + (photoList.SelectedItem as PhotoModel).Id + ".jpg";
+			}
+			
 			if (File.Exists(src))
 			{
 				try
@@ -126,7 +147,11 @@ namespace Twinder.View
 
 			if (SerializbleItem != null)
 				src += SerializbleItem + "\\";
-			src += SerializationHelper.PHOTOS;
+
+			if ((sender as Image).DataContext is InstagramPhoto)
+				src += SerializationHelper.IG_PHOTOS;
+			else
+				src += SerializationHelper.PHOTOS;
 
 			Process.Start(src);
 		}

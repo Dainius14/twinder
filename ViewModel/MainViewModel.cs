@@ -689,30 +689,30 @@ namespace Twinder.ViewModel
 			Messenger.Default.Send(RecList, MessengerToken.OpenRecommendations);
 		}
 
-		private void OpenChat(MatchModel match)
+		private void OpenChat(MatchModel item)
 		{
 			string src = string.Empty;
 			var obj = new PassAroundItem();
 
-			if (MatchList.Contains(match))
+			if (MatchList.Contains(item))
 				obj.DirPath += SerializationHelper.DIR_MATCHES;
-			else if (UnmatchedMeList.Contains(match))
+			else if (UnmatchedMeList != null && UnmatchedMeList.Contains(item))
 				obj.DirPath += SerializationHelper.DIR_UNMATCHED;
-			else if (UnmatchedByMeList.Contains(match))
+			else if (UnmatchedByMeList != null && UnmatchedByMeList.Contains(item))
 				obj.DirPath += SerializationHelper.DIR_UNMATCHED_BY_ME;
-			else if (RecommendationsPassedList.Any(x => x.Id == match.Id))
+			else if (RecommendationsPassedList != null && RecommendationsPassedList.Any(x => x.Id == item.Id))
 				obj.DirPath += SerializationHelper.DIR_RECS_PASSED;
-			else if (RecommendationsPendingList.Any(x => x.Id == match.Id))
+			else if (RecommendationsPendingList != null && RecommendationsPendingList.Any(x => x.Id == item.Id))
 				obj.DirPath += SerializationHelper.DIR_RECS_PENDING;
 
-			obj.Item = match;
+			obj.Item = item;
 			
 			Messenger.Default.Send(obj, MessengerToken.NewChatWindow);
 
 			// Adding match to UpdateMatches list is the least complex way to force serialization
 			// when user sends messages
-			if (!UpdatedMatches.Contains(match))
-				UpdatedMatches.Add(match);
+			if (!UpdatedMatches.Contains(item))
+				UpdatedMatches.Add(item);
 		}
 
 		/// <summary>
@@ -742,22 +742,22 @@ namespace Twinder.ViewModel
 
 		}
 
-		private void OpenFolder(ISerializableItem param)
+		private void OpenFolder(ISerializableItem item)
 		{
 			string src = SerializationHelper.WorkingDir;
 
-			if (MatchList.Contains(param))
+			if (MatchList.Contains(item))
 				src += SerializationHelper.DIR_MATCHES;
-			else if (UnmatchedMeList.Contains(param))
+			else if (UnmatchedMeList != null && UnmatchedMeList.Contains(item))
 				src += SerializationHelper.DIR_UNMATCHED;
-			else if (UnmatchedByMeList.Contains(param))
+			else if (UnmatchedByMeList != null && UnmatchedByMeList.Contains(item))
 				src += SerializationHelper.DIR_UNMATCHED_BY_ME;
-			else if (RecommendationsPassedList.Any(x => x.Id == param.Id))
+			else if (RecommendationsPassedList != null && RecommendationsPassedList.Any(x => x.Id == item.Id))
 				src += SerializationHelper.DIR_RECS_PASSED;
-			else if (RecommendationsPendingList.Any(x => x.Id == param.Id))
+			else if (RecommendationsPendingList != null && RecommendationsPendingList.Any(x => x.Id == item.Id))
 				src += SerializationHelper.DIR_RECS_PENDING;
 
-			src += param;
+			src += item;
 
 			Process.Start(src);
 		}

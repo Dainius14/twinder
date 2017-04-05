@@ -190,6 +190,9 @@ namespace Twinder.View
 				Jobs = match.Jobs;
 				TheDistance = match.DistanceMiles;
 				PhotoScroller.DataContext = match.Person.Photos;
+
+				if (match.Instagram != null)
+					IGButton.IsEnabled = true;
 			}
 			else if (DataContext is RecModel)
 			{
@@ -203,6 +206,9 @@ namespace Twinder.View
 				Schools = rec.Schools;
 				Jobs = rec.Jobs;
 				PhotoScroller.DataContext = rec.Photos;
+
+				if (rec.Instagram != null)
+					IGButton.IsEnabled = true;
 			}
 		}
 
@@ -210,10 +216,10 @@ namespace Twinder.View
 		{
 			InitializeComponent();
 			//MatchProfileViewModel viewModel = DataContext as MatchProfileViewModel;
-			//viewModel.Match = match;
 			PhotoScroller.MyDirPath = dir;
 			DataContextChanged += MatchProfileView_DataContextChanged;
 			DataContext = item;
+
 		}
 
 		/// <summary>
@@ -237,6 +243,24 @@ namespace Twinder.View
 			}
 			e.Handled = true;
 		}
-		
+
+		private void IGButton_Click(object sender, RoutedEventArgs e)
+		{
+			var igview = new InstagramView();
+			if (DataContext is MatchModel)
+			{
+				igview.DataContext = (DataContext as MatchModel).Instagram;
+				igview.PhotoScroller.DataContext = (DataContext as MatchModel).Instagram.InstagramPhotos;
+			}
+			else if (DataContext is RecModel)
+			{
+				igview.DataContext = (DataContext as RecModel).Instagram;
+				igview.PhotoScroller.DataContext = (DataContext as RecModel).Instagram.InstagramPhotos;
+			}
+			igview.PhotoScroller.SerializbleItem = DataContext as ISerializableItem;
+			igview.PhotoScroller.MyDirPath = PhotoScroller.MyDirPath;
+
+			igview.Show();
+		}
 	}
 }

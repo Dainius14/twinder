@@ -16,7 +16,7 @@
 		d:DataContext="{Binding SampleMain.MatchList[0], Source={StaticResource Locator}}">
 	<Window.Title>
 		<MultiBinding StringFormat="{}{0} {1} - {2}">
-			<Binding Path="MatchName" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
+			<Binding Path="MatchName"/>
 			<Binding Source="{x:Static p:Resources.window_title_profile}"/>
 			<Binding Source="{x:Static p:Resources.app_title}"/>
 		</MultiBinding>
@@ -41,14 +41,28 @@
 				</Grid.RowDefinitions>
 				
 				<!-- Name, age -->
-				<TextBlock Grid.Row="0" FontSize="18">
-					<TextBlock.Text>
-						<MultiBinding StringFormat="{}{0}, {1}">
-							<Binding Path="MatchName" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
-							<Binding Path="MatchAge" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
-						</MultiBinding>
-					</TextBlock.Text>
-				</TextBlock>
+				<Grid Grid.Row="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="auto"/>
+					</Grid.ColumnDefinitions>
+					
+					<TextBlock Grid.Column="0" FontSize="18">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0}, {1}">
+								<Binding Path="MatchName" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
+								<Binding Path="MatchAge" RelativeSource="{RelativeSource FindAncestor, AncestorType=Window}"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+
+					<Button x:Name="IGButton"
+							Grid.Column="2" Content="Instagram" Margin="2" Padding="2"
+							IsEnabled="False"
+							Click="IGButton_Click"/>
+
+				</Grid>
 
 				<!-- Bio -->
 					<!--Bio-->

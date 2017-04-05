@@ -233,6 +233,9 @@
     <Compile Include="View\ErrorDialogView.xaml.cs">
       <DependentUpon>ErrorDialogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\InstagramView.xaml.cs">
+      <DependentUpon>InstagramView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MatchListFilterView.xaml.cs">
       <DependentUpon>MatchListFilterView.xaml</DependentUpon>
     </Compile>
@@ -294,6 +297,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ErrorDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InstagramView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
