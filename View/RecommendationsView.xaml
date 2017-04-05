@@ -35,7 +35,7 @@
 
 			<!-- Match info -->
 
-			<Grid Grid.Row="0" Margin="5" DataContext="{Binding SelectedRec}">
+			<Grid Grid.Row="0" Margin="5">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="*"/>
@@ -49,23 +49,29 @@
 					</Grid.RowDefinitions>
 
 					<!--Name, age-->
-					<Grid Grid.Row="0">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="auto"/>
-							<ColumnDefinition Width="10"/>
-							<ColumnDefinition Width="auto"/>
-						</Grid.ColumnDefinitions>
-						
-						<TextBlock Grid.Column="0"
-						   Text="{Binding Name, FallbackValue='Name'}"
-						   FontSize="18"
-						   VerticalAlignment="Bottom"/>
-						
-						<TextBlock Grid.Column="2"
-						   Text="{Binding Age, FallbackValue='99'}"
-						   FontSize="18"
-						   VerticalAlignment="Bottom"/>
-					</Grid>
+
+				<!-- Name, age -->
+				<Grid Grid.Row="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="auto"/>
+					</Grid.ColumnDefinitions>
+					
+					<TextBlock Grid.Column="0" FontSize="18" DataContext="{Binding SelectedRec}">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0}, {1}">
+								<Binding Path="Name"/>
+								<Binding Path="Age"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+
+					<Button x:Name="IGButton"
+							Grid.Column="2" Content="Instagram" Margin="2" Padding="2"
+							Command="{Binding InstagramCommand}"/>
+
+				</Grid>
 
 					<!--Bio-->
 					<ScrollViewer Grid.Row="1" Grid.Column="0"
@@ -256,7 +262,8 @@
 		</Grid>
 
 		<!-- Photos -->
-		<view:PhotoScrollerView DataContext="{Binding SelectedRec.Photos}"
+		<view:PhotoScrollerView x:Name="PhotoScroller"
+								DataContext="{Binding SelectedRec.Photos}"
 								SerializbleItem="{Binding DataContext.SelectedRec, RelativeSource={
 									RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
 								MyDirPath="{x:Static helps:DirPath.DIR_RECS}"/>

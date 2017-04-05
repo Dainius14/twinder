@@ -142,16 +142,16 @@ namespace Twinder.View
 
 		private void MenuItem_OpenFolder(object sender, RoutedEventArgs e)
 		{
-
 			string src = SerializationHelper.WorkingDir + MyDirPath;
 
 			if (SerializbleItem != null)
 				src += SerializbleItem + "\\";
+			
 
-			if ((sender as Image).DataContext is InstagramPhoto)
-				src += SerializationHelper.IG_PHOTOS;
-			else
+			if (DataContext is ObservableCollection<PhotoModel>)
 				src += SerializationHelper.PHOTOS;
+			else
+				src += SerializationHelper.IG_PHOTOS;
 
 			Process.Start(src);
 		}

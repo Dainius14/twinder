@@ -66,5 +66,6 @@ namespace Twinder.View
 				vm.SelectedIndex = 0;
 			}
 		}
+		
 	}
 }

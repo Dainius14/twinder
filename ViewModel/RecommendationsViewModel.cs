@@ -63,6 +63,7 @@ namespace Twinder.ViewModel
 		public RelayCommand<bool> LikeCommand { get; private set; }
 		public RelayCommand<bool> SuperLikeCommand { get; private set; }
 		public RelayCommand LikeAllCommand { get; private set; }
+		public RelayCommand InstagramCommand { get; private set; }
 
 		private bool _onlyWithoutDescription;
 		public bool OnlyWithoutDescription
@@ -89,7 +90,19 @@ namespace Twinder.ViewModel
 			LikeCommand = new RelayCommand<bool>(async param => await Like(false));
 			SuperLikeCommand = new RelayCommand<bool>(async param => await Like(true), param => CanSuperLike);
 			LikeAllCommand = new RelayCommand(async () => await LikeAll());
+			InstagramCommand = new RelayCommand(InstagramButton, () => SelectedRec != null && SelectedRec.Instagram != null);
 
+		}
+
+		private void InstagramButton()
+		{
+			var igview = new InstagramView();
+			igview.DataContext = SelectedRec.Instagram;
+			igview.PhotoScroller.DataContext = SelectedRec.Instagram.InstagramPhotos;
+			igview.PhotoScroller.SerializbleItem = SelectedRec as ISerializableItem;
+			igview.PhotoScroller.MyDirPath = SerializationHelper.DIR_RECS;
+
+			igview.Show();
 		}
 
 		/// <summary>

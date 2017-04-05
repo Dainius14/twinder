@@ -210,6 +210,9 @@ namespace Twinder.View
 				if (rec.Instagram != null)
 					IGButton.IsEnabled = true;
 			}
+
+			Title = MatchName + " Profile - Twinder";
+
 		}
 
 		public MatchProfileView(ISerializableItem item, string dir)
