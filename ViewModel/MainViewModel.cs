@@ -318,7 +318,6 @@ namespace Twinder.ViewModel
 			{
 				if (await Authenticate(FbId, FbToken))
 				{
-
 					UserName = User.ToString();
 
 					string lat = "0";
@@ -335,7 +334,7 @@ namespace Twinder.ViewModel
 					SerializationHelper.UpdateTinderToken(Auth.Token);
 
 
-					// Gets recs
+					// Gets matches
 					await GetMatches();
 
 					// Gets recs
@@ -468,8 +467,10 @@ namespace Twinder.ViewModel
 			{
 				Updates = await TinderHelper.GetUpdates();
 
-				if (MatchList == null)
+				if (MatchList == null && Updates.Matches != null)
 					MatchList = Updates.Matches;
+				else
+					MatchList = new ObservableCollection<MatchModel>();
 
 				MatchListSetup();
 

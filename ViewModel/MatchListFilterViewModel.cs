@@ -329,12 +329,12 @@ namespace Twinder.ViewModel
 					sortDescription.Direction = ListSortDirection.Descending;
 					break;
 			}
-
-			using (MainVM.MatchListCvs.DeferRefresh())
-			{
-				MainVM.MatchListCvs.SortDescriptions.Clear();
-				MainVM.MatchListCvs.SortDescriptions.Add(sortDescription);
-			}
+			if (MainVM.MatchList != null)
+				using (MainVM.MatchListCvs.DeferRefresh())
+				{
+					MainVM.MatchListCvs.SortDescriptions.Clear();
+					MainVM.MatchListCvs.SortDescriptions.Add(sortDescription);
+				}
 
 			if (MainVM.UnmatchedMeList != null)
 				using (MainVM.UnmatchedMeListCvs.DeferRefresh())
