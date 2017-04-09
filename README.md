@@ -5,12 +5,15 @@ A sophisticated (not so much actually) Tinder client made using Windows Presenta
 
 ***
 
+Note: I'm stopping development for this program. Feel free to fork and edit this horrible codebase.
+
 [Download here](https://github.com/Dainius14/twinder/releases)
 
 Building requires [Bing Maps SDK](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=27165) to be installed.
 
 ### Features:
 * Main Tinder functionalities without the bells and whistles
+* See people who unmatched you, people you unmatched, passed and pending recommendations
 * Multi-user support
 * Location spoofing
 * Match filtering
@@ -31,7 +34,7 @@ You can filter your match list to find the match you desire - no more boring scr
 Most of the other advantages are derivatives of the main advantage e.g. you can chat with multiple people at one time and view photos more comfortably.
 
 #### Is everything working?
-Yes, except for that group thing and you can't upload your photos yet and you can't see Instagram pictures (well in data folder pics are all there) and you can't use any Spotify features and chat doesn't show GIFs.
+Yes, except for that group thing and you can't upload your photos yet and you can't use any Spotify features and chat doesn't show GIFs.
 
 ---
 
